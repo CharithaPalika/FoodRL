@@ -4,7 +4,6 @@ from matplotlib import pyplot as plt
 import matplotlib.gridspec as gridspec
 import torch.nn as nn
 import warnings
-import copy
 from collections import deque
 import pandas as pd
 
@@ -16,19 +15,28 @@ except ImportError:
 
 from model import (
     SharedActorCritic, Actor, Critic,
-    sample_continuous_action, recompute_log_prob, _split_mu_logstd,
+    sample_continuous_action, recompute_log_prob,
 )
 from utils import obs_to_tensors
 from env import FoodEnv
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# PPO Agent  —  Continuous action space
+# PPO Agent  —  Continuous action space with sleep/wake cycle support
 #
 # Action:  amounts ∈ [0, 1]^num_foods  (one consumption fraction per menu slot)
-# Policy:  Clipped Gaussian — network predicts (mu, log_std) per food,
-#          samples x_raw ~ N(mu, std), clips to [0,1] for the environment.
-#          Log-prob computed on x_raw (unclipped) following standard PPO practice.
+#          During sleep the env ignores these outputs — the agent still produces
+#          them so the policy gradient flows, but no absorption occurs.
+#
+# Policy:  Clipped Gaussian
+#          Network predicts (mu, log_std) per food slot.
+#          Samples x_raw ~ N(mu, std), clips to [0,1] for the env.
+#          Log-prob is computed on x_raw (unclipped) — standard PPO practice.
+#
+# Observation: [nutrient_0…N-1, is_awake, time_in_cycle]
+#          state_size is read directly from env.observation_space so the agent
+#          adapts automatically to however many nutrients are active + the +2
+#          cycle dims added by the env.
 # ──────────────────────────────────────────────────────────────────────────────
 
 class PPOAgent:
@@ -73,6 +81,8 @@ class PPOAgent:
                 )
 
         # ── Environment specs ──────────────────────────────────────────────
+        # state_shape now includes the +2 cycle dims (is_awake, time_in_cycle)
+        # automatically because the env sets state_dim = num_nutrients + 2.
         try:
             num_foods      = env.num_foods
             state_shape    = env.observation_space["physiological_state"].shape[0]
@@ -124,8 +134,9 @@ class PPOAgent:
         self.actor_optimizer  = None
         self.critic_optimizer = None
 
-        self.episode_returns    = []
-        self.episode_consumption = []   # replaces food_eaten; tracks sum of amounts per episode
+        self.episode_returns     = []
+        # Total consumption per episode = sum of all amounts across all awake steps
+        self.episode_consumption = []
 
     # ──────────────────────────────────────────────────────────────────────────
     # Internal helpers
@@ -168,7 +179,8 @@ class PPOAgent:
         value     : scalar tensor
         mu        : (num_foods,) tensor              — Gaussian mean
         log_std   : (num_foods,) tensor              — Gaussian log std
-        x_raw     : (num_foods,) tensor              — unclipped sample (store for PPO update)
+        x_raw     : (num_foods,) tensor              — unclipped sample
+                                                       (stored for PPO update)
         """
         phy, food_flat = obs_to_tensors(obs, self.device)
 
@@ -179,7 +191,7 @@ class PPOAgent:
             value       = self.critic(phy, food_flat)
 
         if deterministic:
-            # At inference: use the mean directly, clipped to [0,1]
+            # Inference: use the Gaussian mean, clipped to valid range
             amounts  = torch.clamp(mu, 0.0, 1.0)
             log_prob = None
             x_raw    = mu
@@ -226,39 +238,46 @@ class PPOAgent:
         episode_entropies     = []
         episode_total_losses  = []
 
-        obs, _        = self.env.reset()
-        ep_return     = 0.0
-        episode_count = 0
-        ep_consumption = 0.0   # sum of all amounts consumed this episode
+        obs, _         = self.env.reset()
+        ep_return      = 0.0
+        episode_count  = 0
+        ep_consumption = 0.0   # sum of amounts consumed during awake steps only
 
         while episode_count < train_args["num_episodes"]:
 
-            phy_buf, food_flat_buf                         = [], []
-            # x_raw_buf stores unclipped Gaussian samples for PPO log_prob recompute
-            act_buf, rew_buf, done_buf, logp_buf, val_buf  = [], [], [], [], []
-            x_raw_buf                                       = []
+            phy_buf, food_flat_buf                        = [], []
+            act_buf, rew_buf, done_buf, logp_buf, val_buf = [], [], [], [], []
+            # x_raw_buf: unclipped Gaussian samples — needed for correct
+            # importance ratio during the PPO update (must not re-sample)
+            x_raw_buf = []
 
             # ── Rollout ───────────────────────────────────────────────────
             for _ in range(train_args["rollout_steps"]):
                 phy, food_flat = obs_to_tensors(obs, self.device)
 
                 amounts, logp, value, mu, log_std, x_raw = self.act(obs, deterministic=False)
-                amounts_sq = amounts.squeeze(0)     # (num_foods,)
+                amounts_sq = amounts.squeeze(0)    # (num_foods,)
                 logp_sq    = logp.squeeze()
                 value_sq   = value.squeeze(-1).squeeze()
-                x_raw_sq   = x_raw.squeeze(0)       # (num_foods,)
+                x_raw_sq   = x_raw.squeeze(0)     # (num_foods,)
 
-                # Total consumption this step = sum of all amounts
-                ep_consumption += float(amounts_sq.sum().item())
-
-                # Pass numpy array to env
                 amounts_np = amounts_sq.detach().cpu().numpy()
+
+                # The env zeroes out amounts during sleep internally, but we
+                # still record what the agent OUTPUT so the policy gradient
+                # flows correctly through sleep steps.
+                # For consumption tracking we only count awake steps.
+                # We check is_awake from the observation: physiological_state[-2]
+                agent_is_awake = float(obs["physiological_state"][-2]) > 0.5
+                if agent_is_awake:
+                    ep_consumption += float(amounts_sq.sum().item())
+
                 next_obs, reward, terminated, done, info = self.env.step(amounts_np)
 
                 phy_buf.append(phy.squeeze(0))
                 food_flat_buf.append(food_flat.squeeze(0))
-                act_buf.append(amounts_sq.detach())    # (num_foods,) — clipped amounts
-                x_raw_buf.append(x_raw_sq.detach())    # (num_foods,) — unclipped
+                act_buf.append(amounts_sq.detach())
+                x_raw_buf.append(x_raw_sq.detach())
                 rew_buf.append(reward)
                 done_buf.append(done)
                 logp_buf.append(logp_sq.detach())
@@ -276,10 +295,10 @@ class PPOAgent:
                     obs, _ = self.env.reset()
 
                     if episode_count % train_args["log_every_episodes"] == 0:
-                        rolling_avg   = np.mean(self.episode_returns[-train_args["rolling_window"]:])
-                        last_return   = self.episode_returns[-1]
-                        last_consump  = self.episode_consumption[-1]
-                        avg_consump   = np.mean(self.episode_consumption[-train_args["rolling_window"]:])
+                        rolling_avg  = np.mean(self.episode_returns[-train_args["rolling_window"]:])
+                        last_return  = self.episode_returns[-1]
+                        last_consump = self.episode_consumption[-1]
+                        avg_consump  = np.mean(self.episode_consumption[-train_args["rolling_window"]:])
 
                         if printing:
                             print(
@@ -288,7 +307,9 @@ class PPOAgent:
                                 f"Rolling Avg({train_args['rolling_window']}): {rolling_avg:8.2f} | "
                                 f"Total Consumption: {last_consump:6.2f} | "
                                 f"Avg Consumption: {avg_consump:6.2f} | "
-                                f"Distance: {info['distance']:6.4f}"
+                                f"Distance: {info['distance']:6.4f} | "
+                                f"Cycle: {info['cycle_number']} | "
+                                f"{'Awake' if info['is_awake'] else 'Sleep '}"
                             )
 
                         if log_wandb:
@@ -328,7 +349,7 @@ class PPOAgent:
 
             phy_batch       = torch.stack(phy_buf)
             food_flat_batch = torch.stack(food_flat_buf)
-            act_batch       = torch.stack(act_buf)     # (T, num_foods) clipped amounts
+            act_batch       = torch.stack(act_buf)     # (T, num_foods) clipped
             x_raw_batch     = torch.stack(x_raw_buf)  # (T, num_foods) unclipped
             logp_old        = torch.stack(logp_buf)    # (T,)
 
@@ -348,9 +369,8 @@ class PPOAgent:
                         mu_mb, log_std_mb = self.actor(phy_mb, food_mb)
                         val               = self.critic(phy_mb, food_mb)
 
-                    # Recompute log_prob using STORED x_raw (unclipped samples)
-                    # This is critical: we must evaluate the policy at the same
-                    # unclipped sample, not re-sample, to get a meaningful ratio.
+                    # Recompute log_prob using STORED x_raw — must not re-sample,
+                    # otherwise the importance ratio is meaningless.
                     logp, entropy = recompute_log_prob(mu_mb, log_std_mb, x_raw_batch[mb])
 
                     ratio  = torch.exp(logp - logp_old[mb])
@@ -409,10 +429,13 @@ class PPOAgent:
 
         episode_df columns:
             timestep, reward, value, distance,
-            nut_0 … nut_{N-1},          (normalised state)
-            nut_0_error … nut_{N-1}_error,
-            amount_food_0 … amount_food_{K-1},   (consumption amounts per slot)
-            total_consumption                     (sum of amounts at each step)
+            <nutrient_name> × N,
+            <nutrient_name>_error × N,
+            amount_slot_0 … amount_slot_{K-1},
+            total_consumption,
+            is_awake,
+            cycle_number,
+            time_in_cycle
         """
         env = self.env
         obs, _ = env.reset()
@@ -420,26 +443,33 @@ class PPOAgent:
 
         memory  = deque(maxlen=env.max_steps)
         rewards, values, distances = [], [], []
-        phy_states  = []
-        # Per-step amounts: list of (num_foods,) arrays
-        all_amounts = []
+        phy_states  = []    # nutrient dims only (no cycle dims)
+        all_amounts = []    # (num_foods,) per step
+        is_awake_log     = []
+        cycle_number_log = []
+        time_in_cycle_log = []
 
         while not done:
             amounts_t, log_prob, value, mu, log_std, x_raw = self.act(obs, deterministic=True)
-            amounts_np = amounts_t.squeeze(0).detach().cpu().numpy()  # (num_foods,)
+            amounts_np = amounts_t.squeeze(0).detach().cpu().numpy()
 
             next_obs, reward, terminated, done, info = env.step(amounts_np)
 
-            phy = obs["physiological_state"].copy()
+            # Extract nutrient dims only (drop the last 2 cycle dims)
+            phy_full    = obs["physiological_state"]
+            phy_nutri   = phy_full[:env.num_nutrients].copy()
 
             rewards.append(reward)
             values.append(value.item())
-            phy_states.append(phy)
+            phy_states.append(phy_nutri)
             all_amounts.append(amounts_np.copy())
-            distances.append(float(np.linalg.norm(phy - env._norm_targets, ord=1)))
+            distances.append(float(np.linalg.norm(phy_nutri - env._norm_targets, ord=1)))
+            is_awake_log.append(info["is_awake"])
+            cycle_number_log.append(info["cycle_number"])
+            time_in_cycle_log.append(info["time_in_cycle"])
 
             memory.append((
-                obs["physiological_state"],
+                obs["physiological_state"],   # full state incl cycle dims
                 obs["food_embeddings"],
                 amounts_np,
                 reward,
@@ -454,24 +484,26 @@ class PPOAgent:
             obs = next_obs
 
         # ── Build episode dataframe ────────────────────────────────────────
-        phy_arr    = np.array(phy_states)       # (T, num_nutrients)
+        phy_arr    = np.array(phy_states)    # (T, num_nutrients)
         target_arr = env._norm_targets
         names      = env.nutrient_names
         T          = len(rewards)
 
         col_dict = {
-            "timestep": np.arange(T),
-            "reward":   np.array(rewards),
-            "value":    np.array(values),
-            "distance": np.array(distances),
+            "timestep":      np.arange(T),
+            "reward":        np.array(rewards),
+            "value":         np.array(values),
+            "distance":      np.array(distances),
+            "is_awake":      np.array(is_awake_log, dtype=bool),
+            "cycle_number":  np.array(cycle_number_log, dtype=int),
+            "time_in_cycle": np.array(time_in_cycle_log, dtype=np.float32),
         }
 
         for i, name in enumerate(names):
             col_dict[name]            = phy_arr[:, i]
             col_dict[f"{name}_error"] = np.abs(phy_arr[:, i] - target_arr[i])
 
-        # Per-slot consumption amounts
-        amounts_arr = np.array(all_amounts)     # (T, num_foods)
+        amounts_arr = np.array(all_amounts)  # (T, num_foods)
         for slot_i in range(env.num_foods):
             col_dict[f"amount_slot_{slot_i}"] = amounts_arr[:, slot_i]
         col_dict["total_consumption"] = amounts_arr.sum(axis=1)
@@ -482,7 +514,7 @@ class PPOAgent:
             if not WANDB_AVAILABLE:
                 warnings.warn("wandb not available – skipping episode logging.", RuntimeWarning)
             else:
-                self._log_episode(episode_idx, rewards, values, phy_arr, distances, amounts_arr, env)
+                self._log_episode(episode_idx, rewards, values, phy_arr, distances, amounts_arr, episode_df, env)
                 self._log_evaluation_summary(
                     episode_idx=episode_idx,
                     episode_df=episode_df,
@@ -494,39 +526,38 @@ class PPOAgent:
 
     def infer_episode(self, memory):
         """
-        Summarise last state vs target and total consumption per food slot.
-        Returns a DataFrame with columns [Nutrient/Slot, Target (normed), Actual (normed) / Total Consumed].
+        Summarise last nutrient state vs target and total consumption per slot.
+        Returns (nutrient_df, slot_df).
         """
-        env   = self.env
-        names = env.nutrient_names
+        env    = self.env
+        names  = env.nutrient_names
         target = env._norm_targets
 
-        last_phy    = memory[-1][0]   # physiological_state (normalised)
-        last_amounts = memory[-1][2]  # amounts (num_foods,)
+        # Nutrient dims are [:num_nutrients] of the stored state
+        last_phy = memory[-1][0][:env.num_nutrients]
 
         nutrient_df = pd.DataFrame({
-            "Nutrient":         names,
-            "Target (normed)":  target,
-            "Actual (normed)":  last_phy,
+            "Nutrient":        names,
+            "Target (normed)": target,
+            "Actual (normed)": last_phy,
         })
 
-        # Sum total consumption per slot across the full episode
         total_consumed = np.zeros(env.num_foods, dtype=np.float32)
         for entry in memory:
             total_consumed += entry[2]  # amounts at each step
 
         slot_df = pd.DataFrame({
-            "Slot":            [f"slot_{i}" for i in range(env.num_foods)],
-            "Total Consumed":  total_consumed,
+            "Slot":           [f"slot_{i}" for i in range(env.num_foods)],
+            "Total Consumed": total_consumed,
         })
 
         return nutrient_df, slot_df
 
     # ──────────────────────────────────────────────────────────────────────────
-    # WandB logging — updated for continuous actions
+    # WandB logging
     # ──────────────────────────────────────────────────────────────────────────
 
-    def _log_episode(self, episode_idx, rewards, values, phy_arr, distances, amounts_arr, env):
+    def _log_episode(self, episode_idx, rewards, values, phy_arr, distances, amounts_arr, episode_df, env):
         steps = np.arange(len(rewards))
         names = env.nutrient_names
 
@@ -550,7 +581,6 @@ class PPOAgent:
                 title="Physiological state (normalised)",
                 xname="Timestep",
             ),
-            # Total consumption per step (sum over all food slots)
             f"inference_{episode_idx}/total_consumption": wandb.plot.line_series(
                 xs=steps,
                 ys=[amounts_arr.sum(axis=1)],
@@ -558,16 +588,22 @@ class PPOAgent:
                 title="Total consumption per step",
                 xname="Timestep",
             ),
+            f"inference_{episode_idx}/per_slot_consumption": wandb.plot.line_series(
+                xs=steps,
+                ys=[amounts_arr[:, i] for i in range(env.num_foods)],
+                keys=[f"slot_{i}" for i in range(env.num_foods)],
+                title="Per-slot consumption amounts",
+                xname="Timestep",
+            ),
+            # Log is_awake as a 0/1 signal so sleep phases are visible in wandb
+            f"inference_{episode_idx}/is_awake": wandb.plot.line_series(
+                xs=steps,
+                ys=[episode_df["is_awake"].astype(float).values],
+                keys=["is_awake"],
+                title="Awake (1) / Sleep (0)",
+                xname="Timestep",
+            ),
         }
-
-        # Per-slot consumption lines
-        log_dict[f"inference_{episode_idx}/per_slot_consumption"] = wandb.plot.line_series(
-            xs=steps,
-            ys=[amounts_arr[:, i] for i in range(env.num_foods)],
-            keys=[f"slot_{i}" for i in range(env.num_foods)],
-            title="Per-slot consumption amounts",
-            xname="Timestep",
-        )
 
         wandb.log(log_dict)
 
@@ -579,15 +615,16 @@ class PPOAgent:
 
         T = len(episode_df)
 
+        # Nutrient state trajectory (T+1, N) — repeat last row as terminal placeholder
         states = np.vstack([
-            episode_df[[n for n in env.nutrient_names]].values,
-            episode_df[[n for n in env.nutrient_names]].iloc[[-1]].values,
+            episode_df[list(env.nutrient_names)].values,
+            episode_df[list(env.nutrient_names)].iloc[[-1]].values,
         ])
 
-        rewards   = episode_df["reward"].values
-        distances = episode_df["distance"].values
+        rewards      = episode_df["reward"].values
+        distances    = episode_df["distance"].values
+        is_awake_arr = episode_df["is_awake"].values  # (T,) bool
 
-        # Recover amounts array from episode_df
         amounts_arr = np.stack(
             [episode_df[f"amount_slot_{i}"].values for i in range(env.num_foods)],
             axis=1,
@@ -602,12 +639,11 @@ class PPOAgent:
         t_axis = np.arange(T + 1)
         t_step = np.arange(1, T + 1)
 
-        # ── Unnormalise ──────────────────────────────────────────────────────
+        # Unnormalise
         unnorm_states  = np.zeros_like(states)
         unnorm_targets = np.zeros(n, dtype=np.float32)
         unnorm_low     = np.zeros(n, dtype=np.float32)
         unnorm_high    = np.zeros(n, dtype=np.float32)
-
         for i, nm in enumerate(names):
             v_min = env._nutrient_mins[nm]
             v_max = env._nutrient_maxs[nm]
@@ -617,87 +653,86 @@ class PPOAgent:
             unnorm_low[i]       = norm_low[i] * rng + v_min
             unnorm_high[i]      = norm_high[i] * rng + v_min
 
+        # Sleep window boundaries from env
+        sleep_windows = env.sleep_windows()
+
         SKIP_EPS = 15
         WINDOW   = 50
-
-        # Rows: training curve, N nutrient rows, reward/distance, consumption heatmap
-        n_rows = n + 3
+        n_rows   = n + 3
 
         fig = plt.figure(figsize=(14, 4.5 * n_rows))
         gs  = gridspec.GridSpec(n_rows, 2, figure=fig, hspace=0.5, wspace=0.35)
 
-        # ── Training curve ───────────────────────────────────────────────────
+        # ── Training curve ────────────────────────────────────────────────
         ax_tr = fig.add_subplot(gs[0, :])
-
         plot_returns  = returns[SKIP_EPS:]
         plot_episodes = np.arange(SKIP_EPS, len(returns))
-
         rolling = np.convolve(plot_returns, np.ones(WINDOW) / WINDOW, mode="valid")
         roll_x  = np.arange(SKIP_EPS + WINDOW - 1, len(returns))
-
         ax_tr.plot(plot_episodes, plot_returns, alpha=0.3, color="steelblue", label="Episode return")
         ax_tr.plot(roll_x, rolling, color="steelblue", lw=2, label=f"Rolling avg ({WINDOW})")
-
         max_ret = float(np.max(returns))
         max_ep  = int(np.argmax(returns))
         ax_tr.scatter([max_ep], [max_ret], color="crimson", zorder=5, s=60)
-        ax_tr.annotate(
-            f"Max: {max_ret:.2f}", xy=(max_ep, max_ret),
-            xytext=(12, -18), textcoords="offset points",
-            color="crimson", fontsize=9,
-            arrowprops=dict(arrowstyle="->", color="crimson", lw=1.2),
-        )
+        ax_tr.annotate(f"Max: {max_ret:.2f}", xy=(max_ep, max_ret),
+                       xytext=(12, -18), textcoords="offset points",
+                       color="crimson", fontsize=9,
+                       arrowprops=dict(arrowstyle="->", color="crimson", lw=1.2))
         ax_tr.set_xlabel("Episode")
         ax_tr.set_ylabel("Return")
         ax_tr.set_title(f"PPO Training Curve (first {SKIP_EPS} eps omitted)")
         ax_tr.legend(fontsize=9)
         ax_tr.grid(True, alpha=0.3)
 
-        # ── Nutrient rows ────────────────────────────────────────────────────
+        def _shade_sleep(ax, windows, t_max):
+            """Helper: shade sleep windows on any axis."""
+            for k, (ws, we) in enumerate(windows):
+                ax.axvspan(ws, min(we, t_max), alpha=0.10, color="navy",
+                           label="Sleep" if k == 0 else "")
+
+        # ── Nutrient rows ─────────────────────────────────────────────────
         for i, nm in enumerate(names):
             row = i + 1
 
-            # Normalised
             ax_n = fig.add_subplot(gs[row, 0])
             ax_n.axhspan(norm_low[i], norm_high[i], alpha=0.15, color="crimson")
             ax_n.axhline(target_norm[i], ls="--", color="crimson", lw=1.0, alpha=0.5)
             ax_n.plot(t_axis, states[:, i], color="steelblue", lw=1.5, label="Agent state")
             ref_n = np.clip(states[:, i], norm_low[i], norm_high[i])
             ax_n.fill_between(t_axis, states[:, i], ref_n, alpha=0.12, color="steelblue")
+            _shade_sleep(ax_n, sleep_windows, T)
             ax_n.set_title(f"{nm} — normalised")
             ax_n.grid(True, alpha=0.3)
 
-            # Raw units
             ax_u = fig.add_subplot(gs[row, 1])
             ax_u.axhspan(unnorm_low[i], unnorm_high[i], alpha=0.15, color="crimson")
             ax_u.axhline(unnorm_targets[i], ls="--", color="crimson", lw=1.0, alpha=0.5)
             ax_u.plot(t_axis, unnorm_states[:, i], color="darkorange", lw=1.5, label="Agent state")
             ref_u = np.clip(unnorm_states[:, i], unnorm_low[i], unnorm_high[i])
             ax_u.fill_between(t_axis, unnorm_states[:, i], ref_u, alpha=0.12, color="darkorange")
+            _shade_sleep(ax_u, sleep_windows, T)
             ax_u.set_title(f"{nm} — raw units")
             ax_u.grid(True, alpha=0.3)
 
-        # ── Reward / distance ────────────────────────────────────────────────
+        # ── Reward / distance ─────────────────────────────────────────────
         ax_r = fig.add_subplot(gs[n + 1, 0])
         ax_r.plot(t_step, rewards, color="darkorange", lw=1.5)
         ax_r.axhline(0, color="grey", lw=0.8, ls="--")
+        _shade_sleep(ax_r, sleep_windows, T)
         ax_r.set_title("Reward per step")
         ax_r.grid(True, alpha=0.3)
 
         ax_d = fig.add_subplot(gs[n + 1, 1])
         ax_d.plot(t_step, distances, color="teal", lw=1.5)
+        _shade_sleep(ax_d, sleep_windows, T)
         ax_d.set_title("Distance to target")
         ax_d.grid(True, alpha=0.3)
 
-        # ── Consumption heatmap (replaces action bar chart) ──────────────────
-        # Left: per-slot consumption over time as a heatmap (slots × timesteps)
+        # ── Consumption heatmap / error heatmap ───────────────────────────
         ax_ch = fig.add_subplot(gs[n + 2, 0])
         im_c = ax_ch.imshow(
-            amounts_arr.T,          # (num_foods, T)
-            aspect="auto",
-            cmap="YlOrRd",
-            vmin=0.0,
-            vmax=1.0,
+            amounts_arr.T,    # (num_foods, T)
+            aspect="auto", cmap="YlOrRd", vmin=0.0, vmax=1.0,
             interpolation="nearest",
         )
         ax_ch.set_yticks(range(env.num_foods))
@@ -706,18 +741,13 @@ class PPOAgent:
         ax_ch.set_title("Consumption amounts (slot × time)")
         plt.colorbar(im_c, ax=ax_ch, label="Amount [0, 1]")
 
-        # Right: signed nutrient error heatmap (unchanged)
         below = np.minimum(0.0, states - norm_low[None, :])
         above = np.maximum(0.0, states - norm_high[None, :])
         error = below + above
-
-        ax_h = fig.add_subplot(gs[n + 2, 1])
-        im = ax_h.imshow(
-            error.T,
-            aspect="auto",
-            cmap="RdBu_r",
-            vmin=-np.abs(error).max(),
-            vmax=np.abs(error).max(),
+        ax_h  = fig.add_subplot(gs[n + 2, 1])
+        im    = ax_h.imshow(
+            error.T, aspect="auto", cmap="RdBu_r",
+            vmin=-np.abs(error).max(), vmax=np.abs(error).max(),
             interpolation="nearest",
         )
         ax_h.set_yticks(range(n))
@@ -726,7 +756,6 @@ class PPOAgent:
         plt.colorbar(im, ax=ax_h)
 
         fig.suptitle("PPO Agent — Evaluation Summary", fontsize=14, y=1.005)
-
         wandb.log({f"inference_{episode_idx}/evaluation_summary": wandb.Image(fig)})
         plt.close(fig)
 
