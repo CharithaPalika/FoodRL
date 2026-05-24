@@ -37,7 +37,7 @@ MINUTES_PER_STEP: int = 2
 
 # Minimum consumption amount to register as "food eaten" for logging purposes.
 # Amounts below this threshold are treated as zero (not logged, no absorption).
-CONSUMPTION_EPSILON: float = 0.01
+CONSUMPTION_EPSILON: float = 0.1
 
 NUTRIENT_CONFIG: Dict[str, dict] = {
 
@@ -49,7 +49,7 @@ NUTRIENT_CONFIG: Dict[str, dict] = {
         "in_range_bonus": 0.5,
         "window_size":    1,
         "reward_weight":  1.0,
-        "decay_rate":     0.01,
+        "decay_rate":     0.0015,
         "is_cumulative":  False,
     },
 
