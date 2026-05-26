@@ -517,10 +517,16 @@ class FoodEnv(gym.Env):
             f"Expected amounts shape ({self.num_foods},), got {amounts.shape}"
         )
 
+        
+
         # ── Determine current cycle phase ─────────────────────────────────────
         # This is computed BEFORE incrementing timepoint so that the decay and
         # reward at this step correctly reflect the phase the agent is in now.
         is_awake, time_in_cycle, cycle_number = self._cycle_state(self.timepoint)
+
+        if not is_awake:
+            # sleeping
+            amounts = np.zeros(self.num_foods, dtype=np.float32)
 
         # Log cycle state for post-episode analysis (e.g. shading sleep windows)
         self._cycle_log.append({

@@ -27,8 +27,8 @@ def _mlp(layer_sizes, activation=nn.ReLU, output_activation=nn.Identity):
 # Continuous action helpers
 # ──────────────────────────────────────────────────────────────────────────────
 
-LOG_STD_MIN = -4.0
-LOG_STD_MAX =  0.5
+LOG_STD_MIN = -5 #-4.0
+LOG_STD_MAX =  5 #0.5
 
 def _split_mu_logstd(raw, num_foods):
     """
