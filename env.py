@@ -85,7 +85,7 @@ NUTRIENT_CONFIG: Dict[str, dict] = {
         "window_size":        1,           # instantaneous (no rolling average)
         "reward_weight":      1.0,
         "decay_rate":         0.01,        # awake clearance per step
-        "sleep_decay_rate":   0.003,       # slower clearance during sleep
+        "sleep_decay_rate":   0.000075,#0.003,       # slower clearance during sleep
         "sleep_penalty_weight": 2.0,       # 2× penalty for depleted glucose at night
         "is_cumulative":      False,
     },
@@ -99,7 +99,7 @@ NUTRIENT_CONFIG: Dict[str, dict] = {
         "window_size":        1,
         "reward_weight":      1.0,
         "decay_rate":         0.005,
-        "sleep_decay_rate":   0.001,
+        "sleep_decay_rate":   1e-8,#1e-8,#0.000001,#0.001,
         "sleep_penalty_weight": 1.5,
         "is_cumulative":      False,
     },
@@ -113,7 +113,7 @@ NUTRIENT_CONFIG: Dict[str, dict] = {
         "window_size":        1,
         "reward_weight":      1.0,
         "decay_rate":         0.005,
-        "sleep_decay_rate":   0.001,
+        "sleep_decay_rate":   0.00001,#0.001,
         "sleep_penalty_weight": 1.5,
         "is_cumulative":      False,
     },

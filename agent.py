@@ -450,7 +450,7 @@ class PPOAgent:
         time_in_cycle_log = []
 
         while not done:
-            amounts_t, log_prob, value, mu, log_std, x_raw = self.act(obs, deterministic=True)
+            amounts_t, log_prob, value, mu, log_std, x_raw = self.act(obs, deterministic=False)
             amounts_np = amounts_t.squeeze(0).detach().cpu().numpy()
 
             next_obs, reward, terminated, done, info = env.step(amounts_np)
