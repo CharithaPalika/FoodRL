@@ -27,8 +27,8 @@ def _mlp(layer_sizes, activation=nn.ReLU, output_activation=nn.Identity):
 # Continuous action helpers
 # ──────────────────────────────────────────────────────────────────────────────
 
-LOG_STD_MIN = -5 #-4.0
-LOG_STD_MAX =  5 #0.5
+LOG_STD_MIN = -4 #-4.0
+LOG_STD_MAX =  0.5 #0.5
 
 def _split_mu_logstd(raw, num_foods):
     """
@@ -121,7 +121,7 @@ class SharedActorCritic(nn.Module):
             torch.manual_seed(seed)
         self.num_foods = num_foods
         in_size        = state_size + food_flat_size
-        self.trunk     = _mlp([in_size, hidden, hidden])
+        self.trunk     = _mlp([in_size, hidden])
         # Outputs mu_raw and log_std_raw concatenated → (num_foods * 2,)
         self.actor_head = nn.Linear(hidden, num_foods * 2)
         self.critic_head = nn.Linear(hidden, 1)
@@ -148,7 +148,7 @@ class Actor(nn.Module):
             torch.manual_seed(seed)
         self.num_foods = num_foods
         in_size        = state_size + food_flat_size
-        self.trunk     = _mlp([in_size, hidden, hidden])
+        self.trunk     = _mlp([in_size, hidden])
         self.head      = nn.Linear(hidden, num_foods * 2)
 
     def forward(self, phy_state, food_emb_flat):
@@ -165,7 +165,7 @@ class Critic(nn.Module):
         super().__init__()
         if seed is not None:
             torch.manual_seed(seed)
-        self.net = _mlp([state_size + food_flat_size, hidden, hidden, 1])
+        self.net = _mlp([state_size + food_flat_size, hidden, 1])
 
     def forward(self, phy_state, food_emb_flat):
         return self.net(torch.cat([phy_state, food_emb_flat], dim=-1))
