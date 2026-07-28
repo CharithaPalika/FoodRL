@@ -1,0 +1,14 @@
+{"time":"2026-07-26T00:48:48.738203+05:30","level":"INFO","msg":"stream: starting","core version":"0.23.1"}
+{"time":"2026-07-26T00:48:49.307311+05:30","level":"INFO","msg":"stream: created new stream","id":"cchtsdvu"}
+{"time":"2026-07-26T00:48:49.307483+05:30","level":"INFO","msg":"handler: started","stream_id":"cchtsdvu"}
+{"time":"2026-07-26T00:48:49.30835+05:30","level":"INFO","msg":"stream: started","id":"cchtsdvu"}
+{"time":"2026-07-26T00:48:49.308355+05:30","level":"INFO","msg":"sender: started","stream_id":"cchtsdvu"}
+{"time":"2026-07-26T00:48:49.30835+05:30","level":"INFO","msg":"writer: started","stream_id":"cchtsdvu"}
+{"time":"2026-07-26T00:49:24.597673+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-26T00:49:24.598424+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-26T00:49:25.637688+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-07-26T00:49:26.294629+05:30","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2026-07-26T00:49:26.302691+05:30","level":"INFO","msg":"stream: closing","id":"cchtsdvu"}
+{"time":"2026-07-26T00:49:26.30273+05:30","level":"INFO","msg":"handler: closed","stream_id":"cchtsdvu"}
+{"time":"2026-07-26T00:49:26.30302+05:30","level":"INFO","msg":"sender: closed","stream_id":"cchtsdvu"}
+{"time":"2026-07-26T00:49:26.303042+05:30","level":"INFO","msg":"stream: closed","id":"cchtsdvu"}

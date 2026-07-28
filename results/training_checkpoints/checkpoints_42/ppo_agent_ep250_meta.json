@@ -1,0 +1,44 @@
+{
+  "env": {
+    "food_folder": "food_dataset",
+    "num_foods": 1,
+    "max_steps": 432,
+    "awake_steps_per_cycle": 96,
+    "sleep_steps_per_cycle": 48,
+    "is_continuous": false,
+    "one_hot_embedding": true,
+    "embed_size": null,
+    "consumption_threshold": 0.0,
+    "seed": 42
+  },
+  "agent": {
+    "shared": true,
+    "hidden": 256,
+    "bottlenecks": {
+      "trunk": {
+        "phy": 16,
+        "food": null
+      },
+      "actor_head": null,
+      "critic_head": 16
+    },
+    "seed": 42
+  },
+  "is_continuous": false,
+  "seed": 42,
+  "shared": true,
+  "hidden": 256,
+  "separate_branches": true,
+  "awake_steps": 96,
+  "sleep_steps": 48,
+  "num_foods": 1,
+  "max_steps": 432,
+  "bottleneck_names": [
+    "trunk_phy",
+    "critic_head"
+  ],
+  "amplitudes": {},
+  "biases": {},
+  "best_return": 169.13553328328712,
+  "best_episode": 229
+}

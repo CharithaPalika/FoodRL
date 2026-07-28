@@ -1,0 +1,615 @@
+{
+  "checkpoint": {
+    "ref_meta_path": "results/training_checkpoints/checkpoints_42/ppo_agent_best_meta.json",
+    "name": "best",
+    "seeds": [
+      42,
+      64,
+      0
+    ],
+    "ref_seed": 42,
+    "shared": true,
+    "hidden": 256,
+    "best_return": 200.76844101296322,
+    "best_episode": 1942,
+    "separate_branches": true
+  },
+  "ablation": {
+    "bottleneck": "trunk_phy",
+    "bottleneck_dim": 16,
+    "seeds": [
+      42,
+      64,
+      0
+    ],
+    "ref_seed": 42,
+    "seeded_inference": false,
+    "deterministic": true,
+    "n_inference_per_seed": 20,
+    "n_pooled_per_condition": 60,
+    "selected_neurons": [
+      0,
+      1,
+      2
+    ],
+    "conditions": [
+      {
+        "amp": 1.0,
+        "bias": -1.0,
+        "label": "bias=-1",
+        "results": {
+          "return_mean": 102.5144053777059,
+          "return_sem": 8.69074478113272,
+          "food_items_mean": 5.716666666666667,
+          "kcal_mean": 2245.1836751302085,
+          "avg_distance_mean": 0.33924268881479896,
+          "avg_signed_err_mean": -0.05192009609054367
+        }
+      },
+      {
+        "amp": 1.0,
+        "bias": 0.0,
+        "label": "baseline",
+        "results": {
+          "return_mean": 174.51129302978515,
+          "return_sem": 1.1552174209398065,
+          "food_items_mean": 10.583333333333334,
+          "kcal_mean": 4389.265295410156,
+          "avg_distance_mean": 0.18956530491511028,
+          "avg_signed_err_mean": -0.0016711329591998947
+        }
+      },
+      {
+        "amp": 1.0,
+        "bias": 1.5,
+        "label": "bias=+1.5",
+        "results": {
+          "return_mean": 92.00776076316833,
+          "return_sem": 7.344379588014296,
+          "food_items_mean": 20.1,
+          "kcal_mean": 8019.785392252604,
+          "avg_distance_mean": 0.4507199344535669,
+          "avg_signed_err_mean": 0.10395499318971511
+        }
+      }
+    ]
+  },
+  "sweep": {
+    "axis": "bias",
+    "ref_seed": 42,
+    "values": [
+      -1.5,
+      -1.396551724137931,
+      -1.293103448275862,
+      -1.1896551724137931,
+      -1.0862068965517242,
+      -0.9827586206896551,
+      -0.8793103448275862,
+      -0.7758620689655172,
+      -0.6724137931034483,
+      -0.5689655172413793,
+      -0.4655172413793103,
+      -0.3620689655172413,
+      -0.2586206896551724,
+      -0.15517241379310343,
+      -0.051724137931034475,
+      0.051724137931034475,
+      0.15517241379310343,
+      0.2586206896551724,
+      0.3620689655172413,
+      0.4655172413793103,
+      0.5689655172413794,
+      0.6724137931034484,
+      0.7758620689655173,
+      0.8793103448275863,
+      0.9827586206896552,
+      1.0862068965517242,
+      1.1896551724137931,
+      1.293103448275862,
+      1.396551724137931,
+      1.5
+    ],
+    "n_episodes": 20,
+    "results": [
+      {
+        "value": -1.5,
+        "reward_mean": 15.322430610656738,
+        "reward_sem": 0.0,
+        "consumption_mean": 0.0,
+        "consumption_sem": 0.0,
+        "calories_mean": 0.0,
+        "calories_sem": 0.0,
+        "distance_mean": 214.31015014648438,
+        "distance_sem": 0.0,
+        "signed_err_mean": -0.10593303292989731
+      },
+      {
+        "value": -1.396551724137931,
+        "reward_mean": 67.09028835296631,
+        "reward_sem": 5.119927189307346,
+        "consumption_mean": 2.25,
+        "consumption_sem": 0.16018081887929686,
+        "calories_mean": 758.8360565185546,
+        "calories_sem": 62.81368763208457,
+        "distance_mean": 177.47055206298828,
+        "distance_sem": 2.4454987364553435,
+        "signed_err_mean": -0.07800926119089127
+      },
+      {
+        "value": -1.293103448275862,
+        "reward_mean": 97.4468952178955,
+        "reward_sem": 0.8743833895714221,
+        "consumption_mean": 3.5,
+        "consumption_sem": 0.19867985355975656,
+        "calories_mean": 1231.9286804199219,
+        "calories_sem": 54.77165332307228,
+        "distance_mean": 161.70750579833984,
+        "distance_sem": 1.2613923286567594,
+        "signed_err_mean": -0.06479431167244912
+      },
+      {
+        "value": -1.1896551724137931,
+        "reward_mean": 102.22166366577149,
+        "reward_sem": 1.9879366818738464,
+        "consumption_mean": 3.85,
+        "consumption_sem": 0.13128915456069917,
+        "calories_mean": 1458.263653564453,
+        "calories_sem": 44.51069775744902,
+        "distance_mean": 156.79030685424806,
+        "distance_sem": 1.9601655492789978,
+        "signed_err_mean": -0.060212505236268046
+      },
+      {
+        "value": -1.0862068965517242,
+        "reward_mean": 105.86736526489258,
+        "reward_sem": 2.2040568969844117,
+        "consumption_mean": 4.45,
+        "consumption_sem": 0.1697521412933699,
+        "calories_mean": 1690.7021179199219,
+        "calories_sem": 49.91886813719033,
+        "distance_mean": 153.61353607177733,
+        "distance_sem": 2.413308724436209,
+        "signed_err_mean": -0.05858669336885214
+      },
+      {
+        "value": -0.9827586206896551,
+        "reward_mean": 123.28506851196289,
+        "reward_sem": 2.3493058002842027,
+        "consumption_mean": 5.3,
+        "consumption_sem": 0.1791794161110442,
+        "calories_mean": 2040.9003601074219,
+        "calories_sem": 44.97410470373528,
+        "distance_mean": 137.05272941589357,
+        "distance_sem": 2.2008425201930817,
+        "signed_err_mean": -0.045765561237931254
+      },
+      {
+        "value": -0.8793103448275862,
+        "reward_mean": 126.06341819763183,
+        "reward_sem": 2.0572275129209796,
+        "consumption_mean": 5.95,
+        "consumption_sem": 0.19834844406538177,
+        "calories_mean": 2315.813299560547,
+        "calories_sem": 68.86595555007638,
+        "distance_mean": 135.7924026489258,
+        "distance_sem": 2.355578285282728,
+        "signed_err_mean": -0.04660343714058399
+      },
+      {
+        "value": -0.7758620689655172,
+        "reward_mean": 137.00362091064454,
+        "reward_sem": 2.026948760126173,
+        "consumption_mean": 6.6,
+        "consumption_sem": 0.19735087641318605,
+        "calories_mean": 2649.1006591796877,
+        "calories_sem": 69.61726833110349,
+        "distance_mean": 124.21458473205567,
+        "distance_sem": 2.223969288509106,
+        "signed_err_mean": -0.03666256368160248
+      },
+      {
+        "value": -0.6724137931034483,
+        "reward_mean": 138.70826454162597,
+        "reward_sem": 2.284232377727887,
+        "consumption_mean": 7.2,
+        "consumption_sem": 0.23619795444544078,
+        "calories_mean": 2809.7708374023437,
+        "calories_sem": 87.34640333284219,
+        "distance_mean": 120.95134124755859,
+        "distance_sem": 2.053198010317178,
+        "signed_err_mean": -0.03444820335134864
+      },
+      {
+        "value": -0.5689655172413793,
+        "reward_mean": 146.60291748046876,
+        "reward_sem": 2.5967650125393207,
+        "consumption_mean": 7.35,
+        "consumption_sem": 0.20869267255691412,
+        "calories_mean": 2948.5717041015623,
+        "calories_sem": 70.71778708275795,
+        "distance_mean": 115.69184951782226,
+        "distance_sem": 2.694922423970387,
+        "signed_err_mean": -0.02935522384941578
+      },
+      {
+        "value": -0.4655172413793103,
+        "reward_mean": 158.66261291503906,
+        "reward_sem": 1.7507180041276444,
+        "consumption_mean": 8.1,
+        "consumption_sem": 0.20390916450326857,
+        "calories_mean": 3369.706994628906,
+        "calories_sem": 84.87922196459411,
+        "distance_mean": 100.67271499633789,
+        "distance_sem": 1.81528509574422,
+        "signed_err_mean": -0.019800126290647313
+      },
+      {
+        "value": -0.3620689655172413,
+        "reward_mean": 166.84476165771486,
+        "reward_sem": 1.7667966596897644,
+        "consumption_mean": 8.7,
+        "consumption_sem": 0.24170447375168488,
+        "calories_mean": 3561.91923828125,
+        "calories_sem": 84.58850615461796,
+        "distance_mean": 92.64271697998046,
+        "distance_sem": 1.9662240849740824,
+        "signed_err_mean": -0.01587915658019483
+      },
+      {
+        "value": -0.2586206896551724,
+        "reward_mean": 166.79469528198243,
+        "reward_sem": 2.0251472966594024,
+        "consumption_mean": 8.95,
+        "consumption_sem": 0.19834844406538177,
+        "calories_mean": 3587.6604858398437,
+        "calories_sem": 61.41122252222266,
+        "distance_mean": 92.76472854614258,
+        "distance_sem": 2.1170612929615706,
+        "signed_err_mean": -0.014166560722514987
+      },
+      {
+        "value": -0.15517241379310343,
+        "reward_mean": 173.20243759155272,
+        "reward_sem": 1.8159958174944288,
+        "consumption_mean": 9.85,
+        "consumption_sem": 0.20869267255691412,
+        "calories_mean": 4004.961572265625,
+        "calories_sem": 59.50303018861053,
+        "distance_mean": 83.32793960571288,
+        "distance_sem": 1.4342084099053969,
+        "signed_err_mean": -0.008294664626009762
+      },
+      {
+        "value": -0.051724137931034475,
+        "reward_mean": 168.76227798461915,
+        "reward_sem": 2.908464389224296,
+        "consumption_mean": 10.6,
+        "consumption_sem": 0.19735087641318605,
+        "calories_mean": 4331.932580566407,
+        "calories_sem": 79.79646087627651,
+        "distance_mean": 88.81960067749023,
+        "distance_sem": 3.239076172330701,
+        "signed_err_mean": -0.00970971827628091
+      },
+      {
+        "value": 0.051724137931034475,
+        "reward_mean": 174.0161331176758,
+        "reward_sem": 2.102544919731192,
+        "consumption_mean": 10.85,
+        "consumption_sem": 0.2643263533071033,
+        "calories_mean": 4364.317272949219,
+        "calories_sem": 89.57744616449979,
+        "distance_mean": 83.4638900756836,
+        "distance_sem": 1.9652633312566958,
+        "signed_err_mean": -0.003699566179420799
+      },
+      {
+        "value": 0.15517241379310343,
+        "reward_mean": 173.5247703552246,
+        "reward_sem": 2.656300036807354,
+        "consumption_mean": 11.85,
+        "consumption_sem": 0.28353965655989866,
+        "calories_mean": 4690.1484375,
+        "calories_sem": 83.91825868003137,
+        "distance_mean": 82.66145324707031,
+        "distance_sem": 2.5875654704159654,
+        "signed_err_mean": -0.002984646090772003
+      },
+      {
+        "value": 0.2586206896551724,
+        "reward_mean": 174.29858856201173,
+        "reward_sem": 2.527770924114411,
+        "consumption_mean": 12.4,
+        "consumption_sem": 0.19735087641318605,
+        "calories_mean": 5011.84775390625,
+        "calories_sem": 73.9204020002992,
+        "distance_mean": 82.70361671447753,
+        "distance_sem": 2.537849870709062,
+        "signed_err_mean": 0.004454852054186631
+      },
+      {
+        "value": 0.3620689655172413,
+        "reward_mean": 170.23025207519532,
+        "reward_sem": 2.828534073465362,
+        "consumption_mean": 12.7,
+        "consumption_sem": 0.3086473033978053,
+        "calories_mean": 5261.591870117188,
+        "calories_sem": 86.96765603887368,
+        "distance_mean": 84.66180191040038,
+        "distance_sem": 2.8861372020701626,
+        "signed_err_mean": 0.005508818047383101
+      },
+      {
+        "value": 0.4655172413793103,
+        "reward_mean": 168.76114654541016,
+        "reward_sem": 2.1567067798882635,
+        "consumption_mean": 13.7,
+        "consumption_sem": 0.23055995909273166,
+        "calories_mean": 5505.1009521484375,
+        "calories_sem": 111.57569935537548,
+        "distance_mean": 85.6836929321289,
+        "distance_sem": 1.8478701170840617,
+        "signed_err_mean": 0.009301147056976333
+      },
+      {
+        "value": 0.5689655172413794,
+        "reward_mean": 161.79563751220704,
+        "reward_sem": 1.9214426993343336,
+        "consumption_mean": 14.4,
+        "consumption_sem": 0.3509385911193611,
+        "calories_mean": 5860.589111328125,
+        "calories_sem": 106.70892798775597,
+        "distance_mean": 93.10913314819337,
+        "distance_sem": 2.1285463975244476,
+        "signed_err_mean": 0.018571693124249576
+      },
+      {
+        "value": 0.6724137931034484,
+        "reward_mean": 153.14025497436523,
+        "reward_sem": 2.730876004411802,
+        "consumption_mean": 15.7,
+        "consumption_sem": 0.3913539251583433,
+        "calories_mean": 6161.713110351562,
+        "calories_sem": 99.46180430262059,
+        "distance_mean": 99.88440132141113,
+        "distance_sem": 2.9199276809892902,
+        "signed_err_mean": 0.020014909165911376
+      },
+      {
+        "value": 0.7758620689655173,
+        "reward_mean": 146.50828857421874,
+        "reward_sem": 2.066775893478437,
+        "consumption_mean": 15.9,
+        "consumption_sem": 0.29824045403173033,
+        "calories_mean": 6517.843823242188,
+        "calories_sem": 92.67329391091306,
+        "distance_mean": 108.64730491638184,
+        "distance_sem": 3.187184034406001,
+        "signed_err_mean": 0.031478102784603834
+      },
+      {
+        "value": 0.8793103448275863,
+        "reward_mean": 139.81537399291992,
+        "reward_sem": 2.3231868302630305,
+        "consumption_mean": 16.55,
+        "consumption_sem": 0.3938674636820975,
+        "calories_mean": 6673.81943359375,
+        "calories_sem": 136.27086642180402,
+        "distance_mean": 113.37701454162598,
+        "distance_sem": 2.822810573106258,
+        "signed_err_mean": 0.03620212050154805
+      },
+      {
+        "value": 0.9827586206896552,
+        "reward_mean": 131.17407608032227,
+        "reward_sem": 2.052108423582217,
+        "consumption_mean": 18.05,
+        "consumption_sem": 0.32827299294144935,
+        "calories_mean": 7281.9576171875,
+        "calories_sem": 100.66891864714708,
+        "distance_mean": 124.45710983276368,
+        "distance_sem": 2.429156315171487,
+        "signed_err_mean": 0.03954685498028994
+      },
+      {
+        "value": 1.0862068965517242,
+        "reward_mean": 120.68987159729004,
+        "reward_sem": 2.309701372459338,
+        "consumption_mean": 18.65,
+        "consumption_sem": 0.4247290157760655,
+        "calories_mean": 7716.55078125,
+        "calories_sem": 126.37434334859142,
+        "distance_mean": 139.6204391479492,
+        "distance_sem": 3.226773440774237,
+        "signed_err_mean": 0.05582163343206048
+      },
+      {
+        "value": 1.1896551724137931,
+        "reward_mean": 107.54854393005371,
+        "reward_sem": 2.4197656294130123,
+        "consumption_mean": 19.55,
+        "consumption_sem": 0.44999999999999996,
+        "calories_mean": 7804.484594726562,
+        "calories_sem": 97.08711082872748,
+        "distance_mean": 155.3134002685547,
+        "distance_sem": 3.4734564440971254,
+        "signed_err_mean": 0.06529564838856458
+      },
+      {
+        "value": 1.293103448275862,
+        "reward_mean": 101.34102058410645,
+        "reward_sem": 1.8321339807196326,
+        "consumption_mean": 20.65,
+        "consumption_sem": 0.3788834010338107,
+        "calories_mean": 8205.908227539063,
+        "calories_sem": 118.82201916346135,
+        "distance_mean": 162.71383972167968,
+        "distance_sem": 3.2852911344986246,
+        "signed_err_mean": 0.07579799760133028
+      },
+      {
+        "value": 1.396551724137931,
+        "reward_mean": 86.16257762908936,
+        "reward_sem": 2.4481535988279233,
+        "consumption_mean": 21.65,
+        "consumption_sem": 0.28353965655989866,
+        "calories_mean": 8860.815380859374,
+        "calories_sem": 135.27769398034997,
+        "distance_mean": 187.18597183227538,
+        "distance_sem": 3.2245141248759484,
+        "signed_err_mean": 0.09850352257490158
+      },
+      {
+        "value": 1.5,
+        "reward_mean": 76.21213474273682,
+        "reward_sem": 1.4877522034409483,
+        "consumption_mean": 23.35,
+        "consumption_sem": 0.4429268681467809,
+        "calories_mean": 9366.21396484375,
+        "calories_sem": 105.14110438157546,
+        "distance_mean": 204.84274368286134,
+        "distance_sem": 1.9307908745921318,
+        "signed_err_mean": 0.11560318432748318
+      }
+    ],
+    "peak_reward": {
+      "value": 0.2586206896551724,
+      "reward_mean": 174.29858856201173
+    },
+    "under_eating_value_range": [
+      -1.5,
+      0.15517241379310343
+    ],
+    "over_eating_value_range": [
+      0.2586206896551724,
+      1.5
+    ]
+  },
+  "env": {
+    "food_folder": "food_dataset",
+    "num_foods": 1,
+    "num_items": 19,
+    "food_items": [
+      "Apple_Pineapplesalad_01",
+      "Bread_Meal_01",
+      "Bread_Meal_02",
+      "Chickensandwich_01",
+      "Cholebhature_01",
+      "Curd_01",
+      "Curdrice_01",
+      "Lemonrice_01",
+      "Masaladosa_01",
+      "Milk_Chocolate_01",
+      "Muttonpulao_02",
+      "Omelette_01",
+      "Orange_01",
+      "Paneer_01",
+      "Pasta_01",
+      "Peanuts_01",
+      "Rice_01",
+      "Spinach_01",
+      "Vegetable_Biryani_01"
+    ],
+    "max_steps": 432,
+    "awake_steps_per_cycle": 96,
+    "sleep_steps_per_cycle": 48,
+    "cycle_length": 144,
+    "minutes_per_step": 5,
+    "is_continuous": false,
+    "consumption_threshold": 0.0
+  },
+  "nutrient_config": {
+    "glucose": {
+      "csv": "serum_glucose.csv",
+      "col_suffix": "_serum_glucose_mg_dl",
+      "target": 90.0,
+      "tolerance": 20.0,
+      "initial_value": 60.0,
+      "in_range_bonus": 2.0,
+      "window_size": 1,
+      "reward_weight": 0.1,
+      "decay_rate": 0.02,
+      "sleep_decay_rate": 0.0005,
+      "sleep_penalty_weight": 2.0,
+      "is_cumulative": false
+    },
+    "peptides": {
+      "csv": "small_peptides_absorbed.csv",
+      "col_suffix": "_small peptides absorbed",
+      "target": 0.0004,
+      "tolerance": 0.00025,
+      "initial_value": 0.0002,
+      "in_range_bonus": 1.5,
+      "window_size": 1,
+      "reward_weight": 0.1,
+      "decay_rate": 0.02,
+      "sleep_decay_rate": 0.0001,
+      "sleep_penalty_weight": 1.5,
+      "is_cumulative": false
+    },
+    "fatty_acids": {
+      "csv": "fatty_acids_absorbed.csv",
+      "col_suffix": "_fatty acids absorbed",
+      "target": 0.00025,
+      "tolerance": 7.5e-05,
+      "initial_value": 0.0001,
+      "in_range_bonus": 1.5,
+      "window_size": 1,
+      "reward_weight": 0.1,
+      "decay_rate": 0.02,
+      "sleep_decay_rate": 0.0001,
+      "sleep_penalty_weight": 1.5,
+      "is_cumulative": false
+    }
+  },
+  "shadow_nutrient_config": {
+    "fullness": {
+      "csv": "fullness.csv",
+      "col_suffix": "_fullness",
+      "decay_rate": 0.02,
+      "sleep_decay_rate": 0.0,
+      "initial_value": 0.0,
+      "is_cumulative": false
+    },
+    "hunger": {
+      "csv": "hunger.csv",
+      "col_suffix": "_hunger",
+      "decay_rate": 0.02,
+      "sleep_decay_rate": 0.0,
+      "initial_value": 0.5,
+      "is_cumulative": false
+    },
+    "cck": {
+      "csv": "cck.csv",
+      "col_suffix": "_CCK",
+      "decay_rate": 0.01,
+      "sleep_decay_rate": 0.0,
+      "initial_value": 0.0,
+      "is_cumulative": false
+    },
+    "ghrelin": {
+      "csv": "ghrelin.csv",
+      "col_suffix": "_Ghrelin",
+      "decay_rate": 0.01,
+      "sleep_decay_rate": 0.0,
+      "initial_value": 0.5,
+      "is_cumulative": false
+    },
+    "glp_1": {
+      "csv": "glp_1.csv",
+      "col_suffix": "_GLP1",
+      "decay_rate": 0.01,
+      "sleep_decay_rate": 0.0,
+      "initial_value": 0.0,
+      "is_cumulative": false
+    },
+    "pyy": {
+      "csv": "pyy.csv",
+      "col_suffix": "_PYY",
+      "decay_rate": 0.01,
+      "sleep_decay_rate": 0.0,
+      "initial_value": 0.0,
+      "is_cumulative": false
+    }
+  }
+}

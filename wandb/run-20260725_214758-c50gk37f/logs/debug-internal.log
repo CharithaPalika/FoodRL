@@ -1,0 +1,16 @@
+{"time":"2026-07-25T21:47:58.024137+05:30","level":"INFO","msg":"stream: starting","core version":"0.23.1"}
+{"time":"2026-07-25T21:47:58.645549+05:30","level":"INFO","msg":"stream: created new stream","id":"c50gk37f"}
+{"time":"2026-07-25T21:47:58.645741+05:30","level":"INFO","msg":"handler: started","stream_id":"c50gk37f"}
+{"time":"2026-07-25T21:47:58.646354+05:30","level":"INFO","msg":"stream: started","id":"c50gk37f"}
+{"time":"2026-07-25T21:47:58.646354+05:30","level":"INFO","msg":"writer: started","stream_id":"c50gk37f"}
+{"time":"2026-07-25T21:47:58.64637+05:30","level":"INFO","msg":"sender: started","stream_id":"c50gk37f"}
+{"time":"2026-07-25T21:49:25.276515+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/c50gk37f/file_stream\": EOF"}
+{"time":"2026-07-25T21:49:37.461358+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/c50gk37f/file_stream\": EOF"}
+{"time":"2026-07-25T21:49:46.581847+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-25T21:49:46.582799+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-25T21:49:47.420446+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-07-25T21:50:12.695785+05:30","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2026-07-25T21:50:12.704278+05:30","level":"INFO","msg":"stream: closing","id":"c50gk37f"}
+{"time":"2026-07-25T21:50:12.704324+05:30","level":"INFO","msg":"handler: closed","stream_id":"c50gk37f"}
+{"time":"2026-07-25T21:50:12.70454+05:30","level":"INFO","msg":"sender: closed","stream_id":"c50gk37f"}
+{"time":"2026-07-25T21:50:12.704557+05:30","level":"INFO","msg":"stream: closed","id":"c50gk37f"}

@@ -1,0 +1,29 @@
+{"time":"2026-07-27T20:03:05.537162+05:30","level":"INFO","msg":"stream: starting","core version":"0.23.1"}
+{"time":"2026-07-27T20:03:06.100419+05:30","level":"INFO","msg":"stream: created new stream","id":"1ezdkdh7"}
+{"time":"2026-07-27T20:03:06.100602+05:30","level":"INFO","msg":"handler: started","stream_id":"1ezdkdh7"}
+{"time":"2026-07-27T20:03:06.101225+05:30","level":"INFO","msg":"stream: started","id":"1ezdkdh7"}
+{"time":"2026-07-27T20:03:06.101241+05:30","level":"INFO","msg":"writer: started","stream_id":"1ezdkdh7"}
+{"time":"2026-07-27T20:03:06.101255+05:30","level":"INFO","msg":"sender: started","stream_id":"1ezdkdh7"}
+{"time":"2026-07-27T20:03:17.986615+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:04:02.919317+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:04:15.947329+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:05:18.001006+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:06:47.922814+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:07:38.670912+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:07:47.813183+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:08:23.971503+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:09:17.928579+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:09:28.883283+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:11:17.034962+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:12:14.892792+05:30","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream","body":"{\"error\":\"context deadline exceeded\"}"}
+{"time":"2026-07-27T20:12:30.046751+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:15:01.09102+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:15:32.012966+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:15:44.609069+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream\": EOF"}
+{"time":"2026-07-27T20:19:52.861145+05:30","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream","body":"{\"error\":\"context deadline exceeded\"}"}
+{"time":"2026-07-27T20:22:32.678593+05:30","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream","body":"{\"error\":\"context deadline exceeded\"}"}
+{"time":"2026-07-27T20:36:52.461676+05:30","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream","body":"{\"error\":\"context deadline exceeded\"}"}
+{"time":"2026-07-27T20:40:08.041269+05:30","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream","body":"{\"error\":\"context deadline exceeded\"}"}
+{"time":"2026-07-27T20:44:32.553374+05:30","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream","body":"{\"error\":\"context deadline exceeded\"}"}
+{"time":"2026-07-27T20:54:50.445472+05:30","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream","body":"{\"error\":\"context deadline exceeded\"}"}
+{"time":"2026-07-27T20:58:47.51825+05:30","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/files/charitha_palika/Food%20RL/1ezdkdh7/file_stream","body":"{\"error\":\"context deadline exceeded\"}"}

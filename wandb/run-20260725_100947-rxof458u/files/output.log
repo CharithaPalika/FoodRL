@@ -1,0 +1,103 @@
+[34m[1mwandb[0m: Detected [agents] in use.
+[34m[1mwandb[0m: Use W&B Weave for improved LLM call tracing. Install Weave with `pip install weave` then add `import weave` to the top of your script.
+[34m[1mwandb[0m: For more information, check out the docs at: https://weave-docs.wandb.ai/
+Episode length: 432 steps  (3 cycles)
+Action mode: discrete
+Architecture: shared=True  hidden=256
+Bottlenecks config: {'trunk': {'phy': 16, 'food': None}, 'actor_head': None, 'critic_head': 16}
+[FoodEnv] Loading  'glucose'  from  'foods_dataset_raw/serum_glucose.csv'
+           min=0.0000  max=153.4313   foods=28   time_points=500
+[FoodEnv] Loading  'peptides'  from  'foods_dataset_raw/small_peptides_absorbed.csv'
+           min=0.0000  max=0.0018   foods=28   time_points=500
+[FoodEnv] Loading  'fatty_acids'  from  'foods_dataset_raw/fatty_acids_absorbed.csv'
+           min=0.0000  max=0.0049   foods=28   time_points=500
+[FoodEnv] Ready — 28 foods | 3 time-series nutrients | 0 cumulative nutrients
+[FoodEnv] Loading shadow nutrient 'fullness'  from  'foods_dataset_raw/fullness.csv'
+[FoodEnv] Loading shadow nutrient 'hunger'  from  'foods_dataset_raw/hunger.csv'
+[FoodEnv] Loading shadow nutrient 'cck'  from  'foods_dataset_raw/cck.csv'
+[FoodEnv] Loading shadow nutrient 'ghrelin'  from  'foods_dataset_raw/ghrelin.csv'
+[FoodEnv] Loading shadow nutrient 'glp_1'  from  'foods_dataset_raw/glp_1.csv'
+[FoodEnv] Loading shadow nutrient 'pyy'  from  'foods_dataset_raw/pyy.csv'
+[FoodEnv] Shadow nutrients ready — 6 signal(s): ['fullness', 'hunger', 'cck', 'ghrelin', 'glp_1', 'pyy'] (observation/reward untouched)
+[FoodEnv] NOTE – 7 food(s) have non-cumulative (zero-filled after absorption) calorie curves: ['Biscuit_01', 'Chickenbreast_01', 'Eggwhite_01', 'Ghee_01', 'Glucose_01', 'Glucose_02', 'Rapid_starch_01']. Using the curve MAX as their total.
+[FoodEnv] Calorie totals ready — 28/28 foods (inference-only; observation/reward untouched)
+[FoodEnv] NOTE – 4 food(s) have a total below 1 kcal, which is likely missing/!=kcal source data rather than real energy content.
+
+── Environment summary ──────────────────────────────────────
+  Food items             : 28
+  Nutrients              : 3  ['glucose', 'peptides', 'fatty_acids']
+  Observation state dim  : 5  (nutrients + is_awake + time_in_cycle)
+  Menu size              : 1
+  Action space           : Discrete(2)
+  Max steps               : 432
+  Awake steps / cycle    : 96
+  Sleep steps / cycle    : 48
+  Cycle length           : 144
+  Consumption threshold  : 0.0
+  Target (normed)        : [0.5865819  0.22346368 0.05154639]
+  Target low             : [0.45623037 0.08379889 0.03608247]
+  Target high            : [0.7169334  0.36312848 0.06701031]
+
+   nutrient  data_min  data_max  raw_target  normalised_target  window_size  decay_rate  sleep_decay_rate  sleep_penalty_weight  reward_weight
+    glucose       0.0 153.43126    90.00000           0.586582            1        0.02            0.0005                   2.0            0.1
+   peptides       0.0   0.00179     0.00040           0.223464            1        0.02            0.0001                   1.5            0.1
+fatty_acids       0.0   0.00485     0.00025           0.051546            1        0.02            0.0001                   1.5            0.1
+─────────────────────────────────────────────────────────────
+Agent built. shared=True  is_continuous=False
+  policy: SharedDiscreteActorCritic
+Bottlenecks: {'trunk_phy': {'dim': 16, 'amplitude': 1.0, 'bias': 0.0}, 'critic_head': {'dim': 16, 'amplitude': 1.0, 'bias': 0.0}}
+Starting training: 2000 episodes …
+  [best] new best return -1144.86 @ ep1 → results/checkpoints_100/ppo_agent_best_*
+  [best] new best return -887.03 @ ep2 → results/checkpoints_100/ppo_agent_best_*
+Episode     2 | Last Return:  -887.03 | Rolling Avg(50): -1015.95 | Food items:   91 | Total Distance:  1411.53 | Actor L:  -0.017 | Critic L: 1140.329
+  [best] new best return -311.34 @ ep3 → results/checkpoints_100/ppo_agent_best_*
+  [best] new best return -105.40 @ ep4 → results/checkpoints_100/ppo_agent_best_*
+Episode     4 | Last Return:  -105.40 | Rolling Avg(50):  -612.16 | Food items:   43 | Total Distance:   570.05 | Actor L:  -0.005 | Critic L:  30.094
+  [best] new best return -8.83 @ ep5 → results/checkpoints_100/ppo_agent_best_*
+  [best] new best return 34.68 @ ep6 → results/checkpoints_100/ppo_agent_best_*
+Episode     6 | Last Return:    34.68 | Rolling Avg(50):  -403.80 | Food items:   22 | Total Distance:   242.28 | Actor L:   0.001 | Critic L:   3.318
+Episode     8 | Last Return:    14.52 | Rolling Avg(50):  -298.84 | Food items:   34 | Total Distance:   263.61 | Actor L:  -0.005 | Critic L:   5.971
+  [best] new best return 83.78 @ ep9 → results/checkpoints_100/ppo_agent_best_*
+Episode    10 | Last Return:    31.11 | Rolling Avg(50):  -227.58 | Food items:   19 | Total Distance:   250.06 | Actor L:  -0.003 | Critic L:   1.536
+Episode    12 | Last Return:    75.90 | Rolling Avg(50):  -179.57 | Food items:   15 | Total Distance:   118.87 | Actor L:  -0.001 | Critic L:   4.990
+  [best] new best return 91.88 @ ep13 → results/checkpoints_100/ppo_agent_best_*
+Episode    14 | Last Return:    71.78 | Rolling Avg(50):  -142.23 | Food items:    9 | Total Distance:   118.80 | Actor L:  -0.007 | Critic L:   4.347
+Episode    16 | Last Return:    74.00 | Rolling Avg(50):  -115.58 | Food items:   12 | Total Distance:   123.80 | Actor L:  -0.001 | Critic L:   6.030
+Episode    18 | Last Return:    80.83 | Rolling Avg(50):   -94.11 | Food items:   17 | Total Distance:   152.89 | Actor L:  -0.003 | Critic L:  10.511
+Episode    20 | Last Return:    76.97 | Rolling Avg(50):   -77.06 | Food items:   16 | Total Distance:   129.28 | Actor L:  -0.003 | Critic L:   6.158
+  [best] new best return 99.61 @ ep22 → results/checkpoints_100/ppo_agent_best_*
+Episode    22 | Last Return:    99.61 | Rolling Avg(50):   -62.10 | Food items:   18 | Total Distance:   122.06 | Actor L:   0.001 | Critic L:   2.940
+Episode    24 | Last Return:    79.65 | Rolling Avg(50):   -50.57 | Food items:   13 | Total Distance:   129.52 | Actor L:  -0.003 | Critic L:   4.064
+Episode    26 | Last Return:    60.97 | Rolling Avg(50):   -41.71 | Food items:   15 | Total Distance:   144.13 | Actor L:  -0.004 | Critic L:   6.324
+Episode    28 | Last Return:    59.19 | Rolling Avg(50):   -34.67 | Food items:   22 | Total Distance:   186.07 | Actor L:  -0.001 | Critic L:   1.878
+Episode    30 | Last Return:    13.96 | Rolling Avg(50):   -31.04 | Food items:   26 | Total Distance:   249.00 | Actor L:  -0.001 | Critic L:   2.981
+  [best] new best return 108.24 @ ep32 → results/checkpoints_100/ppo_agent_best_*
+Episode    32 | Last Return:   108.24 | Rolling Avg(50):   -23.74 | Food items:   17 | Total Distance:   124.35 | Actor L:  -0.006 | Critic L:   2.247
+Episode    34 | Last Return:    67.07 | Rolling Avg(50):   -18.22 | Food items:   16 | Total Distance:   159.19 | Actor L:  -0.002 | Critic L:   4.831
+Episode    36 | Last Return:    56.31 | Rolling Avg(50):   -13.54 | Food items:   15 | Total Distance:   169.94 | Actor L:  -0.002 | Critic L:   1.516
+Episode    38 | Last Return:    97.42 | Rolling Avg(50):    -8.67 | Food items:   15 | Total Distance:   137.99 | Actor L:  -0.000 | Critic L:   1.972
+Episode    40 | Last Return:    77.60 | Rolling Avg(50):    -4.24 | Food items:   18 | Total Distance:   113.61 | Actor L:  -0.003 | Critic L:   1.472
+Episode    42 | Last Return:    51.32 | Rolling Avg(50):    -0.64 | Food items:   14 | Total Distance:   156.76 | Actor L:  -0.008 | Critic L:   2.592
+Episode    44 | Last Return:    88.99 | Rolling Avg(50):     3.24 | Food items:   13 | Total Distance:   118.62 | Actor L:   0.000 | Critic L:   1.795
+Episode    46 | Last Return:   101.94 | Rolling Avg(50):     7.13 | Food items:   16 | Total Distance:   124.21 | Actor L:  -0.003 | Critic L:   4.141
+Episode    48 | Last Return:    69.67 | Rolling Avg(50):    10.14 | Food items:   17 | Total Distance:   147.20 | Actor L:  -0.007 | Critic L:   2.693
+  [best] new best return 115.06 @ ep49 → results/checkpoints_100/ppo_agent_best_*
+Episode    50 | Last Return:    78.62 | Rolling Avg(50):    13.60 | Food items:   16 | Total Distance:   121.55 | Actor L:  -0.002 | Critic L:   1.039
+Episode    52 | Last Return:   100.71 | Rolling Avg(50):    57.95 | Food items:   14 | Total Distance:   104.77 | Actor L:  -0.002 | Critic L:   3.924
+Episode    54 | Last Return:    85.58 | Rolling Avg(50):    69.62 | Food items:   17 | Total Distance:   115.20 | Actor L:  -0.003 | Critic L:   1.106
+Episode    56 | Last Return:    87.00 | Rolling Avg(50):    72.58 | Food items:   19 | Total Distance:   141.48 | Actor L:  -0.002 | Critic L:   3.157
+Episode    58 | Last Return:    65.83 | Rolling Avg(50):    74.80 | Food items:   18 | Total Distance:   119.77 | Actor L:  -0.000 | Critic L:   1.971
+Episode    60 | Last Return:   107.46 | Rolling Avg(50):    76.57 | Food items:   14 | Total Distance:   104.23 | Actor L:  -0.003 | Critic L:   2.818
+Episode    62 | Last Return:   109.21 | Rolling Avg(50):    78.41 | Food items:   16 | Total Distance:   138.95 | Actor L:  -0.004 | Critic L:   3.378
+Episode    64 | Last Return:    87.91 | Rolling Avg(50):    79.09 | Food items:   12 | Total Distance:   112.70 | Actor L:  -0.002 | Critic L:   3.566
+Episode    66 | Last Return:    85.09 | Rolling Avg(50):    79.63 | Food items:   15 | Total Distance:   118.23 | Actor L:   0.000 | Critic L:   1.796
+Episode    68 | Last Return:    83.12 | Rolling Avg(50):    79.52 | Food items:   15 | Total Distance:   113.82 | Actor L:  -0.003 | Critic L:   1.003
+  [best] new best return 118.94 @ ep69 → results/checkpoints_100/ppo_agent_best_*
+Episode    70 | Last Return:    75.46 | Rolling Avg(50):    80.35 | Food items:   16 | Total Distance:   107.96 | Actor L:  -0.003 | Critic L:   1.518
+Episode    72 | Last Return:   112.68 | Rolling Avg(50):    80.89 | Food items:   13 | Total Distance:    99.73 | Actor L:   0.000 | Critic L:   4.156
+Episode    74 | Last Return:    90.47 | Rolling Avg(50):    81.37 | Food items:   16 | Total Distance:   130.54 | Actor L:  -0.005 | Critic L:   1.164
+Episode    76 | Last Return:    81.32 | Rolling Avg(50):    81.56 | Food items:   18 | Total Distance:   126.39 | Actor L:  -0.004 | Critic L:   2.729
+Episode    78 | Last Return:   102.72 | Rolling Avg(50):    83.60 | Food items:   19 | Total Distance:   123.45 | Actor L:  -0.002 | Critic L:   4.986
+Episode    80 | Last Return:    96.77 | Rolling Avg(50):    86.50 | Food items:   12 | Total Distance:   109.95 | Actor L:  -0.003 | Critic L:   3.050
+Episode    82 | Last Return:   104.26 | Rolling Avg(50):    87.28 | Food items:   13 | Total Distance:   118.92 | Actor L:  -0.002 | Critic L:   1.952
+Episode    84 | Last Return:    79.86 | Rolling Avg(50):    87.81 | Food items:   14 | Total Distance:   114.25 | Actor L:  -0.003 | Critic L:   3.920

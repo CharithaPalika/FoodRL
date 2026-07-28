@@ -1,0 +1,25 @@
+{"time":"2026-07-26T23:48:08.519876+05:30","level":"INFO","msg":"stream: starting","core version":"0.23.1"}
+{"time":"2026-07-26T23:48:09.10235+05:30","level":"INFO","msg":"stream: created new stream","id":"jxrvvka9"}
+{"time":"2026-07-26T23:48:09.102541+05:30","level":"INFO","msg":"handler: started","stream_id":"jxrvvka9"}
+{"time":"2026-07-26T23:48:09.103383+05:30","level":"INFO","msg":"stream: started","id":"jxrvvka9"}
+{"time":"2026-07-26T23:48:09.103383+05:30","level":"INFO","msg":"writer: started","stream_id":"jxrvvka9"}
+{"time":"2026-07-26T23:48:09.103421+05:30","level":"INFO","msg":"sender: started","stream_id":"jxrvvka9"}
+{"time":"2026-07-26T23:48:26.105529+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-26T23:48:26.105736+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-26T23:48:40.799176+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-26T23:48:40.79939+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-26T23:48:55.682566+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-26T23:48:55.682797+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-26T23:49:05.684229+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/jxrvvka9/file_stream\": dial tcp 34.8.250.101:443: connect: operation timed out"}
+{"time":"2026-07-26T23:49:10.505297+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-26T23:49:10.505491+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-26T23:49:25.974909+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-26T23:49:25.976079+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-26T23:49:26.646528+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-26T23:49:26.647399+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-26T23:49:27.596129+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-07-26T23:49:28.318553+05:30","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2026-07-26T23:49:28.325742+05:30","level":"INFO","msg":"stream: closing","id":"jxrvvka9"}
+{"time":"2026-07-26T23:49:28.325778+05:30","level":"INFO","msg":"handler: closed","stream_id":"jxrvvka9"}
+{"time":"2026-07-26T23:49:28.325985+05:30","level":"INFO","msg":"sender: closed","stream_id":"jxrvvka9"}
+{"time":"2026-07-26T23:49:28.326006+05:30","level":"INFO","msg":"stream: closed","id":"jxrvvka9"}

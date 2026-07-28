@@ -1,0 +1,211 @@
+{
+  "checkpoint": {
+    "meta_path": "results/checkpoints_0/ppo_agent_best_meta.json",
+    "name": "best",
+    "seed": 0,
+    "shared": true,
+    "hidden": 256,
+    "best_return": 200.36559658188145,
+    "best_episode": 1739,
+    "separate_branches": true
+  },
+  "bottlenecks": {
+    "trunk_phy": {
+      "dim": 16
+    },
+    "critic_head": {
+      "dim": 16
+    }
+  },
+  "env": {
+    "food_folder": "food_dataset",
+    "num_foods": 1,
+    "num_items": 19,
+    "food_items": [
+      "Apple_Pineapplesalad_01",
+      "Bread_Meal_01",
+      "Bread_Meal_02",
+      "Chickensandwich_01",
+      "Cholebhature_01",
+      "Curd_01",
+      "Curdrice_01",
+      "Lemonrice_01",
+      "Masaladosa_01",
+      "Milk_Chocolate_01",
+      "Muttonpulao_02",
+      "Omelette_01",
+      "Orange_01",
+      "Paneer_01",
+      "Pasta_01",
+      "Peanuts_01",
+      "Rice_01",
+      "Spinach_01",
+      "Vegetable_Biryani_01"
+    ],
+    "max_steps": 432,
+    "awake_steps_per_cycle": 96,
+    "sleep_steps_per_cycle": 48,
+    "cycle_length": 144,
+    "minutes_per_step": 5,
+    "is_continuous": false,
+    "consumption_threshold": 0.0
+  },
+  "nutrient_config": {
+    "glucose": {
+      "csv": "serum_glucose.csv",
+      "col_suffix": "_serum_glucose_mg_dl",
+      "target": 90.0,
+      "tolerance": 20.0,
+      "initial_value": 60.0,
+      "in_range_bonus": 2.0,
+      "window_size": 1,
+      "reward_weight": 0.1,
+      "decay_rate": 0.02,
+      "sleep_decay_rate": 0.0005,
+      "sleep_penalty_weight": 2.0,
+      "is_cumulative": false
+    },
+    "peptides": {
+      "csv": "small_peptides_absorbed.csv",
+      "col_suffix": "_small peptides absorbed",
+      "target": 0.0004,
+      "tolerance": 0.00025,
+      "initial_value": 0.0002,
+      "in_range_bonus": 1.5,
+      "window_size": 1,
+      "reward_weight": 0.1,
+      "decay_rate": 0.02,
+      "sleep_decay_rate": 0.0001,
+      "sleep_penalty_weight": 1.5,
+      "is_cumulative": false
+    },
+    "fatty_acids": {
+      "csv": "fatty_acids_absorbed.csv",
+      "col_suffix": "_fatty acids absorbed",
+      "target": 0.00025,
+      "tolerance": 7.5e-05,
+      "initial_value": 0.0001,
+      "in_range_bonus": 1.5,
+      "window_size": 1,
+      "reward_weight": 0.1,
+      "decay_rate": 0.02,
+      "sleep_decay_rate": 0.0001,
+      "sleep_penalty_weight": 1.5,
+      "is_cumulative": false
+    }
+  },
+  "shadow_nutrient_config": {
+    "fullness": {
+      "csv": "fullness.csv",
+      "col_suffix": "_fullness",
+      "decay_rate": 0.02,
+      "sleep_decay_rate": 0.0,
+      "initial_value": 0.0,
+      "is_cumulative": false
+    },
+    "hunger": {
+      "csv": "hunger.csv",
+      "col_suffix": "_hunger",
+      "decay_rate": 0.02,
+      "sleep_decay_rate": 0.0,
+      "initial_value": 0.5,
+      "is_cumulative": false
+    },
+    "cck": {
+      "csv": "cck.csv",
+      "col_suffix": "_CCK",
+      "decay_rate": 0.01,
+      "sleep_decay_rate": 0.0,
+      "initial_value": 0.0,
+      "is_cumulative": false
+    },
+    "ghrelin": {
+      "csv": "ghrelin.csv",
+      "col_suffix": "_Ghrelin",
+      "decay_rate": 0.01,
+      "sleep_decay_rate": 0.0,
+      "initial_value": 0.5,
+      "is_cumulative": false
+    },
+    "glp_1": {
+      "csv": "glp_1.csv",
+      "col_suffix": "_GLP1",
+      "decay_rate": 0.01,
+      "sleep_decay_rate": 0.0,
+      "initial_value": 0.0,
+      "is_cumulative": false
+    },
+    "pyy": {
+      "csv": "pyy.csv",
+      "col_suffix": "_PYY",
+      "decay_rate": 0.01,
+      "sleep_decay_rate": 0.0,
+      "initial_value": 0.0,
+      "is_cumulative": false
+    }
+  },
+  "run": {
+    "n_inference": 200,
+    "deterministic": true,
+    "reward_threshold": 170.0,
+    "representative_episode": 189,
+    "representative_return": 199.65899658203125
+  },
+  "results": {
+    "avg_reward": {
+      "mean": 0.4054113855957985,
+      "std": 0.024033013473061488
+    },
+    "avg_distance": {
+      "mean": 0.1897116431593895,
+      "std": 0.023836461858034286
+    },
+    "avg_signed_err": {
+      "mean": -0.0012336169018908548,
+      "std": 0.007491344233553576
+    },
+    "food_items": {
+      "mean": 10.695,
+      "std": 1.2080030450226196
+    },
+    "total_return": {
+      "mean": 175.1377187347412,
+      "std": 10.38226153627385
+    },
+    "per_nutrient_signed_err_mean": {
+      "glucose": -0.00026247695417623616,
+      "peptides": 0.0036789987456722884,
+      "fatty_acids": -0.007117372266875464
+    },
+    "decode": {
+      "hunger|linear": {
+        "r2_cv": 0.42854074451908586,
+        "mse_cv": 0.013227639976826279,
+        "r_cv": 0.6546349531410796,
+        "r2_in": 0.43254484931813475,
+        "mse_in": 0.013134956454417096
+      },
+      "hunger|poly": {
+        "r2_cv": 0.5784871559322866,
+        "mse_cv": 0.009756811344745198,
+        "r_cv": 0.7605898998987479,
+        "r2_in": 0.5888829660258643,
+        "mse_in": 0.009516178207970506
+      },
+      "fullness|linear": {
+        "r2_cv": 0.5690873270682086,
+        "mse_cv": 0.00986384175623768,
+        "r_cv": 0.7543828757585038,
+        "r2_in": 0.5599089445685266,
+        "mse_in": 0.010073940270953248
+      },
+      "fullness|poly": {
+        "r2_cv": 0.6586241847928249,
+        "mse_cv": 0.00781429099706059,
+        "r_cv": 0.811587927483724,
+        "r2_in": 0.6692388559284657,
+        "mse_in": 0.007571314999942404
+      }
+    }
+  }
+}

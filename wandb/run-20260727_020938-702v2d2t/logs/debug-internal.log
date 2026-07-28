@@ -1,0 +1,25 @@
+{"time":"2026-07-27T02:09:38.21857+05:30","level":"INFO","msg":"stream: starting","core version":"0.23.1"}
+{"time":"2026-07-27T02:09:38.76054+05:30","level":"INFO","msg":"stream: created new stream","id":"702v2d2t"}
+{"time":"2026-07-27T02:09:38.760702+05:30","level":"INFO","msg":"handler: started","stream_id":"702v2d2t"}
+{"time":"2026-07-27T02:09:38.761484+05:30","level":"INFO","msg":"stream: started","id":"702v2d2t"}
+{"time":"2026-07-27T02:09:38.761499+05:30","level":"INFO","msg":"writer: started","stream_id":"702v2d2t"}
+{"time":"2026-07-27T02:09:38.76151+05:30","level":"INFO","msg":"sender: started","stream_id":"702v2d2t"}
+{"time":"2026-07-27T02:19:04.33599+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-27T02:19:04.336262+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-27T02:19:19.480992+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-27T02:19:19.48123+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-27T02:20:12.905249+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 192.168.1.14:55801->34.8.250.101:443: read: can't assign requested address"}
+{"time":"2026-07-27T02:20:15.36117+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2026-07-27T02:20:20.254117+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2026-07-27T02:20:29.832614+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2026-07-27T02:20:48.241858+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp: lookup api.wandb.ai: no such host"}
+{"time":"2026-07-27T02:21:27.305978+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": dial tcp 34.8.250.101:443: connect: network is unreachable"}
+{"time":"2026-07-27T02:21:59.831595+05:30","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/charitha_palika/Food%20RL/702v2d2t/file_stream\": read tcp 192.168.1.14:56592->34.8.250.101:443: read: operation timed out"}
+{"time":"2026-07-27T02:22:28.686022+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-27T02:22:28.687069+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-27T02:22:45.505467+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-07-27T02:22:46.098984+05:30","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2026-07-27T02:22:46.10874+05:30","level":"INFO","msg":"stream: closing","id":"702v2d2t"}
+{"time":"2026-07-27T02:22:46.108805+05:30","level":"INFO","msg":"handler: closed","stream_id":"702v2d2t"}
+{"time":"2026-07-27T02:22:46.109144+05:30","level":"INFO","msg":"sender: closed","stream_id":"702v2d2t"}
+{"time":"2026-07-27T02:22:46.109203+05:30","level":"INFO","msg":"stream: closed","id":"702v2d2t"}

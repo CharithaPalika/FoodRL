@@ -1,0 +1,499 @@
+[34m[1mwandb[0m: Detected [agents] in use.
+[34m[1mwandb[0m: Use W&B Weave for improved LLM call tracing. Install Weave with `pip install weave` then add `import weave` to the top of your script.
+[34m[1mwandb[0m: For more information, check out the docs at: https://weave-docs.wandb.ai/
+Episode length: 432 steps  (3 cycles)
+Action mode: discrete
+Architecture: shared=True  hidden=256
+Bottlenecks config: {'trunk': {'phy': 16, 'food': None}, 'actor_head': None, 'critic_head': 16}
+[FoodEnv] Loading  'glucose'  from  'foods_dataset_raw/serum_glucose.csv'
+           min=0.0000  max=153.4313   foods=28   time_points=500
+[FoodEnv] Loading  'peptides'  from  'foods_dataset_raw/small_peptides_absorbed.csv'
+           min=0.0000  max=0.0018   foods=28   time_points=500
+[FoodEnv] Loading  'fatty_acids'  from  'foods_dataset_raw/fatty_acids_absorbed.csv'
+           min=0.0000  max=0.0049   foods=28   time_points=500
+[FoodEnv] Ready — 28 foods | 3 time-series nutrients | 0 cumulative nutrients
+[FoodEnv] Loading shadow nutrient 'fullness'  from  'foods_dataset_raw/fullness.csv'
+[FoodEnv] Loading shadow nutrient 'hunger'  from  'foods_dataset_raw/hunger.csv'
+[FoodEnv] Loading shadow nutrient 'cck'  from  'foods_dataset_raw/cck.csv'
+[FoodEnv] Loading shadow nutrient 'ghrelin'  from  'foods_dataset_raw/ghrelin.csv'
+[FoodEnv] Loading shadow nutrient 'glp_1'  from  'foods_dataset_raw/glp_1.csv'
+[FoodEnv] Loading shadow nutrient 'pyy'  from  'foods_dataset_raw/pyy.csv'
+[FoodEnv] Shadow nutrients ready — 6 signal(s): ['fullness', 'hunger', 'cck', 'ghrelin', 'glp_1', 'pyy'] (observation/reward untouched)
+[FoodEnv] NOTE – 7 food(s) have non-cumulative (zero-filled after absorption) calorie curves: ['Biscuit_01', 'Chickenbreast_01', 'Eggwhite_01', 'Ghee_01', 'Glucose_01', 'Glucose_02', 'Rapid_starch_01']. Using the curve MAX as their total.
+[FoodEnv] Calorie totals ready — 28/28 foods (inference-only; observation/reward untouched)
+[FoodEnv] NOTE – 4 food(s) have a total below 1 kcal, which is likely missing/!=kcal source data rather than real energy content.
+
+── Environment summary ──────────────────────────────────────
+  Food items             : 28
+  Nutrients              : 3  ['glucose', 'peptides', 'fatty_acids']
+  Observation state dim  : 5  (nutrients + is_awake + time_in_cycle)
+  Menu size              : 1
+  Action space           : Discrete(2)
+  Max steps               : 432
+  Awake steps / cycle    : 96
+  Sleep steps / cycle    : 48
+  Cycle length           : 144
+  Consumption threshold  : 0.0
+  Target (normed)        : [0.5865819  0.22346368 0.05154639]
+  Target low             : [0.45623037 0.08379889 0.03608247]
+  Target high            : [0.7169334  0.36312848 0.06701031]
+
+   nutrient  data_min  data_max  raw_target  normalised_target  window_size  decay_rate  sleep_decay_rate  sleep_penalty_weight  reward_weight
+    glucose       0.0 153.43126    90.00000           0.586582            1        0.02            0.0005                   2.0            0.1
+   peptides       0.0   0.00179     0.00040           0.223464            1        0.02            0.0001                   1.5            0.1
+fatty_acids       0.0   0.00485     0.00025           0.051546            1        0.02            0.0001                   1.5            0.1
+─────────────────────────────────────────────────────────────
+Agent built. shared=True  is_continuous=False
+  policy: SharedDiscreteActorCritic
+Bottlenecks: {'trunk_phy': {'dim': 16, 'amplitude': 1.0, 'bias': 0.0}, 'critic_head': {'dim': 16, 'amplitude': 1.0, 'bias': 0.0}}
+Starting training: 2000 episodes …
+  [best] new best return -1832.16 @ ep1 → results/checkpoints_0/ppo_agent_best_*
+  [best] new best return -1317.18 @ ep2 → results/checkpoints_0/ppo_agent_best_*
+Episode     2 | Last Return: -1317.18 | Rolling Avg(50): -1574.67 | Food items:  102 | Total Distance:  1685.21 | Actor L:  -0.009 | Critic L: 3289.369
+  [best] new best return -1077.30 @ ep3 → results/checkpoints_0/ppo_agent_best_*
+  [best] new best return -573.81 @ ep4 → results/checkpoints_0/ppo_agent_best_*
+Episode     4 | Last Return:  -573.81 | Rolling Avg(50): -1200.11 | Food items:   73 | Total Distance:  1106.85 | Actor L:  -0.008 | Critic L: 333.710
+  [best] new best return -294.20 @ ep5 → results/checkpoints_0/ppo_agent_best_*
+  [best] new best return -86.56 @ ep6 → results/checkpoints_0/ppo_agent_best_*
+Episode     6 | Last Return:   -86.56 | Rolling Avg(50):  -863.54 | Food items:   31 | Total Distance:   492.86 | Actor L:   0.010 | Critic L:  37.286
+  [best] new best return 20.69 @ ep7 → results/checkpoints_0/ppo_agent_best_*
+  [best] new best return 32.45 @ ep8 → results/checkpoints_0/ppo_agent_best_*
+Episode     8 | Last Return:    32.45 | Rolling Avg(50):  -641.01 | Food items:    7 | Total Distance:   188.14 | Actor L:  -0.001 | Critic L:  13.772
+  [best] new best return 72.40 @ ep9 → results/checkpoints_0/ppo_agent_best_*
+Episode    10 | Last Return:    26.60 | Rolling Avg(50):  -502.91 | Food items:   19 | Total Distance:   220.97 | Actor L:  -0.000 | Critic L:  15.103
+Episode    12 | Last Return:    56.84 | Rolling Avg(50):  -412.41 | Food items:   10 | Total Distance:   139.27 | Actor L:  -0.003 | Critic L:   3.388
+Episode    14 | Last Return:    69.23 | Rolling Avg(50):  -343.67 | Food items:   19 | Total Distance:   150.96 | Actor L:  -0.001 | Critic L:   2.105
+  [best] new best return 88.41 @ ep15 → results/checkpoints_0/ppo_agent_best_*
+  [best] new best return 110.49 @ ep16 → results/checkpoints_0/ppo_agent_best_*
+Episode    16 | Last Return:   110.49 | Rolling Avg(50):  -288.28 | Food items:   16 | Total Distance:    93.54 | Actor L:   0.007 | Critic L:   3.771
+  [best] new best return 111.45 @ ep18 → results/checkpoints_0/ppo_agent_best_*
+Episode    18 | Last Return:   111.45 | Rolling Avg(50):  -244.77 | Food items:   15 | Total Distance:    92.80 | Actor L:  -0.009 | Critic L:   1.566
+  [best] new best return 122.33 @ ep20 → results/checkpoints_0/ppo_agent_best_*
+Episode    20 | Last Return:   122.33 | Rolling Avg(50):  -210.99 | Food items:   13 | Total Distance:    88.53 | Actor L:   0.002 | Critic L:  11.069
+Episode    22 | Last Return:    92.79 | Rolling Avg(50):  -183.05 | Food items:   14 | Total Distance:   106.50 | Actor L:  -0.007 | Critic L:   1.746
+  [best] new best return 122.64 @ ep23 → results/checkpoints_0/ppo_agent_best_*
+Episode    24 | Last Return:    94.51 | Rolling Avg(50):  -158.75 | Food items:   17 | Total Distance:   120.36 | Actor L:  -0.003 | Critic L:   2.334
+Episode    26 | Last Return:    70.15 | Rolling Avg(50):  -140.20 | Food items:   19 | Total Distance:   129.28 | Actor L:   0.005 | Critic L:   6.844
+Episode    28 | Last Return:    67.39 | Rolling Avg(50):  -124.57 | Food items:   16 | Total Distance:   147.65 | Actor L:  -0.004 | Critic L:   1.847
+  [best] new best return 136.74 @ ep29 → results/checkpoints_0/ppo_agent_best_*
+Episode    30 | Last Return:    91.66 | Rolling Avg(50):  -108.65 | Food items:   13 | Total Distance:    95.13 | Actor L:  -0.001 | Critic L:   2.278
+Episode    32 | Last Return:   128.72 | Rolling Avg(50):   -94.95 | Food items:   13 | Total Distance:    85.14 | Actor L:  -0.005 | Critic L:   4.343
+Episode    34 | Last Return:   100.00 | Rolling Avg(50):   -82.94 | Food items:   15 | Total Distance:   105.56 | Actor L:  -0.004 | Critic L:   1.825
+Episode    36 | Last Return:    73.32 | Rolling Avg(50):   -73.89 | Food items:   17 | Total Distance:   121.34 | Actor L:  -0.001 | Critic L:   8.100
+Episode    38 | Last Return:    97.32 | Rolling Avg(50):   -64.22 | Food items:   22 | Total Distance:   109.14 | Actor L:  -0.008 | Critic L:   1.915
+Episode    40 | Last Return:   134.13 | Rolling Avg(50):   -55.50 | Food items:   13 | Total Distance:    85.46 | Actor L:  -0.004 | Critic L:   4.374
+Episode    42 | Last Return:    71.26 | Rolling Avg(50):   -48.18 | Food items:   11 | Total Distance:   158.08 | Actor L:  -0.022 | Critic L:   5.958
+Episode    44 | Last Return:   109.70 | Rolling Avg(50):   -41.81 | Food items:   14 | Total Distance:    92.39 | Actor L:  -0.000 | Critic L:   2.557
+  [best] new best return 139.95 @ ep45 → results/checkpoints_0/ppo_agent_best_*
+Episode    46 | Last Return:   125.02 | Rolling Avg(50):   -34.23 | Food items:   11 | Total Distance:    78.87 | Actor L:   0.004 | Critic L:   2.380
+Episode    48 | Last Return:    86.63 | Rolling Avg(50):   -28.99 | Food items:   16 | Total Distance:    98.83 | Actor L:   0.010 | Critic L:   3.938
+Episode    50 | Last Return:    70.97 | Rolling Avg(50):   -24.14 | Food items:   15 | Total Distance:   118.37 | Actor L:   0.006 | Critic L:   4.127
+Episode    52 | Last Return:   116.52 | Rolling Avg(50):    42.69 | Food items:   12 | Total Distance:    79.95 | Actor L:   0.001 | Critic L:   3.499
+Episode    54 | Last Return:    74.74 | Rolling Avg(50):    79.28 | Food items:   20 | Total Distance:   150.54 | Actor L:  -0.001 | Critic L:   5.548
+Episode    56 | Last Return:   106.97 | Rolling Avg(50):    91.28 | Food items:   12 | Total Distance:    97.65 | Actor L:  -0.005 | Critic L:   0.872
+Episode    58 | Last Return:    81.53 | Rolling Avg(50):    93.85 | Food items:   16 | Total Distance:   104.08 | Actor L:  -0.001 | Critic L:   2.373
+Episode    60 | Last Return:    76.07 | Rolling Avg(50):    94.96 | Food items:   17 | Total Distance:   130.19 | Actor L:  -0.003 | Critic L:   1.751
+Episode    62 | Last Return:    86.18 | Rolling Avg(50):    97.32 | Food items:   19 | Total Distance:   120.18 | Actor L:  -0.001 | Critic L:   1.646
+Episode    64 | Last Return:   102.79 | Rolling Avg(50):    99.30 | Food items:   15 | Total Distance:   113.27 | Actor L:  -0.003 | Critic L:   3.496
+Episode    66 | Last Return:   110.80 | Rolling Avg(50):    99.24 | Food items:   17 | Total Distance:    91.83 | Actor L:  -0.005 | Critic L:   2.828
+Episode    68 | Last Return:   102.00 | Rolling Avg(50):    99.31 | Food items:   16 | Total Distance:    92.74 | Actor L:  -0.003 | Critic L:   1.327
+Episode    70 | Last Return:    93.65 | Rolling Avg(50):   100.03 | Food items:   15 | Total Distance:   130.54 | Actor L:  -0.001 | Critic L:   2.360
+Episode    72 | Last Return:    95.64 | Rolling Avg(50):   100.07 | Food items:   12 | Total Distance:   104.42 | Actor L:  -0.004 | Critic L:   2.912
+Episode    74 | Last Return:    93.34 | Rolling Avg(50):    99.75 | Food items:   13 | Total Distance:    97.71 | Actor L:  -0.004 | Critic L:   3.008
+Episode    76 | Last Return:    97.06 | Rolling Avg(50):    99.95 | Food items:   14 | Total Distance:    96.70 | Actor L:   0.002 | Critic L:   1.334
+Episode    78 | Last Return:    89.24 | Rolling Avg(50):   100.45 | Food items:   12 | Total Distance:   115.07 | Actor L:   0.006 | Critic L:   1.803
+Episode    80 | Last Return:   108.34 | Rolling Avg(50):   100.08 | Food items:   15 | Total Distance:    99.16 | Actor L:  -0.008 | Critic L:   1.880
+Episode    82 | Last Return:   120.23 | Rolling Avg(50):   100.01 | Food items:   18 | Total Distance:    95.81 | Actor L:   0.001 | Critic L:   2.015
+Episode    84 | Last Return:   103.74 | Rolling Avg(50):    99.22 | Food items:   19 | Total Distance:    98.37 | Actor L:  -0.000 | Critic L:   2.404
+Episode    86 | Last Return:    88.27 | Rolling Avg(50):    99.16 | Food items:   19 | Total Distance:   124.97 | Actor L:  -0.002 | Critic L:   3.630
+Episode    88 | Last Return:    80.71 | Rolling Avg(50):    98.73 | Food items:   14 | Total Distance:   125.24 | Actor L:  -0.010 | Critic L:   1.983
+Episode    90 | Last Return:    85.85 | Rolling Avg(50):    98.24 | Food items:   17 | Total Distance:   114.87 | Actor L:   0.002 | Critic L:   1.809
+Episode    92 | Last Return:   114.74 | Rolling Avg(50):    98.76 | Food items:   12 | Total Distance:    90.82 | Actor L:   0.001 | Critic L:   2.689
+Episode    94 | Last Return:    65.56 | Rolling Avg(50):    98.15 | Food items:   21 | Total Distance:   134.09 | Actor L:   0.002 | Critic L:   1.762
+Episode    96 | Last Return:    84.47 | Rolling Avg(50):    97.19 | Food items:   12 | Total Distance:   112.00 | Actor L:  -0.000 | Critic L:   1.898
+Episode    98 | Last Return:    93.28 | Rolling Avg(50):    97.49 | Food items:   12 | Total Distance:   111.26 | Actor L:  -0.006 | Critic L:   1.578
+Episode   100 | Last Return:    84.37 | Rolling Avg(50):    97.43 | Food items:   17 | Total Distance:   108.10 | Actor L:   0.020 | Critic L:   3.223
+Episode   102 | Last Return:    60.80 | Rolling Avg(50):    96.62 | Food items:   15 | Total Distance:   159.14 | Actor L:  -0.004 | Critic L:   2.004
+Episode   104 | Last Return:   107.72 | Rolling Avg(50):    97.22 | Food items:   15 | Total Distance:    92.08 | Actor L:  -0.010 | Critic L:   1.061
+Episode   106 | Last Return:   116.73 | Rolling Avg(50):    97.20 | Food items:   12 | Total Distance:    97.71 | Actor L:  -0.000 | Critic L:   7.867
+Episode   108 | Last Return:   129.36 | Rolling Avg(50):    98.40 | Food items:   11 | Total Distance:    79.15 | Actor L:  -0.000 | Critic L:   2.095
+Episode   110 | Last Return:    94.71 | Rolling Avg(50):    99.56 | Food items:   17 | Total Distance:    93.72 | Actor L:  -0.001 | Critic L:   2.256
+Episode   112 | Last Return:   104.82 | Rolling Avg(50):    99.88 | Food items:   17 | Total Distance:   117.67 | Actor L:  -0.022 | Critic L:   1.925
+Episode   114 | Last Return:    90.05 | Rolling Avg(50):    99.03 | Food items:   13 | Total Distance:   104.47 | Actor L:  -0.004 | Critic L:   2.882
+Episode   116 | Last Return:    92.26 | Rolling Avg(50):    99.04 | Food items:   13 | Total Distance:   110.00 | Actor L:   0.014 | Critic L:   3.450
+Episode   118 | Last Return:   104.68 | Rolling Avg(50):    98.24 | Food items:   11 | Total Distance:    91.56 | Actor L:  -0.000 | Critic L:   1.182
+Episode   120 | Last Return:    88.18 | Rolling Avg(50):    97.98 | Food items:   14 | Total Distance:   122.02 | Actor L:  -0.006 | Critic L:   0.896
+Episode   122 | Last Return:   105.35 | Rolling Avg(50):    98.37 | Food items:   13 | Total Distance:    92.44 | Actor L:  -0.006 | Critic L:   2.970
+Episode   124 | Last Return:    99.92 | Rolling Avg(50):    98.39 | Food items:   14 | Total Distance:    94.71 | Actor L:  -0.001 | Critic L:   3.384
+Episode   126 | Last Return:    99.81 | Rolling Avg(50):    99.32 | Food items:   12 | Total Distance:   100.86 | Actor L:   0.000 | Critic L:   1.624
+Episode   128 | Last Return:    81.36 | Rolling Avg(50):    99.56 | Food items:   14 | Total Distance:    96.64 | Actor L:  -0.003 | Critic L:   3.144
+Episode   130 | Last Return:   139.10 | Rolling Avg(50):    99.54 | Food items:   12 | Total Distance:    81.68 | Actor L:   0.012 | Critic L:   4.097
+Episode   132 | Last Return:   107.38 | Rolling Avg(50):    99.40 | Food items:    9 | Total Distance:    93.20 | Actor L:  -0.010 | Critic L:   1.937
+Episode   134 | Last Return:   117.31 | Rolling Avg(50):   100.75 | Food items:   16 | Total Distance:   102.35 | Actor L:  -0.003 | Critic L:   2.687
+Episode   136 | Last Return:    82.16 | Rolling Avg(50):   100.80 | Food items:   14 | Total Distance:   105.10 | Actor L:  -0.003 | Critic L:   1.655
+Episode   138 | Last Return:   119.48 | Rolling Avg(50):   100.73 | Food items:   15 | Total Distance:   100.04 | Actor L:  -0.004 | Critic L:   3.559
+Episode   140 | Last Return:    94.61 | Rolling Avg(50):   101.09 | Food items:   19 | Total Distance:   125.16 | Actor L:  -0.004 | Critic L:   3.339
+Episode   142 | Last Return:    87.97 | Rolling Avg(50):   100.71 | Food items:   13 | Total Distance:   104.08 | Actor L:  -0.006 | Critic L:   1.139
+Episode   144 | Last Return:    83.92 | Rolling Avg(50):   101.03 | Food items:   10 | Total Distance:   107.14 | Actor L:  -0.005 | Critic L:   2.802
+Episode   146 | Last Return:   103.54 | Rolling Avg(50):   100.81 | Food items:    9 | Total Distance:    84.02 | Actor L:  -0.002 | Critic L:   2.899
+Episode   148 | Last Return:   128.79 | Rolling Avg(50):   101.56 | Food items:   11 | Total Distance:    86.15 | Actor L:  -0.004 | Critic L:   3.088
+Episode   150 | Last Return:    97.21 | Rolling Avg(50):   101.85 | Food items:   12 | Total Distance:   105.58 | Actor L:  -0.021 | Critic L:   2.448
+  [best] new best return 144.36 @ ep151 → results/checkpoints_0/ppo_agent_best_*
+Episode   152 | Last Return:   115.15 | Rolling Avg(50):   104.00 | Food items:   16 | Total Distance:   116.48 | Actor L:  -0.003 | Critic L:   3.145
+Episode   154 | Last Return:    89.58 | Rolling Avg(50):   102.80 | Food items:   14 | Total Distance:   108.45 | Actor L:   0.000 | Critic L:   4.515
+Episode   156 | Last Return:   111.43 | Rolling Avg(50):   103.33 | Food items:   13 | Total Distance:    72.19 | Actor L:  -0.002 | Critic L:   1.537
+Episode   158 | Last Return:   112.64 | Rolling Avg(50):   102.44 | Food items:   12 | Total Distance:    94.73 | Actor L:  -0.009 | Critic L:   1.287
+Episode   160 | Last Return:   120.89 | Rolling Avg(50):   101.62 | Food items:   13 | Total Distance:    84.47 | Actor L:   0.001 | Critic L:   8.827
+Episode   162 | Last Return:   127.08 | Rolling Avg(50):   102.70 | Food items:   10 | Total Distance:    96.72 | Actor L:  -0.009 | Critic L:   3.911
+Episode   164 | Last Return:    70.60 | Rolling Avg(50):   102.21 | Food items:   15 | Total Distance:   113.97 | Actor L:  -0.003 | Critic L:   1.847
+Episode   166 | Last Return: -9660.69 | Rolling Avg(50):   -94.08 | Food items:  237 | Total Distance:  4345.28 | Actor L:   0.009 | Critic L: 244166.306
+Episode   168 | Last Return: -10045.80 | Rolling Avg(50):  -471.44 | Food items:  278 | Total Distance:  4593.51 | Actor L:  -0.001 | Critic L: 132048.311
+Episode   170 | Last Return: -11034.37 | Rolling Avg(50):  -880.64 | Food items:  279 | Total Distance:  4840.82 | Actor L:  -0.001 | Critic L: 108177.928
+Episode   172 | Last Return: -10176.10 | Rolling Avg(50): -1299.35 | Food items:  283 | Total Distance:  4643.82 | Actor L:  -0.001 | Critic L: 123720.823
+Episode   174 | Last Return: -11148.01 | Rolling Avg(50): -1775.13 | Food items:  282 | Total Distance:  4864.45 | Actor L:  -0.001 | Critic L: 96930.475
+Episode   176 | Last Return: -11070.42 | Rolling Avg(50): -2209.81 | Food items:  283 | Total Distance:  4866.15 | Actor L:  -0.001 | Critic L: 42761.108
+Episode   178 | Last Return: -9913.41 | Rolling Avg(50): -2613.29 | Food items:  274 | Total Distance:  4559.39 | Actor L:  -0.001 | Critic L: 36716.572
+Episode   180 | Last Return: -9568.61 | Rolling Avg(50): -3023.35 | Food items:  278 | Total Distance:  4490.24 | Actor L:  -0.000 | Critic L: 12325.549
+Episode   182 | Last Return: -11032.42 | Rolling Avg(50): -3444.44 | Food items:  283 | Total Distance:  4831.19 | Actor L:  -0.001 | Critic L: 41112.206
+Episode   184 | Last Return: -10338.30 | Rolling Avg(50): -3880.39 | Food items:  282 | Total Distance:  4670.55 | Actor L:  -0.001 | Critic L: 3599.874
+Episode   186 | Last Return: -9935.96 | Rolling Avg(50): -4292.91 | Food items:  280 | Total Distance:  4597.23 | Actor L:  -0.001 | Critic L: 3722.156
+Episode   188 | Last Return: -10623.89 | Rolling Avg(50): -4731.61 | Food items:  284 | Total Distance:  4760.05 | Actor L:  -0.002 | Critic L: 7969.960
+Episode   190 | Last Return: -9604.27 | Rolling Avg(50): -5137.47 | Food items:  274 | Total Distance:  4494.64 | Actor L:  -0.001 | Critic L: 1193.182
+Episode   192 | Last Return: -11513.71 | Rolling Avg(50): -5599.04 | Food items:  278 | Total Distance:  4926.01 | Actor L:   0.002 | Critic L: 2416.573
+Episode   194 | Last Return: -11309.65 | Rolling Avg(50): -6016.85 | Food items:  266 | Total Distance:  4894.97 | Actor L:  -0.003 | Critic L: 1737.713
+Episode   196 | Last Return: -8470.74 | Rolling Avg(50): -6383.27 | Food items:  275 | Total Distance:  4248.11 | Actor L:  -0.002 | Critic L:  89.715
+Episode   198 | Last Return: -9770.66 | Rolling Avg(50): -6744.33 | Food items:  265 | Total Distance:  4564.84 | Actor L:  -0.003 | Critic L: 800.540
+Episode   200 | Last Return: -7712.93 | Rolling Avg(50): -7103.35 | Food items:  240 | Total Distance:  4018.69 | Actor L:  -0.004 | Critic L:  84.648
+Episode   202 | Last Return: -9415.88 | Rolling Avg(50): -7444.24 | Food items:  258 | Total Distance:  4476.22 | Actor L:  -0.002 | Critic L: 100.068
+Episode   204 | Last Return: -9063.24 | Rolling Avg(50): -7824.03 | Food items:  240 | Total Distance:  4344.40 | Actor L:  -0.015 | Critic L: 1331.736
+Episode   206 | Last Return: -4899.44 | Rolling Avg(50): -8090.60 | Food items:  176 | Total Distance:  3081.78 | Actor L:  -0.005 | Critic L:  77.317
+Episode   208 | Last Return: -5504.34 | Rolling Avg(50): -8334.76 | Food items:  194 | Total Distance:  3395.17 | Actor L:  -0.006 | Critic L: 126.984
+Episode   210 | Last Return: -4386.65 | Rolling Avg(50): -8525.68 | Food items:  164 | Total Distance:  3053.73 | Actor L:  -0.005 | Critic L: 128.615
+Episode   212 | Last Return: -4618.64 | Rolling Avg(50): -8721.40 | Food items:  169 | Total Distance:  3133.72 | Actor L:  -0.008 | Critic L:  86.239
+Episode   214 | Last Return: -3177.50 | Rolling Avg(50): -8852.49 | Food items:  148 | Total Distance:  2500.84 | Actor L:  -0.005 | Critic L: 107.410
+Episode   216 | Last Return: -1060.82 | Rolling Avg(50): -8736.33 | Food items:   85 | Total Distance:  1359.40 | Actor L:  -0.005 | Critic L:  92.742
+Episode   218 | Last Return: -1211.36 | Rolling Avg(50): -8387.71 | Food items:   87 | Total Distance:  1551.95 | Actor L:  -0.005 | Critic L: 106.766
+Episode   220 | Last Return:  -997.75 | Rolling Avg(50): -8033.89 | Food items:   73 | Total Distance:  1278.17 | Actor L:  -0.005 | Critic L: 193.981
+Episode   222 | Last Return:  -250.09 | Rolling Avg(50): -7623.90 | Food items:   44 | Total Distance:   594.74 | Actor L:  -0.004 | Critic L:  87.458
+Episode   224 | Last Return:    -4.95 | Rolling Avg(50): -7164.21 | Food items:   25 | Total Distance:   324.65 | Actor L:  -0.003 | Critic L: 107.148
+Episode   226 | Last Return:  -693.72 | Rolling Avg(50): -6772.06 | Food items:   71 | Total Distance:  1141.36 | Actor L:  -0.004 | Critic L: 112.590
+Episode   228 | Last Return: -1136.44 | Rolling Avg(50): -6415.07 | Food items:   93 | Total Distance:  1587.03 | Actor L:  -0.005 | Critic L:  87.951
+Episode   230 | Last Return: -1363.67 | Rolling Avg(50): -6059.82 | Food items:   87 | Total Distance:  1600.17 | Actor L:  -0.004 | Critic L: 108.360
+Episode   232 | Last Return: -1101.06 | Rolling Avg(50): -5687.04 | Food items:   94 | Total Distance:  1561.50 | Actor L:  -0.006 | Critic L:  96.365
+Episode   234 | Last Return: -1247.35 | Rolling Avg(50): -5291.13 | Food items:   85 | Total Distance:  1462.79 | Actor L:  -0.009 | Critic L:  86.906
+Episode   236 | Last Return: -1471.39 | Rolling Avg(50): -4926.93 | Food items:   99 | Total Distance:  1767.14 | Actor L:  -0.006 | Critic L:  83.686
+Episode   238 | Last Return:  -751.36 | Rolling Avg(50): -4524.00 | Food items:   73 | Total Distance:  1188.26 | Actor L:  -0.005 | Critic L: 113.258
+Episode   240 | Last Return:  -865.44 | Rolling Avg(50): -4158.19 | Food items:   71 | Total Distance:  1213.44 | Actor L:  -0.005 | Critic L:  76.206
+Episode   242 | Last Return:    40.39 | Rolling Avg(50): -3706.95 | Food items:   23 | Total Distance:   229.19 | Actor L:  -0.003 | Critic L:  84.596
+Episode   244 | Last Return:  -933.07 | Rolling Avg(50): -3336.28 | Food items:   78 | Total Distance:  1226.01 | Actor L:  -0.004 | Critic L: 116.827
+Episode   246 | Last Return: -2333.49 | Rolling Avg(50): -3035.44 | Food items:  117 | Total Distance:  2040.67 | Actor L:  -0.008 | Critic L: 116.268
+Episode   248 | Last Return: -1747.21 | Rolling Avg(50): -2758.79 | Food items:   98 | Total Distance:  1849.82 | Actor L:  -0.006 | Critic L:  88.117
+  [checkpoint] saved to results/checkpoints_0/ppo_agent_ep250_*
+Episode   250 | Last Return:  -413.99 | Rolling Avg(50): -2453.34 | Food items:   51 | Total Distance:   687.30 | Actor L:  -0.005 | Critic L:  81.213
+Episode   252 | Last Return: -1348.17 | Rolling Avg(50): -2177.80 | Food items:   84 | Total Distance:  1485.80 | Actor L:  -0.006 | Critic L: 140.000
+Episode   254 | Last Return:  -108.86 | Rolling Avg(50): -1803.68 | Food items:   45 | Total Distance:   531.41 | Actor L:  -0.004 | Critic L: 164.628
+Episode   256 | Last Return: -1337.31 | Rolling Avg(50): -1594.52 | Food items:   98 | Total Distance:  1636.70 | Actor L:  -0.004 | Critic L:  77.393
+Episode   258 | Last Return:    -4.58 | Rolling Avg(50): -1368.65 | Food items:   26 | Total Distance:   297.06 | Actor L:  -0.004 | Critic L: 102.319
+Episode   260 | Last Return:   -19.67 | Rolling Avg(50): -1183.41 | Food items:   33 | Total Distance:   366.18 | Actor L:  -0.017 | Critic L:  55.348
+Episode   262 | Last Return:   -80.99 | Rolling Avg(50):  -994.95 | Food items:   33 | Total Distance:   468.48 | Actor L:  -0.003 | Critic L:  78.220
+Episode   264 | Last Return:   -12.26 | Rolling Avg(50):  -884.68 | Food items:   31 | Total Distance:   307.64 | Actor L:  -0.003 | Critic L:  97.299
+Episode   266 | Last Return:   -54.04 | Rolling Avg(50):  -809.70 | Food items:   37 | Total Distance:   461.05 | Actor L:  -0.005 | Critic L:  61.157
+Episode   268 | Last Return:    33.16 | Rolling Avg(50):  -783.62 | Food items:   24 | Total Distance:   242.42 | Actor L:  -0.002 | Critic L: 100.402
+Episode   270 | Last Return:    35.16 | Rolling Avg(50):  -731.01 | Food items:   23 | Total Distance:   235.00 | Actor L:   0.006 | Critic L:  62.556
+Episode   272 | Last Return:    72.52 | Rolling Avg(50):  -723.54 | Food items:   18 | Total Distance:   132.92 | Actor L:  -0.001 | Critic L:  70.378
+Episode   274 | Last Return:    78.45 | Rolling Avg(50):  -708.41 | Food items:   15 | Total Distance:   126.82 | Actor L:  -0.001 | Critic L:  54.944
+Episode   276 | Last Return:    92.11 | Rolling Avg(50):  -666.49 | Food items:   13 | Total Distance:   125.45 | Actor L:  -0.002 | Critic L:  68.231
+Episode   278 | Last Return:   103.43 | Rolling Avg(50):  -620.10 | Food items:   15 | Total Distance:   114.75 | Actor L:  -0.002 | Critic L:  58.180
+Episode   280 | Last Return:    89.68 | Rolling Avg(50):  -565.63 | Food items:   19 | Total Distance:   118.18 | Actor L:  -0.002 | Critic L:  49.419
+Episode   282 | Last Return:    86.93 | Rolling Avg(50):  -517.59 | Food items:   14 | Total Distance:   111.13 | Actor L:  -0.002 | Critic L:  90.250
+Episode   284 | Last Return:   103.56 | Rolling Avg(50):  -478.88 | Food items:   11 | Total Distance:    97.29 | Actor L:   0.005 | Critic L:  27.402
+Episode   286 | Last Return:    66.28 | Rolling Avg(50):  -431.11 | Food items:   18 | Total Distance:   138.13 | Actor L:   0.006 | Critic L:  61.486
+Episode   288 | Last Return:    74.07 | Rolling Avg(50):  -396.15 | Food items:    8 | Total Distance:   125.49 | Actor L:  -0.001 | Critic L:  58.673
+Episode   290 | Last Return:    76.32 | Rolling Avg(50):  -357.46 | Food items:    8 | Total Distance:   120.51 | Actor L:   0.003 | Critic L:  37.507
+Episode   292 | Last Return:    34.71 | Rolling Avg(50):  -350.42 | Food items:   10 | Total Distance:   154.78 | Actor L:  -0.001 | Critic L:  42.318
+Episode   294 | Last Return:    37.76 | Rolling Avg(50):  -305.02 | Food items:   10 | Total Distance:   156.33 | Actor L:  -0.002 | Critic L:  20.048
+Episode   296 | Last Return:    79.97 | Rolling Avg(50):  -240.84 | Food items:    9 | Total Distance:   112.55 | Actor L:   0.003 | Critic L:  29.066
+Episode   298 | Last Return:    44.47 | Rolling Avg(50):  -159.28 | Food items:    6 | Total Distance:   145.24 | Actor L:  -0.002 | Critic L:  18.833
+Episode   300 | Last Return:    53.96 | Rolling Avg(50):  -108.19 | Food items:   11 | Total Distance:   138.14 | Actor L:  -0.000 | Critic L:  93.191
+Episode   302 | Last Return:    53.69 | Rolling Avg(50):   -45.93 | Food items:    6 | Total Distance:   148.73 | Actor L:  -0.002 | Critic L:  16.369
+Episode   304 | Last Return:    22.69 | Rolling Avg(50):   -42.13 | Food items:    5 | Total Distance:   180.10 | Actor L:  -0.002 | Critic L:  11.636
+Episode   306 | Last Return:    31.32 | Rolling Avg(50):    12.39 | Food items:    4 | Total Distance:   175.69 | Actor L:  -0.001 | Critic L:   9.291
+Episode   308 | Last Return:    20.69 | Rolling Avg(50):    27.10 | Food items:    5 | Total Distance:   175.76 | Actor L:  -0.001 | Critic L:  12.459
+Episode   310 | Last Return:    26.00 | Rolling Avg(50):    30.52 | Food items:    6 | Total Distance:   179.40 | Actor L:  -0.001 | Critic L:  26.682
+Episode   312 | Last Return:    43.25 | Rolling Avg(50):    34.14 | Food items:    5 | Total Distance:   149.60 | Actor L:  -0.001 | Critic L:  10.219
+Episode   314 | Last Return:    44.68 | Rolling Avg(50):    53.33 | Food items:    6 | Total Distance:   145.86 | Actor L:  -0.001 | Critic L:   8.454
+Episode   316 | Last Return:    32.53 | Rolling Avg(50):    55.36 | Food items:    5 | Total Distance:   166.86 | Actor L:  -0.000 | Critic L:   7.286
+Episode   318 | Last Return:    50.60 | Rolling Avg(50):    56.05 | Food items:    6 | Total Distance:   152.96 | Actor L:  -0.001 | Critic L:   6.912
+Episode   320 | Last Return:    29.29 | Rolling Avg(50):    55.33 | Food items:    5 | Total Distance:   170.39 | Actor L:  -0.002 | Critic L:   4.009
+Episode   322 | Last Return:    23.08 | Rolling Avg(50):    53.78 | Food items:    6 | Total Distance:   175.88 | Actor L:  -0.001 | Critic L:   4.771
+Episode   324 | Last Return:    49.93 | Rolling Avg(50):    52.31 | Food items:    8 | Total Distance:   140.22 | Actor L:  -0.001 | Critic L:  14.853
+Episode   326 | Last Return:    66.20 | Rolling Avg(50):    50.15 | Food items:   12 | Total Distance:   130.58 | Actor L:  -0.001 | Critic L:  20.604
+Episode   328 | Last Return:    60.67 | Rolling Avg(50):    48.74 | Food items:    8 | Total Distance:   165.69 | Actor L:  -0.002 | Critic L:  11.823
+Episode   330 | Last Return:    78.52 | Rolling Avg(50):    47.17 | Food items:   10 | Total Distance:   115.16 | Actor L:  -0.001 | Critic L:   6.541
+Episode   332 | Last Return:    98.12 | Rolling Avg(50):    47.42 | Food items:   10 | Total Distance:   105.95 | Actor L:  -0.002 | Critic L:  10.221
+Episode   334 | Last Return:    80.94 | Rolling Avg(50):    46.92 | Food items:   13 | Total Distance:   124.05 | Actor L:  -0.003 | Critic L:   6.171
+Episode   336 | Last Return:    92.42 | Rolling Avg(50):    47.56 | Food items:   15 | Total Distance:   131.36 | Actor L:   0.000 | Critic L:   7.548
+Episode   338 | Last Return:    93.77 | Rolling Avg(50):    48.06 | Food items:   14 | Total Distance:   127.22 | Actor L:  -0.000 | Critic L:   7.044
+Episode   340 | Last Return:    76.37 | Rolling Avg(50):    48.52 | Food items:   16 | Total Distance:   145.97 | Actor L:  -0.000 | Critic L:   9.617
+Episode   342 | Last Return:   114.55 | Rolling Avg(50):    51.27 | Food items:   16 | Total Distance:   118.36 | Actor L:  -0.002 | Critic L:   6.233
+Episode   344 | Last Return:    83.31 | Rolling Avg(50):    52.30 | Food items:   14 | Total Distance:   110.41 | Actor L:  -0.002 | Critic L:   5.621
+Episode   346 | Last Return:    74.02 | Rolling Avg(50):    52.42 | Food items:   16 | Total Distance:   141.40 | Actor L:   0.001 | Critic L:   5.028
+Episode   348 | Last Return:    68.73 | Rolling Avg(50):    53.36 | Food items:   18 | Total Distance:   135.42 | Actor L:  -0.004 | Critic L:   2.013
+Episode   350 | Last Return:    76.45 | Rolling Avg(50):    54.83 | Food items:    9 | Total Distance:   119.61 | Actor L:  -0.004 | Critic L:   1.751
+Episode   352 | Last Return:    58.69 | Rolling Avg(50):    55.74 | Food items:   15 | Total Distance:   128.64 | Actor L:  -0.001 | Critic L:   3.518
+Episode   354 | Last Return:    81.69 | Rolling Avg(50):    57.37 | Food items:   12 | Total Distance:   112.92 | Actor L:  -0.003 | Critic L:   1.414
+Episode   356 | Last Return:    55.27 | Rolling Avg(50):    57.92 | Food items:   11 | Total Distance:   132.00 | Actor L:  -0.001 | Critic L:   2.312
+Episode   358 | Last Return:    98.82 | Rolling Avg(50):    60.92 | Food items:   12 | Total Distance:   114.13 | Actor L:  -0.004 | Critic L:   3.151
+Episode   360 | Last Return:    84.19 | Rolling Avg(50):    63.54 | Food items:   12 | Total Distance:   111.80 | Actor L:  -0.001 | Critic L:   1.657
+Episode   362 | Last Return:    65.22 | Rolling Avg(50):    64.65 | Food items:   22 | Total Distance:   145.55 | Actor L:  -0.003 | Critic L:   3.729
+Episode   364 | Last Return:   109.60 | Rolling Avg(50):    66.49 | Food items:   14 | Total Distance:   104.33 | Actor L:  -0.002 | Critic L:   3.355
+Episode   366 | Last Return:    83.40 | Rolling Avg(50):    69.46 | Food items:   13 | Total Distance:   114.85 | Actor L:  -0.007 | Critic L:   2.227
+Episode   368 | Last Return:    39.91 | Rolling Avg(50):    70.66 | Food items:   23 | Total Distance:   216.22 | Actor L:  -0.003 | Critic L:  19.918
+Episode   370 | Last Return:    90.53 | Rolling Avg(50):    74.11 | Food items:   17 | Total Distance:   117.80 | Actor L:  -0.003 | Critic L:   1.546
+Episode   372 | Last Return:   107.93 | Rolling Avg(50):    76.21 | Food items:   12 | Total Distance:    93.78 | Actor L:  -0.005 | Critic L:   6.374
+Episode   374 | Last Return:    97.08 | Rolling Avg(50):    77.85 | Food items:    9 | Total Distance:    91.06 | Actor L:  -0.003 | Critic L:   1.760
+Episode   376 | Last Return:    72.61 | Rolling Avg(50):    79.67 | Food items:   11 | Total Distance:    99.23 | Actor L:  -0.003 | Critic L:   1.301
+Episode   378 | Last Return:   115.55 | Rolling Avg(50):    80.67 | Food items:   14 | Total Distance:    82.43 | Actor L:  -0.002 | Critic L:   1.759
+Episode   380 | Last Return:   122.26 | Rolling Avg(50):    82.95 | Food items:   15 | Total Distance:    91.47 | Actor L:  -0.003 | Critic L:   1.919
+Episode   382 | Last Return:    84.35 | Rolling Avg(50):    81.74 | Food items:   15 | Total Distance:   116.48 | Actor L:  -0.002 | Critic L:   1.879
+Episode   384 | Last Return:    93.48 | Rolling Avg(50):    81.89 | Food items:   12 | Total Distance:   123.38 | Actor L:  -0.004 | Critic L:   3.508
+Episode   386 | Last Return:    87.50 | Rolling Avg(50):    82.16 | Food items:   14 | Total Distance:   126.28 | Actor L:  -0.003 | Critic L:   2.532
+Episode   388 | Last Return:    71.43 | Rolling Avg(50):    81.33 | Food items:   17 | Total Distance:   117.61 | Actor L:  -0.006 | Critic L:   3.291
+Episode   390 | Last Return:    71.71 | Rolling Avg(50):    81.06 | Food items:   15 | Total Distance:   150.91 | Actor L:  -0.006 | Critic L:   6.385
+Episode   392 | Last Return:    83.49 | Rolling Avg(50):    81.06 | Food items:   14 | Total Distance:   108.83 | Actor L:  -0.004 | Critic L:   4.691
+Episode   394 | Last Return:    70.37 | Rolling Avg(50):    81.59 | Food items:   14 | Total Distance:   124.38 | Actor L:  -0.003 | Critic L:   3.346
+Episode   396 | Last Return:    73.30 | Rolling Avg(50):    82.47 | Food items:   12 | Total Distance:   118.87 | Actor L:  -0.005 | Critic L:   2.477
+Episode   398 | Last Return:   107.87 | Rolling Avg(50):    83.86 | Food items:   12 | Total Distance:    89.94 | Actor L:  -0.005 | Critic L:   4.071
+Episode   400 | Last Return:    48.24 | Rolling Avg(50):    84.18 | Food items:   17 | Total Distance:   204.33 | Actor L:  -0.008 | Critic L:  41.830
+Episode   402 | Last Return:    88.65 | Rolling Avg(50):    84.97 | Food items:   15 | Total Distance:   107.62 | Actor L:  -0.003 | Critic L:   3.120
+Episode   404 | Last Return:    75.73 | Rolling Avg(50):    85.40 | Food items:   11 | Total Distance:   112.86 | Actor L:  -0.001 | Critic L:   1.677
+Episode   406 | Last Return:    95.41 | Rolling Avg(50):    86.71 | Food items:   17 | Total Distance:   125.06 | Actor L:  -0.005 | Critic L:   6.663
+Episode   408 | Last Return:    71.83 | Rolling Avg(50):    87.09 | Food items:   14 | Total Distance:   139.00 | Actor L:  -0.005 | Critic L:   1.512
+Episode   410 | Last Return:    79.12 | Rolling Avg(50):    86.61 | Food items:   16 | Total Distance:   112.38 | Actor L:  -0.004 | Critic L:   2.817
+Episode   412 | Last Return:    73.94 | Rolling Avg(50):    87.24 | Food items:   19 | Total Distance:   169.23 | Actor L:  -0.006 | Critic L:   3.189
+Episode   414 | Last Return:    60.55 | Rolling Avg(50):    86.40 | Food items:   15 | Total Distance:   128.59 | Actor L:  -0.003 | Critic L:   2.201
+Episode   416 | Last Return:   110.62 | Rolling Avg(50):    86.52 | Food items:   13 | Total Distance:   120.90 | Actor L:  -0.003 | Critic L:   4.531
+Episode   418 | Last Return:    69.34 | Rolling Avg(50):    87.37 | Food items:    8 | Total Distance:   118.72 | Actor L:  -0.004 | Critic L:   1.791
+Episode   420 | Last Return:    98.59 | Rolling Avg(50):    87.28 | Food items:   14 | Total Distance:   104.94 | Actor L:  -0.005 | Critic L:   0.989
+Episode   422 | Last Return:    69.78 | Rolling Avg(50):    87.04 | Food items:   10 | Total Distance:   127.02 | Actor L:  -0.003 | Critic L:   2.233
+Episode   424 | Last Return:   109.17 | Rolling Avg(50):    87.68 | Food items:   12 | Total Distance:   117.42 | Actor L:  -0.002 | Critic L:   1.050
+Episode   426 | Last Return:    75.66 | Rolling Avg(50):    87.23 | Food items:   10 | Total Distance:   126.61 | Actor L:  -0.006 | Critic L:   2.089
+Episode   428 | Last Return:    92.24 | Rolling Avg(50):    87.45 | Food items:   11 | Total Distance:   117.97 | Actor L:  -0.002 | Critic L:   1.786
+Episode   430 | Last Return:    74.62 | Rolling Avg(50):    85.41 | Food items:   14 | Total Distance:   119.43 | Actor L:  -0.005 | Critic L:   6.816
+Episode   432 | Last Return:   130.00 | Rolling Avg(50):    86.26 | Food items:   14 | Total Distance:    77.92 | Actor L:  -0.005 | Critic L:   2.776
+Episode   434 | Last Return:    48.11 | Rolling Avg(50):    85.72 | Food items:   18 | Total Distance:   162.60 | Actor L:  -0.006 | Critic L:   1.898
+Episode   436 | Last Return:   105.03 | Rolling Avg(50):    86.12 | Food items:   16 | Total Distance:    92.29 | Actor L:  -0.002 | Critic L:   4.192
+Episode   438 | Last Return:    63.60 | Rolling Avg(50):    86.19 | Food items:   14 | Total Distance:   130.64 | Actor L:  -0.005 | Critic L:   5.094
+Episode   440 | Last Return:    91.03 | Rolling Avg(50):    87.13 | Food items:   17 | Total Distance:   120.21 | Actor L:   0.000 | Critic L:   3.205
+Episode   442 | Last Return:    94.07 | Rolling Avg(50):    86.33 | Food items:   14 | Total Distance:   110.82 | Actor L:  -0.004 | Critic L:   4.758
+Episode   444 | Last Return:    87.51 | Rolling Avg(50):    86.81 | Food items:   13 | Total Distance:   108.07 | Actor L:  -0.001 | Critic L:   1.442
+Episode   446 | Last Return:    73.18 | Rolling Avg(50):    85.89 | Food items:    9 | Total Distance:   135.37 | Actor L:  -0.016 | Critic L:   1.154
+Episode   448 | Last Return:   112.85 | Rolling Avg(50):    86.15 | Food items:   10 | Total Distance:    91.91 | Actor L:  -0.002 | Critic L:   3.215
+Episode   450 | Last Return:    73.86 | Rolling Avg(50):    86.22 | Food items:   15 | Total Distance:   133.52 | Actor L:  -0.003 | Critic L:   4.281
+Episode   452 | Last Return:    81.29 | Rolling Avg(50):    85.72 | Food items:   12 | Total Distance:   109.85 | Actor L:  -0.004 | Critic L:   2.006
+Episode   454 | Last Return:   111.31 | Rolling Avg(50):    85.79 | Food items:   10 | Total Distance:    90.73 | Actor L:  -0.001 | Critic L:   5.297
+Episode   456 | Last Return:    79.00 | Rolling Avg(50):    84.88 | Food items:   12 | Total Distance:    96.87 | Actor L:  -0.003 | Critic L:   1.822
+Episode   458 | Last Return:    95.63 | Rolling Avg(50):    84.66 | Food items:   14 | Total Distance:   116.04 | Actor L:  -0.002 | Critic L:   3.049
+Episode   460 | Last Return:    89.37 | Rolling Avg(50):    85.19 | Food items:   12 | Total Distance:    96.07 | Actor L:  -0.002 | Critic L:   1.968
+Episode   462 | Last Return:    94.22 | Rolling Avg(50):    85.27 | Food items:   15 | Total Distance:    93.12 | Actor L:  -0.007 | Critic L:   1.895
+Episode   464 | Last Return:    74.02 | Rolling Avg(50):    85.37 | Food items:   19 | Total Distance:   172.46 | Actor L:  -0.003 | Critic L:   4.296
+Episode   466 | Last Return:    95.52 | Rolling Avg(50):    85.42 | Food items:   17 | Total Distance:   113.78 | Actor L:  -0.005 | Critic L:   3.251
+Episode   468 | Last Return:   123.08 | Rolling Avg(50):    85.45 | Food items:   12 | Total Distance:    98.23 | Actor L:  -0.001 | Critic L:   3.553
+Episode   470 | Last Return:   142.67 | Rolling Avg(50):    85.73 | Food items:   14 | Total Distance:    92.59 | Actor L:   0.001 | Critic L:   5.948
+Episode   472 | Last Return:    60.51 | Rolling Avg(50):    85.23 | Food items:   21 | Total Distance:   154.57 | Actor L:  -0.005 | Critic L:   3.109
+Episode   474 | Last Return:    81.94 | Rolling Avg(50):    84.69 | Food items:   18 | Total Distance:   133.26 | Actor L:  -0.001 | Critic L:   1.630
+Episode   476 | Last Return:    72.35 | Rolling Avg(50):    84.96 | Food items:   17 | Total Distance:   127.33 | Actor L:  -0.005 | Critic L:   3.438
+Episode   478 | Last Return:   122.27 | Rolling Avg(50):    85.45 | Food items:   15 | Total Distance:    96.47 | Actor L:  -0.001 | Critic L:   1.779
+Episode   480 | Last Return:    83.78 | Rolling Avg(50):    86.32 | Food items:   20 | Total Distance:   147.15 | Actor L:  -0.004 | Critic L:   6.301
+Episode   482 | Last Return:    40.29 | Rolling Avg(50):    84.95 | Food items:   19 | Total Distance:   209.16 | Actor L:  -0.003 | Critic L:   1.946
+Episode   484 | Last Return:    74.64 | Rolling Avg(50):    85.41 | Food items:   15 | Total Distance:   123.49 | Actor L:  -0.003 | Critic L:   2.937
+Episode   486 | Last Return:    89.61 | Rolling Avg(50):    84.67 | Food items:   16 | Total Distance:   101.25 | Actor L:  -0.003 | Critic L:   1.757
+Episode   488 | Last Return:    93.93 | Rolling Avg(50):    85.87 | Food items:   18 | Total Distance:   124.27 | Actor L:  -0.007 | Critic L:   4.455
+Episode   490 | Last Return:    74.41 | Rolling Avg(50):    85.05 | Food items:   13 | Total Distance:   135.38 | Actor L:  -0.003 | Critic L:   1.794
+Episode   492 | Last Return:    97.10 | Rolling Avg(50):    85.44 | Food items:   13 | Total Distance:    92.46 | Actor L:   0.001 | Critic L:   1.628
+Episode   494 | Last Return:    82.12 | Rolling Avg(50):    85.03 | Food items:   19 | Total Distance:   132.90 | Actor L:  -0.012 | Critic L:   3.376
+Episode   496 | Last Return:    81.16 | Rolling Avg(50):    86.07 | Food items:   19 | Total Distance:   119.13 | Actor L:  -0.004 | Critic L:   4.618
+Episode   498 | Last Return:   139.55 | Rolling Avg(50):    86.65 | Food items:   13 | Total Distance:    76.64 | Actor L:  -0.001 | Critic L:   3.689
+  [checkpoint] saved to results/checkpoints_0/ppo_agent_ep500_*
+Episode   500 | Last Return:    77.24 | Rolling Avg(50):    86.29 | Food items:   16 | Total Distance:   133.01 | Actor L:  -0.001 | Critic L:   1.922
+Episode   502 | Last Return:    71.78 | Rolling Avg(50):    86.46 | Food items:   20 | Total Distance:   132.70 | Actor L:  -0.001 | Critic L:   3.831
+Episode   504 | Last Return:    90.59 | Rolling Avg(50):    86.52 | Food items:   14 | Total Distance:   117.33 | Actor L:  -0.003 | Critic L:   1.373
+Episode   506 | Last Return:    65.99 | Rolling Avg(50):    87.02 | Food items:   11 | Total Distance:   124.61 | Actor L:  -0.001 | Critic L:   2.105
+Episode   508 | Last Return:    71.77 | Rolling Avg(50):    86.68 | Food items:   13 | Total Distance:   123.52 | Actor L:  -0.001 | Critic L:   1.221
+Episode   510 | Last Return:   108.32 | Rolling Avg(50):    86.71 | Food items:   14 | Total Distance:    93.53 | Actor L:  -0.003 | Critic L:   2.219
+Episode   512 | Last Return:   107.80 | Rolling Avg(50):    87.20 | Food items:   12 | Total Distance:    97.39 | Actor L:  -0.002 | Critic L:   1.245
+Episode   514 | Last Return:    96.56 | Rolling Avg(50):    88.74 | Food items:   15 | Total Distance:    99.69 | Actor L:  -0.004 | Critic L:   2.337
+Episode   516 | Last Return:   111.49 | Rolling Avg(50):    88.86 | Food items:   13 | Total Distance:    92.40 | Actor L:  -0.001 | Critic L:   1.478
+Episode   518 | Last Return:   101.93 | Rolling Avg(50):    89.06 | Food items:   16 | Total Distance:   121.72 | Actor L:  -0.003 | Critic L:   1.160
+Episode   520 | Last Return:   115.81 | Rolling Avg(50):    89.27 | Food items:   12 | Total Distance:    74.23 | Actor L:  -0.002 | Critic L:   2.210
+Episode   522 | Last Return:   117.43 | Rolling Avg(50):    90.17 | Food items:   15 | Total Distance:    82.31 | Actor L:  -0.001 | Critic L:   1.821
+Episode   524 | Last Return:   112.12 | Rolling Avg(50):    91.04 | Food items:   15 | Total Distance:    92.84 | Actor L:   0.001 | Critic L:   3.454
+Episode   526 | Last Return:   117.39 | Rolling Avg(50):    91.74 | Food items:   13 | Total Distance:    88.99 | Actor L:  -0.000 | Critic L:   1.009
+Episode   528 | Last Return:    98.35 | Rolling Avg(50):    91.28 | Food items:   14 | Total Distance:   116.04 | Actor L:  -0.002 | Critic L:   1.425
+Episode   530 | Last Return:    81.44 | Rolling Avg(50):    91.50 | Food items:   17 | Total Distance:   106.28 | Actor L:  -0.001 | Critic L:   1.644
+Episode   532 | Last Return:    89.99 | Rolling Avg(50):    93.26 | Food items:   17 | Total Distance:   119.24 | Actor L:  -0.002 | Critic L:   1.349
+Episode   534 | Last Return:   126.68 | Rolling Avg(50):    94.89 | Food items:   16 | Total Distance:   105.77 | Actor L:  -0.001 | Critic L:   1.120
+Episode   536 | Last Return:    97.35 | Rolling Avg(50):    95.00 | Food items:   15 | Total Distance:   102.89 | Actor L:  -0.007 | Critic L:   2.342
+Episode   538 | Last Return:    99.53 | Rolling Avg(50):    94.85 | Food items:   16 | Total Distance:   112.77 | Actor L:   0.000 | Critic L:   2.128
+Episode   540 | Last Return:   106.82 | Rolling Avg(50):    95.46 | Food items:   18 | Total Distance:    97.05 | Actor L:  -0.001 | Critic L:   3.241
+Episode   542 | Last Return:   100.84 | Rolling Avg(50):    96.71 | Food items:   12 | Total Distance:   107.66 | Actor L:  -0.001 | Critic L:   1.360
+Episode   544 | Last Return:    86.22 | Rolling Avg(50):    97.67 | Food items:   19 | Total Distance:   106.02 | Actor L:  -0.001 | Critic L:   2.642
+Episode   546 | Last Return:    80.53 | Rolling Avg(50):    98.09 | Food items:   14 | Total Distance:   116.51 | Actor L:   0.000 | Critic L:   2.154
+Episode   548 | Last Return:    87.44 | Rolling Avg(50):    97.29 | Food items:   16 | Total Distance:   114.20 | Actor L:  -0.004 | Critic L:   1.648
+Episode   550 | Last Return:   112.75 | Rolling Avg(50):    98.07 | Food items:   12 | Total Distance:    86.91 | Actor L:  -0.000 | Critic L:   3.412
+Episode   552 | Last Return:   123.67 | Rolling Avg(50):    99.24 | Food items:   11 | Total Distance:    71.90 | Actor L:  -0.002 | Critic L:   1.865
+Episode   554 | Last Return:   125.05 | Rolling Avg(50):   100.24 | Food items:   12 | Total Distance:    93.88 | Actor L:  -0.001 | Critic L:   1.730
+Episode   556 | Last Return:   123.91 | Rolling Avg(50):   101.52 | Food items:   12 | Total Distance:    78.08 | Actor L:  -0.000 | Critic L:   0.716
+Episode   558 | Last Return:    82.37 | Rolling Avg(50):   102.56 | Food items:   20 | Total Distance:   128.11 | Actor L:   0.001 | Critic L:   2.332
+Episode   560 | Last Return:   116.16 | Rolling Avg(50):   103.09 | Food items:   17 | Total Distance:   101.74 | Actor L:  -0.002 | Critic L:   1.784
+Episode   562 | Last Return:    95.78 | Rolling Avg(50):   103.07 | Food items:   13 | Total Distance:    93.35 | Actor L:  -0.002 | Critic L:   1.438
+Episode   564 | Last Return:    94.07 | Rolling Avg(50):   102.47 | Food items:   17 | Total Distance:   105.35 | Actor L:   0.006 | Critic L:   3.146
+Episode   566 | Last Return:    62.95 | Rolling Avg(50):   101.15 | Food items:   21 | Total Distance:   180.16 | Actor L:  -0.005 | Critic L:   3.963
+Episode   568 | Last Return:   108.77 | Rolling Avg(50):   101.38 | Food items:   12 | Total Distance:   100.56 | Actor L:  -0.003 | Critic L:   1.109
+Episode   570 | Last Return:   121.26 | Rolling Avg(50):   101.26 | Food items:   15 | Total Distance:    91.22 | Actor L:  -0.002 | Critic L:   1.437
+Episode   572 | Last Return:   116.59 | Rolling Avg(50):   101.69 | Food items:   13 | Total Distance:    81.64 | Actor L:  -0.002 | Critic L:   1.460
+Episode   574 | Last Return:   126.93 | Rolling Avg(50):   101.47 | Food items:   10 | Total Distance:    77.17 | Actor L:   0.001 | Critic L:   1.783
+Episode   576 | Last Return:   113.88 | Rolling Avg(50):   102.10 | Food items:   13 | Total Distance:    87.50 | Actor L:  -0.001 | Critic L:   1.909
+Episode   578 | Last Return:    94.29 | Rolling Avg(50):   101.85 | Food items:   14 | Total Distance:   101.58 | Actor L:  -0.005 | Critic L:   2.363
+Episode   580 | Last Return:    77.60 | Rolling Avg(50):   102.05 | Food items:   20 | Total Distance:   137.07 | Actor L:  -0.004 | Critic L:   3.034
+Episode   582 | Last Return:  -148.09 | Rolling Avg(50):    96.90 | Food items:   39 | Total Distance:   484.85 | Actor L:   0.012 | Critic L: 196.818
+Episode   584 | Last Return:    75.52 | Rolling Avg(50):    95.79 | Food items:   18 | Total Distance:   113.17 | Actor L:  -0.005 | Critic L:   1.310
+Episode   586 | Last Return:   127.57 | Rolling Avg(50):    97.56 | Food items:   13 | Total Distance:    84.16 | Actor L:  -0.003 | Critic L:   1.972
+Episode   588 | Last Return:    92.96 | Rolling Avg(50):    97.41 | Food items:   18 | Total Distance:   109.39 | Actor L:  -0.000 | Critic L:   1.715
+Episode   590 | Last Return:   105.40 | Rolling Avg(50):    97.88 | Food items:   13 | Total Distance:    79.54 | Actor L:  -0.010 | Critic L:   0.586
+Episode   592 | Last Return:    86.32 | Rolling Avg(50):    97.28 | Food items:   18 | Total Distance:   113.86 | Actor L:  -0.004 | Critic L:   2.339
+Episode   594 | Last Return:   106.05 | Rolling Avg(50):    97.45 | Food items:   13 | Total Distance:    82.67 | Actor L:  -0.001 | Critic L:   3.077
+Episode   596 | Last Return:    87.85 | Rolling Avg(50):    97.14 | Food items:   20 | Total Distance:   106.51 | Actor L:   0.002 | Critic L:   4.752
+Episode   598 | Last Return:   120.20 | Rolling Avg(50):    97.05 | Food items:   14 | Total Distance:    83.83 | Actor L:  -0.000 | Critic L:   0.871
+Episode   600 | Last Return:   112.09 | Rolling Avg(50):    97.80 | Food items:   18 | Total Distance:    98.10 | Actor L:  -0.003 | Critic L:   1.767
+Episode   602 | Last Return:    86.93 | Rolling Avg(50):    97.38 | Food items:   18 | Total Distance:   138.96 | Actor L:  -0.005 | Critic L:   0.958
+Episode   604 | Last Return:   120.98 | Rolling Avg(50):    97.85 | Food items:   14 | Total Distance:   100.82 | Actor L:  -0.009 | Critic L:   1.727
+Episode   606 | Last Return:   101.92 | Rolling Avg(50):    96.34 | Food items:   13 | Total Distance:    91.23 | Actor L:  -0.001 | Critic L:   1.014
+Episode   608 | Last Return:   113.06 | Rolling Avg(50):    96.37 | Food items:   12 | Total Distance:   100.71 | Actor L:  -0.004 | Critic L:   3.198
+  [best] new best return 148.93 @ ep609 → results/checkpoints_0/ppo_agent_best_*
+Episode   610 | Last Return:    89.53 | Rolling Avg(50):    96.73 | Food items:   15 | Total Distance:   106.38 | Actor L:   0.003 | Critic L:   3.157
+Episode   612 | Last Return:   122.15 | Rolling Avg(50):    97.84 | Food items:   14 | Total Distance:    84.19 | Actor L:  -0.002 | Critic L:   1.133
+Episode   614 | Last Return:    85.13 | Rolling Avg(50):    98.22 | Food items:   13 | Total Distance:   119.27 | Actor L:  -0.001 | Critic L:   0.572
+Episode   616 | Last Return:   142.38 | Rolling Avg(50):   100.49 | Food items:   14 | Total Distance:    77.14 | Actor L:  -0.005 | Critic L:   0.896
+Episode   618 | Last Return:   135.78 | Rolling Avg(50):   101.16 | Food items:   13 | Total Distance:    70.98 | Actor L:  -0.000 | Critic L:   1.196
+Episode   620 | Last Return:    90.29 | Rolling Avg(50):   101.04 | Food items:   12 | Total Distance:   124.35 | Actor L:  -0.001 | Critic L:   1.988
+Episode   622 | Last Return:   126.50 | Rolling Avg(50):   101.50 | Food items:   12 | Total Distance:    78.68 | Actor L:  -0.004 | Critic L:   2.525
+Episode   624 | Last Return:   115.29 | Rolling Avg(50):   101.00 | Food items:   13 | Total Distance:    81.17 | Actor L:   0.000 | Critic L:   1.466
+Episode   626 | Last Return:   117.08 | Rolling Avg(50):   101.42 | Food items:   17 | Total Distance:   100.57 | Actor L:  -0.002 | Critic L:   4.189
+Episode   628 | Last Return:   111.08 | Rolling Avg(50):   101.94 | Food items:   13 | Total Distance:   100.09 | Actor L:  -0.002 | Critic L:   1.985
+Episode   630 | Last Return:   120.40 | Rolling Avg(50):   103.19 | Food items:   13 | Total Distance:    76.79 | Actor L:  -0.008 | Critic L:   2.414
+Episode   632 | Last Return:   102.67 | Rolling Avg(50):   108.13 | Food items:   19 | Total Distance:    84.01 | Actor L:  -0.006 | Critic L:   1.070
+Episode   634 | Last Return:   116.50 | Rolling Avg(50):   108.80 | Food items:   13 | Total Distance:    88.57 | Actor L:  -0.000 | Critic L:   1.787
+Episode   636 | Last Return:   112.23 | Rolling Avg(50):   108.16 | Food items:   13 | Total Distance:    82.06 | Actor L:  -0.002 | Critic L:   1.199
+Episode   638 | Last Return:   108.44 | Rolling Avg(50):   108.22 | Food items:   13 | Total Distance:    97.78 | Actor L:  -0.001 | Critic L:   1.915
+Episode   640 | Last Return:   117.73 | Rolling Avg(50):   108.32 | Food items:   15 | Total Distance:   100.48 | Actor L:  -0.003 | Critic L:   2.743
+Episode   642 | Last Return:   146.54 | Rolling Avg(50):   110.23 | Food items:   13 | Total Distance:    60.41 | Actor L:  -0.003 | Critic L:   3.193
+Episode   644 | Last Return:   117.86 | Rolling Avg(50):   110.59 | Food items:   14 | Total Distance:    78.26 | Actor L:   0.005 | Critic L:   1.309
+Episode   646 | Last Return:   100.29 | Rolling Avg(50):   111.28 | Food items:   15 | Total Distance:   101.14 | Actor L:  -0.002 | Critic L:   3.445
+Episode   648 | Last Return:   110.44 | Rolling Avg(50):   110.90 | Food items:   11 | Total Distance:   113.36 | Actor L:   0.003 | Critic L:   1.500
+Episode   650 | Last Return:    92.51 | Rolling Avg(50):   109.93 | Food items:   11 | Total Distance:   104.11 | Actor L:  -0.004 | Critic L:   1.588
+Episode   652 | Last Return:   126.78 | Rolling Avg(50):   110.51 | Food items:   16 | Total Distance:    94.96 | Actor L:   0.001 | Critic L:   1.509
+Episode   654 | Last Return:    89.08 | Rolling Avg(50):   109.48 | Food items:   15 | Total Distance:   127.92 | Actor L:   0.003 | Critic L:   1.805
+Episode   656 | Last Return:   117.80 | Rolling Avg(50):   110.58 | Food items:   15 | Total Distance:    86.64 | Actor L:  -0.006 | Critic L:   5.128
+Episode   658 | Last Return:    78.98 | Rolling Avg(50):   109.82 | Food items:   18 | Total Distance:   116.33 | Actor L:  -0.002 | Critic L:   2.165
+Episode   660 | Last Return:   120.90 | Rolling Avg(50):   109.61 | Food items:   13 | Total Distance:    78.32 | Actor L:  -0.001 | Critic L:   3.800
+Episode   662 | Last Return: -3324.29 | Rolling Avg(50):    35.56 | Food items:  126 | Total Distance:  1903.62 | Actor L:   0.016 | Critic L: 22814.890
+Episode   664 | Last Return: -8322.21 | Rolling Avg(50):  -322.96 | Food items:  253 | Total Distance:  3998.12 | Actor L:  -0.004 | Critic L: 30981.752
+Episode   666 | Last Return: -10854.51 | Rolling Avg(50):  -747.21 | Food items:  281 | Total Distance:  4786.90 | Actor L:   0.009 | Critic L: 21559.054
+Episode   668 | Last Return: -9436.13 | Rolling Avg(50): -1151.68 | Food items:  285 | Total Distance:  4472.79 | Actor L:  -0.000 | Critic L: 39328.796
+Episode   670 | Last Return: -11512.17 | Rolling Avg(50): -1586.73 | Food items:  285 | Total Distance:  4965.49 | Actor L:  -0.000 | Critic L: 36974.601
+Episode   672 | Last Return: -11604.01 | Rolling Avg(50): -2073.44 | Food items:  286 | Total Distance:  4949.33 | Actor L:  -0.000 | Critic L: 18294.301
+Episode   674 | Last Return: -11645.62 | Rolling Avg(50): -2514.90 | Food items:  285 | Total Distance:  4986.60 | Actor L:  -0.001 | Critic L: 13888.623
+Episode   676 | Last Return: -11369.13 | Rolling Avg(50): -2967.57 | Food items:  286 | Total Distance:  4917.73 | Actor L:  -0.001 | Critic L: 5182.871
+Episode   678 | Last Return: -10586.14 | Rolling Avg(50): -3420.83 | Food items:  280 | Total Distance:  4732.22 | Actor L:  -0.001 | Critic L: 6845.168
+Episode   680 | Last Return: -10910.98 | Rolling Avg(50): -3847.32 | Food items:  286 | Total Distance:  4832.22 | Actor L:  -0.000 | Critic L: 2411.612
+Episode   682 | Last Return: -10232.43 | Rolling Avg(50): -4283.62 | Food items:  286 | Total Distance:  4674.20 | Actor L:  -0.001 | Critic L: 396.689
+Episode   684 | Last Return: -9452.74 | Rolling Avg(50): -4682.39 | Food items:  275 | Total Distance:  4492.52 | Actor L:   0.000 | Critic L: 322.949
+Episode   686 | Last Return: -10281.48 | Rolling Avg(50): -5090.81 | Food items:  282 | Total Distance:  4687.66 | Actor L:  -0.001 | Critic L: 3198.836
+Episode   688 | Last Return: -10204.15 | Rolling Avg(50): -5516.19 | Food items:  281 | Total Distance:  4671.20 | Actor L:  -0.001 | Critic L: 1188.374
+Episode   690 | Last Return: -11930.92 | Rolling Avg(50): -5955.49 | Food items:  285 | Total Distance:  5043.02 | Actor L:   0.000 | Critic L: 2515.360
+Episode   692 | Last Return: -10482.86 | Rolling Avg(50): -6387.91 | Food items:  281 | Total Distance:  4717.42 | Actor L:   0.000 | Critic L: 384.996
+Episode   694 | Last Return: -11547.31 | Rolling Avg(50): -6838.67 | Food items:  287 | Total Distance:  4958.97 | Actor L:  -0.001 | Critic L: 5054.076
+Episode   696 | Last Return: -11666.73 | Rolling Avg(50): -7307.21 | Food items:  284 | Total Distance:  4962.65 | Actor L:  -0.001 | Critic L: 4169.627
+Episode   698 | Last Return: -11178.71 | Rolling Avg(50): -7765.67 | Food items:  287 | Total Distance:  4839.48 | Actor L:  -0.000 | Critic L: 312.198
+Episode   700 | Last Return: -10498.89 | Rolling Avg(50): -8206.01 | Food items:  287 | Total Distance:  4718.27 | Actor L:  -0.001 | Critic L: 566.758
+Episode   702 | Last Return: -10640.39 | Rolling Avg(50): -8658.88 | Food items:  284 | Total Distance:  4765.21 | Actor L:  -0.001 | Critic L: 398.694
+Episode   704 | Last Return: -10996.50 | Rolling Avg(50): -9117.84 | Food items:  286 | Total Distance:  4833.24 | Actor L:  -0.001 | Critic L: 1168.505
+Episode   706 | Last Return: -12408.73 | Rolling Avg(50): -9606.57 | Food items:  285 | Total Distance:  5090.29 | Actor L:  -0.001 | Critic L: 1789.682
+Episode   708 | Last Return: -10574.22 | Rolling Avg(50): -10031.12 | Food items:  282 | Total Distance:  4754.55 | Actor L:  -0.001 | Critic L: 468.347
+Episode   710 | Last Return: -10770.07 | Rolling Avg(50): -10460.42 | Food items:  288 | Total Distance:  4789.72 | Actor L:  -0.001 | Critic L: 454.047
+Episode   712 | Last Return: -12442.91 | Rolling Avg(50): -10850.45 | Food items:  286 | Total Distance:  5152.01 | Actor L:  -0.001 | Critic L: 2154.320
+Episode   714 | Last Return: -11126.18 | Rolling Avg(50): -10955.66 | Food items:  282 | Total Distance:  4882.39 | Actor L:  -0.001 | Critic L: 304.056
+Episode   716 | Last Return: -10722.85 | Rolling Avg(50): -10966.68 | Food items:  283 | Total Distance:  4760.50 | Actor L:  -0.001 | Critic L: 715.622
+Episode   718 | Last Return: -9947.45 | Rolling Avg(50): -10990.67 | Food items:  286 | Total Distance:  4595.97 | Actor L:  -0.001 | Critic L: 1088.274
+Episode   720 | Last Return: -10163.84 | Rolling Avg(50): -10987.71 | Food items:  287 | Total Distance:  4635.53 | Actor L:  -0.001 | Critic L: 1416.377
+Episode   722 | Last Return: -12574.37 | Rolling Avg(50): -10995.96 | Food items:  284 | Total Distance:  5150.14 | Actor L:  -0.001 | Critic L: 1078.087
+Episode   724 | Last Return: -10579.67 | Rolling Avg(50): -10991.23 | Food items:  285 | Total Distance:  4734.15 | Actor L:  -0.001 | Critic L: 840.971
+Episode   726 | Last Return: -10629.69 | Rolling Avg(50): -10977.03 | Food items:  284 | Total Distance:  4753.35 | Actor L:  -0.001 | Critic L: 678.539
+Episode   728 | Last Return: -9559.87 | Rolling Avg(50): -10946.11 | Food items:  285 | Total Distance:  4484.30 | Actor L:  -0.001 | Critic L: 159.707
+Episode   730 | Last Return: -13091.62 | Rolling Avg(50): -10990.12 | Food items:  287 | Total Distance:  5262.41 | Actor L:  -0.001 | Critic L: 394.478
+Episode   732 | Last Return: -10702.60 | Rolling Avg(50): -11009.88 | Food items:  284 | Total Distance:  4789.42 | Actor L:  -0.001 | Critic L: 269.678
+Episode   734 | Last Return: -10710.17 | Rolling Avg(50): -11061.82 | Food items:  282 | Total Distance:  4770.70 | Actor L:  -0.001 | Critic L: 338.451
+Episode   736 | Last Return: -10770.78 | Rolling Avg(50): -11103.81 | Food items:  285 | Total Distance:  4777.04 | Actor L:  -0.001 | Critic L: 228.185
+Episode   738 | Last Return: -9768.87 | Rolling Avg(50): -11114.03 | Food items:  282 | Total Distance:  4560.43 | Actor L:  -0.001 | Critic L: 469.422
+Episode   740 | Last Return: -11013.64 | Rolling Avg(50): -11137.19 | Food items:  286 | Total Distance:  4846.93 | Actor L:  -0.001 | Critic L:  80.417
+Episode   742 | Last Return: -10343.00 | Rolling Avg(50): -11146.53 | Food items:  281 | Total Distance:  4684.81 | Actor L:  -0.001 | Critic L:  73.408
+Episode   744 | Last Return: -9231.53 | Rolling Avg(50): -11098.68 | Food items:  284 | Total Distance:  4424.15 | Actor L:  -0.001 | Critic L: 460.550
+Episode   746 | Last Return: -9802.28 | Rolling Avg(50): -11050.24 | Food items:  281 | Total Distance:  4573.38 | Actor L:  -0.001 | Critic L: 166.437
+Episode   748 | Last Return: -9441.98 | Rolling Avg(50): -10992.28 | Food items:  284 | Total Distance:  4480.34 | Actor L:  -0.001 | Critic L: 124.810
+  [checkpoint] saved to results/checkpoints_0/ppo_agent_ep750_*
+Episode   750 | Last Return: -11565.05 | Rolling Avg(50): -10993.71 | Food items:  283 | Total Distance:  4980.47 | Actor L:  -0.001 | Critic L: 177.831
+Episode   752 | Last Return: -11043.78 | Rolling Avg(50): -10959.24 | Food items:  281 | Total Distance:  4849.11 | Actor L:  -0.001 | Critic L: 449.246
+Episode   754 | Last Return: -9565.85 | Rolling Avg(50): -10926.45 | Food items:  276 | Total Distance:  4516.63 | Actor L:  -0.001 | Critic L: 142.558
+Episode   756 | Last Return: -10358.74 | Rolling Avg(50): -10859.71 | Food items:  283 | Total Distance:  4691.39 | Actor L:  -0.001 | Critic L: 142.468
+Episode   758 | Last Return: -10250.07 | Rolling Avg(50): -10817.47 | Food items:  280 | Total Distance:  4659.42 | Actor L:  -0.002 | Critic L: 683.793
+Episode   760 | Last Return: -10187.68 | Rolling Avg(50): -10772.87 | Food items:  281 | Total Distance:  4655.34 | Actor L:  -0.002 | Critic L: 278.608
+Episode   762 | Last Return: -11643.78 | Rolling Avg(50): -10747.99 | Food items:  277 | Total Distance:  4980.34 | Actor L:  -0.001 | Critic L: 959.532
+Episode   764 | Last Return: -10670.10 | Rolling Avg(50): -10715.47 | Food items:  280 | Total Distance:  4719.01 | Actor L:  -0.002 | Critic L: 506.220
+Episode   766 | Last Return: -10947.63 | Rolling Avg(50): -10705.07 | Food items:  282 | Total Distance:  4842.95 | Actor L:  -0.002 | Critic L: 159.753
+Episode   768 | Last Return: -11004.57 | Rolling Avg(50): -10686.33 | Food items:  279 | Total Distance:  4825.82 | Actor L:  -0.001 | Critic L:  70.407
+Episode   770 | Last Return: -12126.79 | Rolling Avg(50): -10687.77 | Food items:  283 | Total Distance:  5069.96 | Actor L:  -0.002 | Critic L: 853.644
+Episode   772 | Last Return: -10724.91 | Rolling Avg(50): -10623.18 | Food items:  280 | Total Distance:  4764.99 | Actor L:  -0.001 | Critic L: 329.396
+Episode   774 | Last Return: -9352.92 | Rolling Avg(50): -10601.82 | Food items:  277 | Total Distance:  4477.24 | Actor L:  -0.001 | Critic L: 227.279
+Episode   776 | Last Return: -10170.28 | Rolling Avg(50): -10571.85 | Food items:  281 | Total Distance:  4664.37 | Actor L:  -0.002 | Critic L: 264.434
+Episode   778 | Last Return: -11241.36 | Rolling Avg(50): -10598.09 | Food items:  278 | Total Distance:  4893.16 | Actor L:  -0.001 | Critic L: 199.834
+Episode   780 | Last Return: -10185.31 | Rolling Avg(50): -10564.51 | Food items:  278 | Total Distance:  4661.61 | Actor L:  -0.001 | Critic L: 100.640
+Episode   782 | Last Return: -11049.28 | Rolling Avg(50): -10564.02 | Food items:  283 | Total Distance:  4842.45 | Actor L:  -0.002 | Critic L: 178.231
+Episode   784 | Last Return: -10638.57 | Rolling Avg(50): -10565.59 | Food items:  283 | Total Distance:  4755.77 | Actor L:  -0.002 | Critic L: 614.163
+Episode   786 | Last Return: -10127.26 | Rolling Avg(50): -10516.56 | Food items:  277 | Total Distance:  4651.08 | Actor L:  -0.002 | Critic L: 234.124
+Episode   788 | Last Return: -8413.06 | Rolling Avg(50): -10435.40 | Food items:  280 | Total Distance:  4221.00 | Actor L:  -0.003 | Critic L: 106.305
+Episode   790 | Last Return: -8982.26 | Rolling Avg(50): -10375.57 | Food items:  272 | Total Distance:  4390.06 | Actor L:  -0.003 | Critic L:  85.945
+Episode   792 | Last Return: -10316.65 | Rolling Avg(50): -10350.35 | Food items:  263 | Total Distance:  4686.91 | Actor L:  -0.004 | Critic L: 595.165
+Episode   794 | Last Return: -7907.35 | Rolling Avg(50): -10306.47 | Food items:  273 | Total Distance:  4107.29 | Actor L:  -0.002 | Critic L: 125.527
+Episode   796 | Last Return: -9719.63 | Rolling Avg(50): -10288.71 | Food items:  264 | Total Distance:  4564.22 | Actor L:  -0.003 | Critic L: 493.294
+Episode   798 | Last Return: -8990.24 | Rolling Avg(50): -10274.40 | Food items:  260 | Total Distance:  4401.73 | Actor L:  -0.003 | Critic L: 130.694
+Episode   800 | Last Return: -9662.83 | Rolling Avg(50): -10237.99 | Food items:  273 | Total Distance:  4518.60 | Actor L:  -0.002 | Critic L: 283.326
+Episode   802 | Last Return: -12094.54 | Rolling Avg(50): -10266.34 | Food items:  275 | Total Distance:  5072.11 | Actor L:  -0.004 | Critic L: 1904.097
+Episode   804 | Last Return: -11331.26 | Rolling Avg(50): -10260.00 | Food items:  270 | Total Distance:  4897.14 | Actor L:  -0.001 | Critic L: 337.586
+Episode   806 | Last Return: -9174.86 | Rolling Avg(50): -10238.56 | Food items:  272 | Total Distance:  4411.25 | Actor L:  -0.003 | Critic L: 132.892
+Episode   808 | Last Return: -9296.26 | Rolling Avg(50): -10236.14 | Food items:  275 | Total Distance:  4443.98 | Actor L:  -0.003 | Critic L:  96.597
+Episode   810 | Last Return: -8204.64 | Rolling Avg(50): -10241.91 | Food items:  264 | Total Distance:  4184.27 | Actor L:  -0.002 | Critic L: 451.609
+Episode   812 | Last Return: -10475.77 | Rolling Avg(50): -10214.61 | Food items:  273 | Total Distance:  4695.57 | Actor L:  -0.005 | Critic L: 101.545
+Episode   814 | Last Return: -8447.01 | Rolling Avg(50): -10171.97 | Food items:  265 | Total Distance:  4246.44 | Actor L:  -0.003 | Critic L: 279.188
+Episode   816 | Last Return: -9330.37 | Rolling Avg(50): -10113.66 | Food items:  264 | Total Distance:  4467.01 | Actor L:  -0.002 | Critic L: 212.721
+Episode   818 | Last Return: -9674.66 | Rolling Avg(50): -10084.12 | Food items:  275 | Total Distance:  4547.20 | Actor L:  -0.002 | Critic L: 192.262
+Episode   820 | Last Return: -10283.60 | Rolling Avg(50): -10094.47 | Food items:  276 | Total Distance:  4679.13 | Actor L:  -0.002 | Critic L: 130.143
+Episode   822 | Last Return: -10794.40 | Rolling Avg(50): -10075.43 | Food items:  273 | Total Distance:  4800.17 | Actor L:  -0.002 | Critic L: 221.181
+Episode   824 | Last Return: -9483.65 | Rolling Avg(50): -10062.83 | Food items:  277 | Total Distance:  4496.28 | Actor L:  -0.002 | Critic L: 114.568
+Episode   826 | Last Return: -10295.39 | Rolling Avg(50): -10094.66 | Food items:  274 | Total Distance:  4697.75 | Actor L:  -0.002 | Critic L: 483.023
+Episode   828 | Last Return: -10111.82 | Rolling Avg(50): -10057.49 | Food items:  269 | Total Distance:  4626.01 | Actor L:  -0.003 | Critic L: 175.624
+Episode   830 | Last Return: -11765.19 | Rolling Avg(50): -10090.64 | Food items:  276 | Total Distance:  4995.59 | Actor L:  -0.001 | Critic L: 743.793
+Episode   832 | Last Return: -7847.01 | Rolling Avg(50): -10029.46 | Food items:  270 | Total Distance:  4096.59 | Actor L:  -0.003 | Critic L: 423.597
+Episode   834 | Last Return: -9875.86 | Rolling Avg(50): -9967.80 | Food items:  274 | Total Distance:  4570.98 | Actor L:  -0.002 | Critic L: 1460.080
+Episode   836 | Last Return: -8869.47 | Rolling Avg(50): -9946.98 | Food items:  272 | Total Distance:  4364.84 | Actor L:  -0.001 | Critic L: 621.132
+Episode   838 | Last Return: -9867.36 | Rolling Avg(50): -10011.64 | Food items:  268 | Total Distance:  4608.54 | Actor L:  -0.002 | Critic L: 144.146
+Episode   840 | Last Return: -9906.01 | Rolling Avg(50): -10026.66 | Food items:  272 | Total Distance:  4578.73 | Actor L:  -0.002 | Critic L: 129.668
+Episode   842 | Last Return: -10527.10 | Rolling Avg(50): -10029.15 | Food items:  279 | Total Distance:  4716.76 | Actor L:  -0.001 | Critic L: 113.044
+Episode   844 | Last Return: -11220.31 | Rolling Avg(50): -10108.00 | Food items:  278 | Total Distance:  4898.69 | Actor L:  -0.002 | Critic L: 182.709
+Episode   846 | Last Return: -9164.46 | Rolling Avg(50): -10082.37 | Food items:  273 | Total Distance:  4405.08 | Actor L:  -0.002 | Critic L: 131.633
+Episode   848 | Last Return: -10368.41 | Rolling Avg(50): -10114.84 | Food items:  274 | Total Distance:  4707.22 | Actor L:  -0.002 | Critic L: 170.163
+Episode   850 | Last Return: -9226.54 | Rolling Avg(50): -10089.58 | Food items:  275 | Total Distance:  4426.25 | Actor L:  -0.003 | Critic L: 314.906
+Episode   852 | Last Return: -8593.38 | Rolling Avg(50): -10034.53 | Food items:  276 | Total Distance:  4267.23 | Actor L:  -0.002 | Critic L: 131.373
+Episode   854 | Last Return: -10282.08 | Rolling Avg(50): -10020.40 | Food items:  274 | Total Distance:  4687.52 | Actor L:  -0.003 | Critic L: 224.795
+Episode   856 | Last Return: -10219.72 | Rolling Avg(50): -10036.89 | Food items:  274 | Total Distance:  4637.58 | Actor L:  -0.003 | Critic L:  76.673
+Episode   858 | Last Return: -10097.21 | Rolling Avg(50): -10047.94 | Food items:  275 | Total Distance:  4638.87 | Actor L:  -0.005 | Critic L: 157.812

@@ -1,0 +1,48 @@
+_wandb:
+    value:
+        cli_version: 0.23.1
+        e:
+            keygp59zd8e6cjbwi2qqrs4l10bht5j3:
+                apple: {}
+                codePath: /Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies/run_training.ipynb
+                codePathLocal: run_training.ipynb
+                cpu_count: 10
+                cpu_count_logical: 10
+                disk:
+                    /:
+                        total: "245107195904"
+                        used: "211009191936"
+                email: charithapalika@gmail.com
+                executable: /opt/homebrew/anaconda3/envs/workbench/bin/python
+                git:
+                    commit: c6683f0504310954e80cac7b5d7134f1ccf1c205
+                    remote: https://github.com/CharithaPalika/FoodRL.git
+                host: Charithas-MacBook-Air.local
+                memory:
+                    total: "17179869184"
+                os: macOS-26.5.1-arm64-arm-64bit
+                program: /Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies/run_training.ipynb
+                python: CPython 3.10.19
+                root: /Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies
+                startedAt: "2026-07-25T04:33:35.552001Z"
+                writerId: keygp59zd8e6cjbwi2qqrs4l10bht5j3
+        m: []
+        python_version: 3.10.19
+        t:
+            "1":
+                - 1
+                - 105
+            "2":
+                - 1
+                - 105
+            "3":
+                - 2
+                - 13
+                - 61
+            "4": 3.10.19
+            "5": 0.23.1
+            "8":
+                - 1
+                - 2
+            "12": 0.23.1
+            "13": darwin-arm64

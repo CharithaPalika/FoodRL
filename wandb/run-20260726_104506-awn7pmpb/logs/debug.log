@@ -1,0 +1,49 @@
+2026-07-26 10:45:06,148 INFO    MainThread:42502 [wandb_setup.py:_flush():80] Current SDK version is 0.23.1
+2026-07-26 10:45:06,148 INFO    MainThread:42502 [wandb_setup.py:_flush():80] Configure stats pid to 42502
+2026-07-26 10:45:06,148 INFO    MainThread:42502 [wandb_setup.py:_flush():80] Loading settings from /Users/charithapalika/.config/wandb/settings
+2026-07-26 10:45:06,148 INFO    MainThread:42502 [wandb_setup.py:_flush():80] Loading settings from /Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies/wandb/settings
+2026-07-26 10:45:06,148 INFO    MainThread:42502 [wandb_setup.py:_flush():80] Loading settings from environment variables
+2026-07-26 10:45:06,148 INFO    MainThread:42502 [wandb_init.py:setup_run_log_directory():714] Logging user logs to /Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies/wandb/run-20260726_104506-awn7pmpb/logs/debug.log
+2026-07-26 10:45:06,148 INFO    MainThread:42502 [wandb_init.py:setup_run_log_directory():715] Logging internal logs to /Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies/wandb/run-20260726_104506-awn7pmpb/logs/debug-internal.log
+2026-07-26 10:45:06,149 INFO    MainThread:42502 [wandb_init.py:monkeypatch_ipython():633] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x107caaf80>
+2026-07-26 10:45:06,149 INFO    MainThread:42502 [wandb_init.py:init():841] calling init triggers
+2026-07-26 10:45:06,149 INFO    MainThread:42502 [wandb_init.py:init():846] wandb.init called with sweep_config: {}
+config: {'_wandb': {}}
+2026-07-26 10:45:06,149 INFO    MainThread:42502 [wandb_init.py:init():889] starting backend
+2026-07-26 10:45:06,454 INFO    MainThread:42502 [wandb_init.py:init():892] sending inform_init request
+2026-07-26 10:45:06,481 INFO    MainThread:42502 [wandb_init.py:init():900] backend started and connected
+2026-07-26 10:45:06,503 INFO    MainThread:42502 [wandb_run.py:_label_probe_notebook():1334] probe notebook
+2026-07-26 10:45:06,505 INFO    MainThread:42502 [wandb_init.py:init():970] updated telemetry
+2026-07-26 10:45:06,575 INFO    MainThread:42502 [wandb_init.py:init():994] communicating run to backend with 90.0 second timeout
+2026-07-26 10:45:07,578 INFO    MainThread:42502 [wandb_init.py:init():1041] starting run threads in backend
+2026-07-26 10:45:07,702 INFO    MainThread:42502 [wandb_run.py:_console_start():2521] atexit reg
+2026-07-26 10:45:07,702 INFO    MainThread:42502 [wandb_run.py:_redirect():2369] redirect: wrap_raw
+2026-07-26 10:45:07,702 INFO    MainThread:42502 [wandb_run.py:_redirect():2438] Wrapping output streams.
+2026-07-26 10:45:07,702 INFO    MainThread:42502 [wandb_run.py:_redirect():2461] Redirects installed.
+2026-07-26 10:45:07,704 INFO    MainThread:42502 [wandb_init.py:init():1081] run started, returning control to user process
+2026-07-26 10:45:07,706 INFO    MainThread:42502 [wandb_init.py:_post_run_cell_hook():603] [no run ID] resuming backend
+2026-07-26 10:45:07,717 INFO    MainThread:42502 [jupyter.py:save_ipynb():359] [no run ID] not saving jupyter notebook
+2026-07-26 10:45:07,717 INFO    MainThread:42502 [wandb_init.py:_pre_run_cell_hook():592] [no run ID] pausing backend
+2026-07-26 10:45:07,719 INFO    MainThread:42502 [wandb_init.py:_post_run_cell_hook():603] [no run ID] resuming backend
+2026-07-26 10:45:07,732 INFO    MainThread:42502 [jupyter.py:save_ipynb():359] [no run ID] not saving jupyter notebook
+2026-07-26 10:45:07,732 INFO    MainThread:42502 [wandb_init.py:_pre_run_cell_hook():592] [no run ID] pausing backend
+2026-07-26 10:45:07,789 INFO    MainThread:42502 [wandb_init.py:_post_run_cell_hook():603] [no run ID] resuming backend
+2026-07-26 10:45:07,796 INFO    MainThread:42502 [jupyter.py:save_ipynb():359] [no run ID] not saving jupyter notebook
+2026-07-26 10:45:07,796 INFO    MainThread:42502 [wandb_init.py:_pre_run_cell_hook():592] [no run ID] pausing backend
+2026-07-26 10:45:07,801 INFO    MainThread:42502 [wandb_init.py:_post_run_cell_hook():603] [no run ID] resuming backend
+2026-07-26 10:45:07,813 INFO    MainThread:42502 [jupyter.py:save_ipynb():359] [no run ID] not saving jupyter notebook
+2026-07-26 10:45:07,813 INFO    MainThread:42502 [wandb_init.py:_pre_run_cell_hook():592] [no run ID] pausing backend
+2026-07-26 10:50:20,701 INFO    MainThread:42502 [wandb_init.py:_post_run_cell_hook():603] [no run ID] resuming backend
+2026-07-26 10:50:20,716 INFO    MainThread:42502 [jupyter.py:save_ipynb():359] [no run ID] not saving jupyter notebook
+2026-07-26 10:50:20,716 INFO    MainThread:42502 [wandb_init.py:_pre_run_cell_hook():592] [no run ID] pausing backend
+2026-07-26 10:50:21,083 INFO    MainThread:42502 [wandb_init.py:_post_run_cell_hook():603] [no run ID] resuming backend
+2026-07-26 10:50:21,103 INFO    MainThread:42502 [jupyter.py:save_ipynb():359] [no run ID] not saving jupyter notebook
+2026-07-26 10:50:21,103 INFO    MainThread:42502 [wandb_init.py:_pre_run_cell_hook():592] [no run ID] pausing backend
+2026-07-26 10:50:21,104 INFO    MainThread:42502 [wandb_run.py:_finish():2287] finishing run charitha_palika/Food RL/awn7pmpb
+2026-07-26 10:50:21,182 INFO    MainThread:42502 [jupyter.py:save_history():435] not saving jupyter history
+2026-07-26 10:50:21,182 INFO    MainThread:42502 [jupyter.py:save_ipynb():359] not saving jupyter notebook
+2026-07-26 10:50:21,182 INFO    MainThread:42502 [wandb_init.py:_jupyter_teardown():618] cleaning up jupyter logic
+2026-07-26 10:50:21,182 INFO    MainThread:42502 [wandb_run.py:_atexit_cleanup():2486] got exitcode: 0
+2026-07-26 10:50:21,182 INFO    MainThread:42502 [wandb_run.py:_restore():2468] restore
+2026-07-26 10:50:21,182 INFO    MainThread:42502 [wandb_run.py:_restore():2474] restore done
+2026-07-26 10:50:31,772 INFO    MainThread:42502 [wandb_run.py:_footer_sync_info():3862] logging synced files

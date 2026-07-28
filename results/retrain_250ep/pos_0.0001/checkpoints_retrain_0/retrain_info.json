@@ -1,0 +1,14 @@
+{
+  "seed": 0,
+  "limit_delta": 0.0001,
+  "del_lim_tag": "pos_0.0001",
+  "source_ckpt": "results/checkpoints_0/ppo_agent_last_meta.json",
+  "retrain_episodes": 250,
+  "train_kw": {
+    "rollout_steps": 256,
+    "ppo_epochs": 4,
+    "minibatch_size": 64,
+    "shared_ac_lr": 0.0001,
+    "log_every_episodes": 10
+  }
+}

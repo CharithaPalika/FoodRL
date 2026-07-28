@@ -1,0 +1,206 @@
+2026-07-27 02:09:38,215 INFO    MainThread:58190 [wandb_init.py:setup_run_log_directory():714] Logging user logs to /Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies/wandb/run-20260727_020938-702v2d2t/logs/debug.log
+2026-07-27 02:09:38,216 INFO    MainThread:58190 [wandb_init.py:setup_run_log_directory():715] Logging internal logs to /Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies/wandb/run-20260727_020938-702v2d2t/logs/debug-internal.log
+2026-07-27 02:09:38,216 INFO    MainThread:58190 [wandb_init.py:monkeypatch_ipython():633] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x177e7b430>
+2026-07-27 02:09:38,216 INFO    MainThread:58190 [wandb_init.py:init():841] calling init triggers
+2026-07-27 02:09:38,216 INFO    MainThread:58190 [wandb_init.py:init():846] wandb.init called with sweep_config: {}
+config: {'seed': 64, 'limit_delta': 3e-06, 'del_lim_tag': 'pos_3e-06', 'source_ckpt': 'results/training_checkpoints/checkpoints_64/ppo_agent_last_meta.json', 'retrain_episodes': 500, 'rollout_steps': 256, 'ppo_epochs': 4, 'minibatch_size': 64, 'shared_ac_lr': 0.0001, 'log_every_episodes': 10, '_wandb': {}}
+2026-07-27 02:09:38,216 INFO    MainThread:58190 [wandb_init.py:init():889] starting backend
+2026-07-27 02:09:38,216 INFO    MainThread:58190 [wandb_init.py:init():892] sending inform_init request
+2026-07-27 02:09:38,218 INFO    MainThread:58190 [wandb_init.py:init():900] backend started and connected
+2026-07-27 02:09:38,223 INFO    MainThread:58190 [wandb_run.py:_label_probe_notebook():1334] probe notebook
+2026-07-27 02:09:38,225 INFO    MainThread:58190 [wandb_init.py:init():970] updated telemetry
+2026-07-27 02:09:38,261 INFO    MainThread:58190 [wandb_init.py:init():994] communicating run to backend with 90.0 second timeout
+2026-07-27 02:09:39,445 INFO    MainThread:58190 [wandb_init.py:init():1041] starting run threads in backend
+2026-07-27 02:09:39,577 INFO    MainThread:58190 [wandb_run.py:_console_start():2521] atexit reg
+2026-07-27 02:09:39,577 INFO    MainThread:58190 [wandb_run.py:_redirect():2369] redirect: wrap_raw
+2026-07-27 02:09:39,577 INFO    MainThread:58190 [wandb_run.py:_redirect():2438] Wrapping output streams.
+2026-07-27 02:09:39,577 INFO    MainThread:58190 [wandb_run.py:_redirect():2461] Redirects installed.
+2026-07-27 02:09:39,577 INFO    MainThread:58190 [wandb_init.py:init():1081] run started, returning control to user process
+2026-07-27 02:20:11,241 INFO    MainThread:58190 [retry.py:__call__():164] Retry attempt failed:
+Traceback (most recent call last):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/util/connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/socket.py", line 967, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connection.py", line 753, in connect
+    self.sock = sock = self._new_conn()
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connection.py", line 205, in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+urllib3.exceptions.NameResolutionError: <urllib3.connection.HTTPSConnection object at 0x177c84100>: Failed to resolve 'api.wandb.ai' ([Errno 8] nodename nor servname provided, or not known)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/adapters.py", line 644, in send
+    resp = conn.urlopen(
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/util/retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.wandb.ai', port=443): Max retries exceeded with url: /graphql (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x177c84100>: Failed to resolve 'api.wandb.ai' ([Errno 8] nodename nor servname provided, or not known)"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/sdk/lib/retry.py", line 157, in __call__
+    result = self._call_fn(*args, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/apis/public/api.py", line 123, in _wrapped
+    return self._client.execute(*args, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 52, in execute
+    result = self._get_result(document, *args, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 60, in _get_result
+    return self.transport.execute(document, *args, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/sdk/lib/gql_request.py", line 70, in execute
+    request = self.session.post(self.url, **post_args)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/sessions.py", line 637, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/adapters.py", line 677, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='api.wandb.ai', port=443): Max retries exceeded with url: /graphql (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x177c84100>: Failed to resolve 'api.wandb.ai' ([Errno 8] nodename nor servname provided, or not known)"))
+2026-07-27 02:20:59,914 INFO    MainThread:58190 [retry.py:__call__():164] Retry attempt failed:
+Traceback (most recent call last):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/util/connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/socket.py", line 967, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connection.py", line 753, in connect
+    self.sock = sock = self._new_conn()
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connection.py", line 205, in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+urllib3.exceptions.NameResolutionError: <urllib3.connection.HTTPSConnection object at 0x30998d630>: Failed to resolve 'api.wandb.ai' ([Errno 8] nodename nor servname provided, or not known)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/adapters.py", line 644, in send
+    resp = conn.urlopen(
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/util/retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.wandb.ai', port=443): Max retries exceeded with url: /graphql (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x30998d630>: Failed to resolve 'api.wandb.ai' ([Errno 8] nodename nor servname provided, or not known)"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/sdk/lib/retry.py", line 157, in __call__
+    result = self._call_fn(*args, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/apis/public/api.py", line 123, in _wrapped
+    return self._client.execute(*args, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 52, in execute
+    result = self._get_result(document, *args, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 60, in _get_result
+    return self.transport.execute(document, *args, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/sdk/lib/gql_request.py", line 70, in execute
+    request = self.session.post(self.url, **post_args)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/sessions.py", line 637, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/adapters.py", line 677, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='api.wandb.ai', port=443): Max retries exceeded with url: /graphql (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x30998d630>: Failed to resolve 'api.wandb.ai' ([Errno 8] nodename nor servname provided, or not known)"))
+2026-07-27 02:21:36,491 INFO    MainThread:58190 [retry.py:__call__():164] Retry attempt failed:
+Traceback (most recent call last):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/util/connection.py", line 60, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/socket.py", line 967, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connection.py", line 753, in connect
+    self.sock = sock = self._new_conn()
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connection.py", line 205, in _new_conn
+    raise NameResolutionError(self.host, self, e) from e
+urllib3.exceptions.NameResolutionError: <urllib3.connection.HTTPSConnection object at 0x309977a00>: Failed to resolve 'api.wandb.ai' ([Errno 8] nodename nor servname provided, or not known)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/adapters.py", line 644, in send
+    resp = conn.urlopen(
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/urllib3/util/retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.wandb.ai', port=443): Max retries exceeded with url: /graphql (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x309977a00>: Failed to resolve 'api.wandb.ai' ([Errno 8] nodename nor servname provided, or not known)"))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/sdk/lib/retry.py", line 157, in __call__
+    result = self._call_fn(*args, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/apis/public/api.py", line 123, in _wrapped
+    return self._client.execute(*args, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 52, in execute
+    result = self._get_result(document, *args, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 60, in _get_result
+    return self.transport.execute(document, *args, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/wandb/sdk/lib/gql_request.py", line 70, in execute
+    request = self.session.post(self.url, **post_args)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/sessions.py", line 637, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/opt/homebrew/anaconda3/envs/workbench/lib/python3.10/site-packages/requests/adapters.py", line 677, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='api.wandb.ai', port=443): Max retries exceeded with url: /graphql (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x309977a00>: Failed to resolve 'api.wandb.ai' ([Errno 8] nodename nor servname provided, or not known)"))
+2026-07-27 02:22:10,271 INFO    MainThread:58190 [wandb_run.py:_finish():2287] finishing run charitha_palika/Food RL/702v2d2t
+2026-07-27 02:22:10,272 INFO    MainThread:58190 [jupyter.py:save_history():435] not saving jupyter history
+2026-07-27 02:22:10,272 INFO    MainThread:58190 [jupyter.py:save_ipynb():359] not saving jupyter notebook
+2026-07-27 02:22:10,272 INFO    MainThread:58190 [wandb_init.py:_jupyter_teardown():618] cleaning up jupyter logic
+2026-07-27 02:22:10,272 INFO    MainThread:58190 [wandb_run.py:_atexit_cleanup():2486] got exitcode: 0
+2026-07-27 02:22:10,273 INFO    MainThread:58190 [wandb_run.py:_restore():2468] restore
+2026-07-27 02:22:10,273 INFO    MainThread:58190 [wandb_run.py:_restore():2474] restore done
+2026-07-27 02:22:46,104 INFO    MainThread:58190 [wandb_run.py:_footer_sync_info():3862] logging synced files

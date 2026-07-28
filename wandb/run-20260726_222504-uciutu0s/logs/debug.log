@@ -1,0 +1,26 @@
+2026-07-26 22:25:04,182 INFO    MainThread:58190 [wandb_init.py:setup_run_log_directory():714] Logging user logs to /Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies/wandb/run-20260726_222504-uciutu0s/logs/debug.log
+2026-07-26 22:25:04,182 INFO    MainThread:58190 [wandb_init.py:setup_run_log_directory():715] Logging internal logs to /Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies/wandb/run-20260726_222504-uciutu0s/logs/debug-internal.log
+2026-07-26 22:25:04,182 INFO    MainThread:58190 [wandb_init.py:monkeypatch_ipython():633] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x16c2c9de0>
+2026-07-26 22:25:04,182 INFO    MainThread:58190 [wandb_init.py:init():841] calling init triggers
+2026-07-26 22:25:04,183 INFO    MainThread:58190 [wandb_init.py:init():846] wandb.init called with sweep_config: {}
+config: {'seed': 42, 'limit_delta': -0.003, 'del_lim_tag': 'neg_0.003', 'source_ckpt': 'results/training_checkpoints/checkpoints_42/ppo_agent_last_meta.json', 'retrain_episodes': 500, 'rollout_steps': 256, 'ppo_epochs': 4, 'minibatch_size': 64, 'shared_ac_lr': 0.0001, 'log_every_episodes': 10, '_wandb': {}}
+2026-07-26 22:25:04,183 INFO    MainThread:58190 [wandb_init.py:init():889] starting backend
+2026-07-26 22:25:04,183 INFO    MainThread:58190 [wandb_init.py:init():892] sending inform_init request
+2026-07-26 22:25:04,185 INFO    MainThread:58190 [wandb_init.py:init():900] backend started and connected
+2026-07-26 22:25:04,191 INFO    MainThread:58190 [wandb_run.py:_label_probe_notebook():1334] probe notebook
+2026-07-26 22:25:04,192 INFO    MainThread:58190 [wandb_init.py:init():970] updated telemetry
+2026-07-26 22:25:04,224 INFO    MainThread:58190 [wandb_init.py:init():994] communicating run to backend with 90.0 second timeout
+2026-07-26 22:25:05,257 INFO    MainThread:58190 [wandb_init.py:init():1041] starting run threads in backend
+2026-07-26 22:25:05,418 INFO    MainThread:58190 [wandb_run.py:_console_start():2521] atexit reg
+2026-07-26 22:25:05,418 INFO    MainThread:58190 [wandb_run.py:_redirect():2369] redirect: wrap_raw
+2026-07-26 22:25:05,418 INFO    MainThread:58190 [wandb_run.py:_redirect():2438] Wrapping output streams.
+2026-07-26 22:25:05,418 INFO    MainThread:58190 [wandb_run.py:_redirect():2461] Redirects installed.
+2026-07-26 22:25:05,419 INFO    MainThread:58190 [wandb_init.py:init():1081] run started, returning control to user process
+2026-07-26 22:26:15,878 INFO    MainThread:58190 [wandb_run.py:_finish():2287] finishing run charitha_palika/Food RL/uciutu0s
+2026-07-26 22:26:15,878 INFO    MainThread:58190 [jupyter.py:save_history():435] not saving jupyter history
+2026-07-26 22:26:15,878 INFO    MainThread:58190 [jupyter.py:save_ipynb():359] not saving jupyter notebook
+2026-07-26 22:26:15,878 INFO    MainThread:58190 [wandb_init.py:_jupyter_teardown():618] cleaning up jupyter logic
+2026-07-26 22:26:15,878 INFO    MainThread:58190 [wandb_run.py:_atexit_cleanup():2486] got exitcode: 0
+2026-07-26 22:26:15,879 INFO    MainThread:58190 [wandb_run.py:_restore():2468] restore
+2026-07-26 22:26:15,879 INFO    MainThread:58190 [wandb_run.py:_restore():2474] restore done
+2026-07-26 22:26:18,602 INFO    MainThread:58190 [wandb_run.py:_footer_sync_info():3862] logging synced files

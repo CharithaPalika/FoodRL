@@ -1,0 +1,7 @@
+COLORS = ["#1b4965", "#c1121f", "#07544b", "#e07a00"]
+
+Overrating: Red
+undereating: Orange
+baseline: Blue
+Any target indications: Green
+

@@ -1,0 +1,1 @@
+{"_step":500,"train/actor_loss":-0.006373305746819824,"train/critic_loss":0.0012103037502164682,"_timestamp":1.78510200252578e+09,"train/reward":136.25089416980313,"train/distance":127.5450620688498,"_runtime":72.250740875,"train/entropy":0.14688194543123245,"train/shared_ac_lr":0.0001,"train/reward_rolling_avg":106.06564737263642,"train/consumption":8,"_wandb":{"runtime":72}}

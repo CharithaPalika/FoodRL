@@ -1,0 +1,24 @@
+{"time":"2026-07-27T05:16:28.838999+05:30","level":"INFO","msg":"stream: starting","core version":"0.23.1"}
+{"time":"2026-07-27T05:16:29.43987+05:30","level":"INFO","msg":"stream: created new stream","id":"4zfml5hg"}
+{"time":"2026-07-27T05:16:29.440084+05:30","level":"INFO","msg":"handler: started","stream_id":"4zfml5hg"}
+{"time":"2026-07-27T05:16:29.440952+05:30","level":"INFO","msg":"stream: started","id":"4zfml5hg"}
+{"time":"2026-07-27T05:16:29.440956+05:30","level":"INFO","msg":"writer: started","stream_id":"4zfml5hg"}
+{"time":"2026-07-27T05:16:29.440977+05:30","level":"INFO","msg":"sender: started","stream_id":"4zfml5hg"}
+{"time":"2026-07-27T05:16:46.16078+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-27T05:16:46.161007+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-27T05:17:00.673374+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-27T05:17:00.673596+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-27T05:17:15.846358+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-27T05:17:15.846561+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-27T05:17:31.413298+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-27T05:17:31.413528+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-27T05:17:47.18389+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-27T05:17:47.184554+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-27T05:17:47.826712+05:30","level":"ERROR","msg":"HTTP error","status":400,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2026-07-27T05:17:47.827409+05:30","level":"ERROR","msg":"sender: failed to log artifact: ArtifactSaver.createArtifact: returned error 400: {\"data\":{\"createArtifact\":null},\"errors\":[{\"message\":\"Invalid Client ID digest\",\"path\":[\"createArtifact\"]}]}","artifactID":""}
+{"time":"2026-07-27T05:17:49.005655+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-07-27T05:17:49.537644+05:30","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2026-07-27T05:17:49.548618+05:30","level":"INFO","msg":"stream: closing","id":"4zfml5hg"}
+{"time":"2026-07-27T05:17:49.548662+05:30","level":"INFO","msg":"handler: closed","stream_id":"4zfml5hg"}
+{"time":"2026-07-27T05:17:49.548966+05:30","level":"INFO","msg":"sender: closed","stream_id":"4zfml5hg"}
+{"time":"2026-07-27T05:17:49.548984+05:30","level":"INFO","msg":"stream: closed","id":"4zfml5hg"}

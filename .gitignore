@@ -1,0 +1,8 @@
+/temp/*
+__pycache__/
+/plots/*
+/temp/*
+/wandb/*
+/results/retrain_250ep/*
+/results/retrain_750ep/*
+/results/training_checkpoints/*

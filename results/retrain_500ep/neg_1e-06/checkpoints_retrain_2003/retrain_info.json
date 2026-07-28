@@ -1,0 +1,14 @@
+{
+  "seed": 2003,
+  "limit_delta": -1e-06,
+  "del_lim_tag": "neg_1e-06",
+  "source_ckpt": "results/training_checkpoints/checkpoints_2003/ppo_agent_last_meta.json",
+  "retrain_episodes": 500,
+  "train_kw": {
+    "rollout_steps": 256,
+    "ppo_epochs": 4,
+    "minibatch_size": 64,
+    "shared_ac_lr": 0.0001,
+    "log_every_episodes": 10
+  }
+}

@@ -1,0 +1,71 @@
+_wandb:
+    value:
+        cli_version: 0.23.1
+        e:
+            5rhnpu24rv9ldhpmmmdpq6mwg3bggrkl:
+                apple: {}
+                codePath: /Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies/td_clip_retrain_sweep.ipynb
+                codePathLocal: td_clip_retrain_sweep.ipynb
+                cpu_count: 10
+                cpu_count_logical: 10
+                disk:
+                    /:
+                        total: "245107195904"
+                        used: "216114642944"
+                email: charithapalika@gmail.com
+                executable: /opt/homebrew/anaconda3/envs/workbench/bin/python
+                git:
+                    commit: c6683f0504310954e80cac7b5d7134f1ccf1c205
+                    remote: https://github.com/CharithaPalika/FoodRL.git
+                host: Charithas-MacBook-Air.local
+                memory:
+                    total: "17179869184"
+                os: macOS-26.5.1-arm64-arm-64bit
+                program: /Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies/td_clip_retrain_sweep.ipynb
+                python: CPython 3.10.19
+                root: /Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies
+                startedAt: "2026-07-26T18:54:13.462705Z"
+                writerId: 5rhnpu24rv9ldhpmmmdpq6mwg3bggrkl
+        m: []
+        python_version: 3.10.19
+        t:
+            "1":
+                - 1
+                - 105
+            "2":
+                - 1
+                - 105
+            "3":
+                - 2
+                - 13
+                - 16
+                - 61
+            "4": 3.10.19
+            "5": 0.23.1
+            "8":
+                - 1
+                - 2
+            "10":
+                - 20
+            "12": 0.23.1
+            "13": darwin-arm64
+del_lim_tag:
+    value: neg_2e-05
+limit_delta:
+    value: -2e-05
+log_every_episodes:
+    value: 10
+minibatch_size:
+    value: 64
+ppo_epochs:
+    value: 4
+retrain_episodes:
+    value: 500
+rollout_steps:
+    value: 256
+seed:
+    value: 42
+shared_ac_lr:
+    value: 0.0001
+source_ckpt:
+    value: results/training_checkpoints/checkpoints_42/ppo_agent_last_meta.json

@@ -1,0 +1,29 @@
+{
+  "os": "macOS-26.5.1-arm64-arm-64bit",
+  "python": "CPython 3.10.19",
+  "startedAt": "2026-07-25T19:49:43.379225Z",
+  "program": "/Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies/td_clip_retrain_sweep.ipynb",
+  "codePath": "/Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies/td_clip_retrain_sweep.ipynb",
+  "codePathLocal": "td_clip_retrain_sweep.ipynb",
+  "git": {
+    "remote": "https://github.com/CharithaPalika/FoodRL.git",
+    "commit": "c6683f0504310954e80cac7b5d7134f1ccf1c205"
+  },
+  "email": "charithapalika@gmail.com",
+  "root": "/Users/charithapalika/Desktop/Lab projects/Appetite modelling/FoodRL/FoodRL_cleaned_copies",
+  "host": "Charithas-MacBook-Air.local",
+  "executable": "/opt/homebrew/anaconda3/envs/workbench/bin/python",
+  "cpu_count": 10,
+  "cpu_count_logical": 10,
+  "disk": {
+    "/": {
+      "total": "245107195904",
+      "used": "214567153664"
+    }
+  },
+  "memory": {
+    "total": "17179869184"
+  },
+  "apple": {},
+  "writerId": "ptdcw7iydqh8xcj5k3vq8gk3ht6njz3b"
+}
