@@ -31,7 +31,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 21,
+   "execution_count": 1,
    "id": "af2d26f3",
    "metadata": {},
    "outputs": [
@@ -129,7 +129,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 22,
+   "execution_count": 2,
    "id": "c806268f",
    "metadata": {},
    "outputs": [
@@ -282,7 +282,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 23,
+   "execution_count": 3,
    "id": "c28bc74f",
    "metadata": {},
    "outputs": [
@@ -514,7 +514,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 24,
+   "execution_count": 4,
    "id": "73b84a8c",
    "metadata": {},
    "outputs": [
@@ -522,7 +522,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "/var/folders/9v/hs9qlpdx4791kpqgpt09stch0000gn/T/ipykernel_5365/432562556.py:86: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.\n",
+      "/var/folders/9v/hs9qlpdx4791kpqgpt09stch0000gn/T/ipykernel_4351/432562556.py:86: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.\n",
       "  ax.legend(loc=\"upper right\", frameon=False, fontsize=12)\n"
      ]
     },
@@ -640,7 +640,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 25,
+   "execution_count": 5,
    "id": "400a8938",
    "metadata": {},
    "outputs": [
@@ -784,7 +784,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 26,
+   "execution_count": 6,
    "id": "d393a979",
    "metadata": {},
    "outputs": [
@@ -792,7 +792,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "/var/folders/9v/hs9qlpdx4791kpqgpt09stch0000gn/T/ipykernel_5365/683790550.py:44: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.\n",
+      "/var/folders/9v/hs9qlpdx4791kpqgpt09stch0000gn/T/ipykernel_4351/683790550.py:44: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.\n",
       "  axes[0, 0].legend(loc=\"upper right\", fontsize=9, frameon=False)\n",
       "The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.\n"
      ]
@@ -862,7 +862,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 27,
+   "execution_count": 7,
    "id": "d6bbec4c",
    "metadata": {},
    "outputs": [],
@@ -1114,7 +1114,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 28,
+   "execution_count": 8,
    "id": "776ad020",
    "metadata": {},
    "outputs": [
@@ -1151,7 +1151,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 29,
+   "execution_count": 9,
    "id": "4709bdcd",
    "metadata": {},
    "outputs": [
@@ -1209,7 +1209,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 30,
+   "execution_count": 10,
    "id": "a6af0205",
    "metadata": {},
    "outputs": [
@@ -1302,7 +1302,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 31,
+   "execution_count": 11,
    "id": "b5601221",
    "metadata": {},
    "outputs": [
@@ -1405,7 +1405,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 32,
+   "execution_count": 12,
    "id": "3eb2ec2e",
    "metadata": {},
    "outputs": [
@@ -1582,7 +1582,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 33,
+   "execution_count": 13,
    "id": "8e2fe4fd",
    "metadata": {},
    "outputs": [
@@ -1695,7 +1695,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 34,
+   "execution_count": 14,
    "id": "492a9a36",
    "metadata": {},
    "outputs": [
@@ -1792,7 +1792,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 35,
+   "execution_count": 15,
    "id": "9e5022d5",
    "metadata": {},
    "outputs": [
@@ -1906,7 +1906,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 36,
+   "execution_count": 16,
    "id": "cd301f95",
    "metadata": {},
    "outputs": [
@@ -1968,7 +1968,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 37,
+   "execution_count": 17,
    "id": "85b09732",
    "metadata": {},
    "outputs": [
@@ -2067,7 +2067,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 38,
+   "execution_count": 18,
    "id": "5e1898fc",
    "metadata": {},
    "outputs": [
@@ -2075,7 +2075,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "/var/folders/9v/hs9qlpdx4791kpqgpt09stch0000gn/T/ipykernel_5365/44432576.py:61: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.\n",
+      "/var/folders/9v/hs9qlpdx4791kpqgpt09stch0000gn/T/ipykernel_4351/44432576.py:61: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.\n",
       "  fig.tight_layout(); fig.savefig(os.path.join(FIG5_DIR, 'fig5_3_trajectories.png'), bbox_inches='tight', dpi=200)\n"
      ]
     },
@@ -2172,7 +2172,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 39,
+   "execution_count": 19,
    "id": "0bd8bce9",
    "metadata": {},
    "outputs": [
