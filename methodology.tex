@@ -1,0 +1,230 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=1.9cm,columnsep=0.6cm}
+\usepackage{xcolor}
+\newcommand{\todocite}[1]{\textcolor{red}{[CITATION NEEDED: #1]}}
+
+\setlength{\abovedisplayskip}{4pt}
+\setlength{\belowdisplayskip}{4pt}
+
+\title{Methodology}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Methodology}
+
+\subsection{Problem Formulation}
+\label{sec:problem-formulation}
+
+We frame appetite regulation as a sequential decision-making problem in which an agent chooses, at discrete time steps, whether and how much to eat from a small menu of foods, with the objective of keeping a set of internal physiological signals within a biologically plausible target range. The action space is discrete (Section~\ref{sec:env-design}): at each step the agent either eats nothing or consumes one menu item at a fixed portion size. Each environment step advances simulated physiological time by ten minutes. The underlying digestion simulator that generates each food's absorption profile is itself specified at one-minute resolution (Section~\ref{sec:dataset}); the environment subsamples this finer per-minute profile at its own ten-minute step size before use, so an episode of $T$ steps spans $10T$ minutes of simulated time, with each step's nutrient increment aggregating ten consecutive minutes of the raw simulated profile. In the reported configuration an episode spans 432 steps (72 simulated hours across three repeated sleep/wake cycles), a horizon chosen to be long enough to require the agent to plan across multiple meals and at least two full overnight fasts, while remaining short enough for on-policy rollout collection to remain computationally tractable.
+
+We formalise the problem as a partially observable Markov decision process (POMDP), given by the tuple $\langle \mathcal{S}, \mathcal{A}, \mathcal{O}, \mathcal{T}, \Omega, \mathcal{R}, \gamma \rangle$, with each term defined below.
+
+\begin{itemize}
+\item \textbf{$\mathcal{S}$ — state.} The true, fully-specified state at step $t$: the complete set of foods currently being digested, where each entry records the food's identity, the number of steps elapsed since it was eaten, and the portion fraction consumed, together with the current sleep/wake phase and the agent's exact position within that phase. This state alone determines the entire future trajectory of every physiological channel, including the six channels withheld from the agent (below).
+\item \textbf{$\mathcal{A}$ — action space.} The discrete set $\{0,1,\dots,K\}$, $K$ the number of menu slots per step. Action $0$ is eat nothing; action $k\!\geq\!1$ consumes menu slot $k{-}1$ at a fixed portion fraction (0.6 of a full portion; Section~\ref{sec:env-design}).
+\item \textbf{$\mathcal{O}$ — observation space.} What the agent receives at step $t$: the three regulated, integrated physiological readouts (glucose, peptides, fatty acids), a binary awake/asleep indicator, a normalised phase-progress scalar, and a one-hot embedding of the current food menu (Equation~\eqref{eq:obs}). $\mathcal{O}$ excludes both the decomposition of $\mathcal{S}$ into individual in-progress meals and six shadow physiological signals (fullness, hunger, and the gut hormones CCK, ghrelin, GLP-1, and PYY) that the environment computes internally but never exposes.
+\item \textbf{$\mathcal{T}$ — transition function.} $\mathcal{S}_{t+1}=\mathcal{T}(\mathcal{S}_t,a_t)$: ages every in-progress meal by one step, appends a newly eaten food if $a_t\neq 0$, drops any meal whose absorption profile has fully elapsed, and advances the sleep/wake phase; the menu at $t{+}1$ is redrawn uniformly without replacement from the 19-item pool.
+\item \textbf{$\Omega$ — observation function.} $o_t=\Omega(\mathcal{S}_t)$: the deterministic, many-to-one map from true state to observation. It is precisely because $\Omega$ is not invertible — distinct in-progress meal configurations can map to the same, or nearly the same, integrated readout $o_t$ while implying different future trajectories — that the process is partially, rather than fully, observable.
+\item \textbf{$\mathcal{R}$ — reward function.} $r_t=\mathcal{R}(\mathcal{S}_t,a_t)$: the piecewise, target-band reward over the three regulated nutrients, Equation~\eqref{eq:reward}.
+\item \textbf{$\gamma$ — discount factor.} $\gamma\in(0,1)$, weighting future against immediate reward; set to $0.99$ (Table~\ref{tab:train-hparams}).
+\end{itemize}
+
+We adopt the POMDP formalism, rather than treating $o_t$ itself as a Markov state, for two independent reasons. First, as the definition of $\Omega$ makes explicit, the map from true state to observation is not injective: the integrated readout $s_n(t)$ is a sum over every currently-digesting meal's absorption contribution at its current age (Equation~\eqref{eq:leaky-integrator}), so two different sets of in-progress meals can produce an equal or near-equal $o_t$ while diverging in their subsequent trajectory as those meals continue to be absorbed — $o_t$ is therefore not guaranteed to be a sufficient statistic for $\mathcal{T}$. Second, and separately from this aliasing argument, the environment computes six additional physiological signals with a well-established role in human appetite regulation, and these are withheld from $\mathcal{O}$ by construction rather than by any information-theoretic necessity of the task itself. The agent must therefore act, and its value function must be estimated, without direct access to any explicit hunger or satiety signal, using only the consequences of past intake as filtered through the three macronutrient-linked channels it can see. This second, deliberately engineered source of partial observability motivates the compressed latent representation introduced in Section~\ref{sec:network}, whose correspondence to the six withheld signals is evaluated post hoc (Section~\ref{sec:metrics}, Section~\ref{sec:ablation2}) rather than supervised during training.
+
+\subsection{Physiological Dataset}
+\label{sec:dataset}
+
+Training and evaluation are grounded in a simulated digestion dataset that specifies, for each of 19 food items, the time course of ten physiological channels sampled at one-minute resolution over a 500-minute post-ingestion window \todocite{digestion/absorption simulator used to generate food\_dataset}. Three channels are treated as regulated physiological state and enter the agent's observation and reward: serum glucose (mg/dL, instantaneous), small peptides absorbed (g, cumulative), and free fatty acids absorbed (g, cumulative) — chosen as simple, well-separated proxies for carbohydrate, protein, and fat handling respectively. A fourth channel, total calories absorbed (kcal, cumulative), is retained only for inference-time energy-intake reporting and never enters the observation, reward, or training signal. The remaining six channels — fullness, hunger, and the hormones CCK, ghrelin, GLP-1, and PYY — are computed by the environment using the identical integration pipeline as the regulated channels but are deliberately withheld from the agent at all times; we refer to these as \emph{shadow nutrients} and use them exclusively for the post-hoc representation analysis of Sections~\ref{sec:metrics} and~\ref{sec:ablation2}.
+
+The raw dataset originally covered a larger set of food items, of which seven were excluded because their simulated trajectories were numerically degenerate — diverging exponentially in CCK/PYY before the underlying solver failed, or producing implausibly flat fatty-acid and glucose responses inconsistent with the food's macronutrient content — and one further item was excluded as a byte-identical duplicate of another entry. This left the 19-item set used throughout. Cumulative channels are normalised per channel by min–max scaling against the column-wise maximum absorbed value across foods (rather than the final time-point, since several fast-absorbing items plateau and are then zero-filled for the remainder of the window); instantaneous channels are min–max scaled using the global minimum and maximum over the full food$\times$time matrix.
+
+Because the environment allows an agent to consume a fractional portion of a food, every channel's full-portion curve must be rescaled to represent a partial meal. This rescaling is affine rather than multiplicative, anchored at each channel's pre-meal resting level $B$ (the mean of the $t{=}0$ value across all foods) rather than at zero or at the channel's normalisation minimum:
+\begin{equation}
+\text{raw}'(\tau) = \text{amt}\cdot\big(\text{raw}(\tau)-B\big) + B,
+\label{eq:partial-portion}
+\end{equation}
+$\text{amt}\in[0,1]$ the consumed fraction. Equation~\eqref{eq:partial-portion} scales only the meal-induced \emph{excursion} away from baseline, so a smaller portion produces a proportionally smaller rise (glucose, CCK, fullness, PYY, GLP-1, fatty acids, peptides, calories) or a proportionally smaller suppression (the drop-from-baseline hormones ghrelin and hunger), while leaving the resting level itself intact. Anchoring at $B$ rather than at the channel's global minimum matters physiologically: for glucose the global minimum sits below the fasting level (an insulin-undershoot artefact of the simulation), and for the drop-hormones the global minimum is the post-meal nadir, so anchoring there would incorrectly rescale the resting state itself rather than only the meal response.
+
+\subsection{Environment Design}
+\label{sec:env-design}
+
+At every step the agent is offered a menu of $K$ items drawn without replacement from the 19-item pool and represented as one-hot embeddings; the menu is resampled every step, so the agent cannot rely on a food remaining available across consecutive steps. Two action-space variants are supported by the implementation. In the continuous variant the action is $a_t\in[0,1]^K$, one consumption fraction per menu slot; in the discrete variant, used for all experiments reported here, the action is a single categorical choice $a_t\in\{0,1,\dots,K\}$, where $0$ is eat nothing and $k\!\geq\!1$ consumes menu slot $k{-}1$ at a fixed fraction (0.6 of a full portion). Sub-threshold actions are treated as a non-event and do not initiate digestion.
+
+The environment alternates fixed-length awake and sleep phases in a repeating cycle. During sleep, any action the agent outputs is discarded before it can affect intake — no new food is registered as eaten — although meals ingested before sleep onset continue to be digested, at a slower, phase-specific decay rate. This is intended to force the agent to plan intake ahead of the sleep phase, and is enforced asymmetrically in the reward (below): being under-target while asleep is penalised more heavily than being under-target while awake, since the agent cannot act to correct it until waking.
+
+For each regulated nutrient $n$, the environment maintains a leaky-integrator internal state
+\begin{equation}
+\text{IS}_n(t) = \text{IS}_n(t-1)\big(1-d_n(t)\big) + x_n(t),
+\label{eq:leaky-integrator}
+\end{equation}
+where $d_n(t)$ is the awake decay rate if the agent is awake at $t$ and the (typically smaller) sleep decay rate otherwise, and $x_n(t)=\sum_{f\in\text{active}(t)}\text{amt}_f\cdot\text{profile}_{f,n}(\text{age}_f(t))$ sums the amount-scaled absorption-profile contribution of every food still being digested at its current age. The observed level $s_n(t)$ is the sum of a rolling window of the $w_n$ most recent $\text{IS}_n$ values ($w_n{=}1$ for every regulated nutrient here, i.e.\ an instantaneous readout). The full observation is
+\begin{equation}
+o_t = \big(\, s_1(t),\dots,s_N(t),\; \mathbb{1}_{\text{awake}}(t),\; \tau(t),\; e_t \,\big),
+\label{eq:obs}
+\end{equation}
+$N{=}3$ the number of regulated nutrients, $\tau(t)\in[0,1]$ the agent's normalised progress through the current phase (0 at onset, approaching 1 near a transition, so the policy can anticipate an upcoming sleep or wake event), and $e_t$ the one-hot food embeddings of the current menu.
+
+The reward sums a per-nutrient term over all regulated nutrients,
+\begin{equation}
+r_t = \sum_{n=1}^{N} \rho_n\big(s_n(t)\big),
+\label{eq:reward-sum}
+\end{equation}
+\begin{equation}
+\rho_n(s) =
+\begin{cases}
+w_n\beta_n, & \text{lo}_n\!\le\! s \!\le\!\text{hi}_n \\[2pt]
+-2w_n(s-\text{hi}_n)^2, & s>\text{hi}_n \\[2pt]
+-2w_n m_n(t)(\text{lo}_n-s)^2, & s<\text{lo}_n
+\end{cases}
+\label{eq:reward}
+\end{equation}
+where $[\text{lo}_n,\text{hi}_n]$ is nutrient $n$'s target band (a target value $\pm$ a tolerance), $w_n$ its reward weight, $\beta_n$ a fixed in-range bonus, and $m_n(t)$ a phase-dependent multiplier equal to a nutrient-specific sleep-penalty weight $>\!1$ while asleep and $1$ while awake. Episodes run for a fixed number of steps with no early termination.
+
+\subsection{Agent Architecture --- Algorithm}
+\label{sec:algorithm}
+
+The policy is trained with Proximal Policy Optimization (PPO) using a clipped surrogate objective and Generalized Advantage Estimation (GAE). Writing $r_t(\theta)=\pi_\theta(a_t\mid o_t)/\pi_{\theta_{\text{old}}}(a_t\mid o_t)$ for the importance ratio, the clipped policy objective is
+\begin{equation}
+L^{\text{CLIP}}(\theta) = \mathbb{E}_t\Big[\min\big(r_t\hat A_t,\ \text{clip}(r_t,1{-}\epsilon,1{+}\epsilon)\hat A_t\big)\Big],
+\end{equation}
+combined with a value loss $L^{V}(\theta)=\mathbb{E}_t[(V_\theta(o_t)-\hat R_t)^2]$ and an entropy bonus $H[\pi_\theta]$ discouraging premature convergence to a deterministic policy; the total minimised loss is $-L^{\text{CLIP}} - c_e H[\pi_\theta] + c_v L^{V}$, with $c_e,c_v$ fixed coefficients (Table~\ref{tab:train-hparams}). Advantages are computed via GAE,
+\begin{equation}
+\hat A_t = \delta'_t + \gamma\lambda(1-d_t)\,\hat A_{t+1},
+\label{eq:gae}
+\end{equation}
+\begin{equation}
+\delta_t = r_t + \gamma V(o_{t+1})(1-d_t) - V(o_t),
+\label{eq:td-residual}
+\end{equation}
+$d_t$ the episode-termination indicator.
+
+Beyond standard PPO, we introduce a one-sided clip on the raw TD residual $\delta_t$ before it enters the GAE recursion, controlled by a single signed parameter $c$:
+\begin{equation}
+\delta'_t =
+\begin{cases}
+\min(\delta_t,c), & c>0 \\
+\max(\delta_t,c), & c<0 \\
+\delta_t, & c=0 \text{ or None.}
+\end{cases}
+\label{eq:td-clip}
+\end{equation}
+A positive $c$ damps unusually \emph{positive} surprises (better-than-expected outcomes); a negative $c$ damps unusually \emph{negative} surprises (worse-than-expected outcomes). Unlike a symmetric clamp, Equation~\eqref{eq:td-clip} deliberately damps only one direction at a time, so the effect of suppressing good surprises can be studied independently of the effect of suppressing bad ones (Section~\ref{sec:ablation1}). Discrete actions are drawn from a categorical distribution over the $K{+}1$ outcomes parameterised by the policy's logits; during the PPO update, log-probabilities are recomputed from the \emph{stored} action indices sampled during rollout collection rather than resampled, as required for a valid importance ratio.
+
+\subsection{Network Architecture}
+\label{sec:network}
+
+The policy and value function share a common trunk (\texttt{SharedActorCritic}) with two dual-branch input streams, processing the physiological observation and the flattened food embedding independently before concatenation. Each branch is a bottleneck autoencoder-style module: an encoder
+\begin{equation}
+z = \tanh\!\big(W_2\,\text{ReLU}(W_1x+b_1)+b_2\big)
+\end{equation}
+compresses the branch input through a hidden layer of width 256 into a $z_\text{dim}$-dimensional code, followed by a runtime-only affine transform $z'=a\odot z+b$ (per-neuron gain $a$ and offset $b$, fixed at $a{=}1,b{=}0$ during training and used only for the post-hoc probing of Section~\ref{sec:ablation2}), and a decoder $\text{ReLU}(W_3z'+b_3)$ expanding back to width 256.
+
+In the reported architecture, only the physiological branch is compressed, through a 16-dimensional bottleneck denoted $z_\text{phy}$; the food-embedding branch is left as an uncompressed two-layer MLP. This asymmetry is deliberate: the food identity on the menu is already a low-entropy, fully known quantity (a one-hot code), so there is little to compress, whereas the physiological branch is the one channel through which the withheld appetite-related signals (Section~\ref{sec:problem-formulation}) could plausibly leave a trace, making it the natural target for the representation analysis in Sections~\ref{sec:metrics}--\ref{sec:ablation2}. The concatenated 512-dimensional trunk output feeds two linear heads: an actor head producing logits over the $K{+}1$ discrete actions directly from the trunk output, and a critic head passing through an additional 16-dimensional bottleneck before a final linear projection to a scalar value. Because $z_\text{phy}$ receives no explicit supervision toward any particular semantic content, it is trained purely as whatever representation is useful for the policy and value objectives; whether it comes to resemble a physiologically meaningful hunger/satiety signal is assessed empirically (Section~\ref{sec:ablation2}) rather than assumed by construction.
+
+\subsection{Evaluation Metrics}
+\label{sec:metrics}
+
+Three families of metrics are used. \emph{Training-time} metrics, logged once per episode, are the episodic return, a rolling average of return over the trailing 50 episodes, total food items consumed, total summed $L_2$ distance between the nutrient state and its target centre, and the mean actor loss, critic loss, and policy entropy from the most recent PPO update — the last three serving primarily as optimisation-health diagnostics rather than behavioural outcomes. \emph{Inference-time behavioural} metrics, computed over deterministic (mode/argmax) rollouts so that behaviour is compared across conditions without sampling noise confounding the comparison, are per-episode total reward, average distance to the target band, total food items and total calories consumed (via the inference-only calorie accounting of Section~\ref{sec:dataset}), and per-day caloric intake. \emph{Representation-quality} metrics probe $z_\text{phy}$ directly: its principal components over a rollout, with the explained-variance ratio per component reported so that any correlation found is interpreted against how much of $z_\text{phy}$'s variance that component actually captures; Pearson and Spearman correlation and min–max-normalised mean squared error between $z_\text{phy}$ (or its leading components) and each withheld shadow nutrient; and, for architectures with independently parameterised actor and critic trunks, canonical correlation analysis (CCA) testing whether the two networks' bottlenecks converge to a shared linear subspace despite receiving no direct supervision to do so.
+
+\subsection{Training}
+\label{sec:training}
+
+Table~\ref{tab:env-hparams} lists the environment configuration and Table~\ref{tab:nutrient-config} the per-nutrient reward and dynamics parameters for the primary training run reported in this work; Table~\ref{tab:train-hparams} lists the PPO optimisation hyperparameters. The agent is optimised with a single Adam optimiser over the shared trunk (actor and critic heads share one learning rate under the shared-trunk architecture), with an exponential learning-rate schedule decaying to 10\% of its initial value by the final episode. Rollouts of fixed length are collected on-policy and used for multiple epochs of minibatch PPO updates before being discarded, following Equations~\eqref{eq:gae}--\eqref{eq:td-clip}.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Environment configuration, primary training run.}
+\label{tab:env-hparams}
+\begin{tabular}{@{}p{5.1cm}l@{}}
+\toprule
+Parameter & Value \\
+\midrule
+Simulated minutes / environment step & 10 \\
+Digestion simulator native resolution & 1 min \\
+Menu size $K$ (foods offered / step) & 1 \\
+Action space & Discrete$(K{+}1)$ \\
+Fixed discrete eat amount & 0.6 \\
+Consumption threshold & 0.0 \\
+Awake steps / cycle & 96 \\
+Sleep steps / cycle & 48 \\
+Cycles / episode & 3 \\
+Episode length (steps) & 432 \\
+Food embedding & One-hot, dim.\ 19 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{PPO training hyperparameters.}
+\label{tab:train-hparams}
+\begin{tabular}{@{}p{5.1cm}l@{}}
+\toprule
+Hyperparameter & Value \\
+\midrule
+Discount factor $\gamma$ & 0.99 \\
+GAE $\lambda$ & 0.95 \\
+TD-clip parameter $c$ & 1.0 \\
+PPO clip range $\epsilon$ & 0.2 \\
+Value loss coeff.\ $c_v$ & 0.5 \\
+Entropy coeff.\ $c_e$ & 0.01 \\
+Max gradient norm & 0.5 \\
+Trunk hidden width & 256 \\
+$z_\text{phy}$ bottleneck dim.\ & 16 \\
+Critic pre-output bottleneck dim.\ & 16 \\
+Optimizer & Adam \\
+Shared actor--critic LR & $1\times10^{-4}$ \\
+LR schedule & Exp.\ decay to 10\% \\
+Rollout length & 256 steps \\
+PPO epochs / rollout & 4 \\
+Minibatch size & 64 \\
+Training episodes & 2000 \\
+Random seed & 2026 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table*}[t]
+\centering
+\caption{Per-nutrient reward and dynamics configuration.}
+\label{tab:nutrient-config}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+Nutrient & Target & Tolerance & In-range bonus & Reward weight & Decay (awake) & Decay (sleep) & Sleep penalty $\times$ \\
+\midrule
+Glucose (mg/dL) & 90.0 & 20.0 & 2.0 & 0.1 & 0.02 & $5\times10^{-4}$ & 2.0 \\
+Peptides (g) & $4\times10^{-4}$ & $2.5\times10^{-4}$ & 1.5 & 0.1 & 0.02 & $1\times10^{-4}$ & 1.5 \\
+Fatty acids (g) & $2.5\times10^{-4}$ & $7.5\times10^{-5}$ & 1.5 & 0.1 & 0.02 & $1\times10^{-4}$ & 1.5 \\
+\bottomrule
+\end{tabular}}
+\end{table*}
+
+\subsection{Ablation 1 --- TD-Error Clipping Direction}
+\label{sec:ablation1}
+
+This ablation tests whether one-sided damping of positive versus negative TD surprises (Equation~\eqref{eq:td-clip}) has a differential effect on learned intake behaviour and regulation quality. We compare three conditions applied to the advantage-estimation step of PPO: a \emph{negative-severe} clip ($c=-1\times10^{-4}$, flooring unusually negative TD errors), a \emph{positive-severe} clip ($c=+1\times10^{-5}$, capping unusually positive TD errors), and a \emph{no-clip} baseline ($c=\text{None}$). The two clip magnitudes are configured independently and need not match, since each condition perturbs only one side of the TD-error distribution.
+
+For each condition, we take an already-trained base policy checkpoint and continue training for 500 additional episodes with the corresponding clip applied, holding all other PPO hyperparameters fixed at rollout length 256, 4 PPO epochs per rollout, minibatch size 64, and shared actor--critic learning rate $1\times10^{-4}$. This is repeated independently across ten pretrained seeds ($\{0,7,27,42,64,100,107,1997,2003,2026\}$), so each condition is represented by ten independently retrained models. Each retrained model is evaluated with 20 deterministic inference rollouts, giving 200 pooled rollouts per condition (10 seeds $\times$ 20 rollouts), from which we report mean and standard error of episodic reward, distance to target, food items consumed, and per-day caloric intake.
+
+\subsection{Ablation 2 --- Physiological Bottleneck Perturbation}
+\label{sec:ablation2}
+
+This ablation tests the causal contribution of $z_\text{phy}$ (Section~\ref{sec:network}) to intake behaviour, without any retraining. Using the runtime-only affine probe $z'_\text{phy}=a\odot z_\text{phy}+b$ available on every bottleneck module, we apply a fixed $(a,b)$ pair to an already-trained policy at inference time and measure the resulting change in behaviour relative to the untouched network ($a{=}1,b{=}0$). We compare three conditions: the identity baseline, a negative bias ($a{=}1,b{=}-1.0$), hypothesised to make the agent behave as though less hungry and under-eat, and a positive bias ($a{=}1,b{=}+1.5$), hypothesised to induce over-eating. To characterise the dose--response relationship beyond these three points, we additionally sweep bias over 30 equally spaced values in $[-1.5,1.5]$ (amplitude held at its identity value), on a single reference seed.
+
+The three-condition comparison pools results across three pretrained seeds ($\{0,42,64\}$, best-checkpoint policy per seed), with 20 unseeded deterministic inference episodes per seed per condition (60 pooled rollouts per condition); the bias sweep uses 20 inference episodes per sweep value on the reference seed alone. For both, we report episodic reward, food items consumed, calories consumed, distance to target, and signed target-band error (negative indicating under-target, positive over-target), together with raw per-neuron $z_\text{phy}$ activation traces for a representative rollout under each condition.
+
+\end{document}

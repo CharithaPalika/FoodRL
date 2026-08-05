@@ -1,0 +1,706 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=2.4cm}
+\usepackage{xcolor}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Ahat}{\hat A}
+\newcommand{\Rhat}{\hat R}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\up}[1]{\left[#1\right]_{+}}
+\newcommand{\dn}[1]{\left[#1\right]_{-}}
+
+\title{One-sided TD-residual clipping in the appetite-regulation MDP:\\
+why the \emph{sign} of the clip determines the \emph{direction} of the intake bias}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Ablation~1 reports that a negative one-sided clip on the TD residual
+($c<0$, flooring worse-than-expected outcomes) produces sustained
+\emph{over}consumption, while a positive clip ($c>0$, capping
+better-than-expected outcomes) produces sustained \emph{under}consumption.
+This note derives that result rather than describing it. Three facts do the
+work. First, at the magnitudes used the clip is not a damper but a
+\emph{half-wave rectifier}: it renders the advantage estimate sign-definite
+(Lemma~\ref{lem:rect}). Second, because the reported configuration has a
+single menu slot, the policy is a Bernoulli field and the policy gradient
+along the eat/no-eat margin is \emph{exactly} the advantage gap
+(Lemma~\ref{lem:bern}) --- no scalar-intensity approximation is required.
+Third, the clipped advantage enters the value target \emph{without} the
+mean-centring applied to the actor's copy, so the critic residual is
+sign-definite at every visited state and the induced value operator has no
+interior fixed point (Theorem~\ref{thm:critic}). We then reduce the
+behavioural question to the sign of two measurable quantities, $\Delta U$ and
+$\Delta D$ --- the effect of one meal on the discounted upward and downward
+surprise --- and measure them by paired forking under common random numbers.
+The measurement is asymmetric, and the asymmetry is the result: $\Delta D>0$
+at \emph{every} intake level, so the $c>0$ undereating conclusion follows
+globally from the actor channel alone; $\Delta U>0$ only near the regulating
+policy, so the $c<0$ overeating \emph{runaway} cannot be actor-driven and must
+be attributed to the critic channel. This predicts a decisive two-line
+ablation that separates the channels.
+\end{abstract}
+
+\section{Setup and notation}
+\label{sec:setup}
+
+We work throughout in the reported configuration: one menu slot ($K=1$), so
+the action set is binary,
+\begin{equation}
+a_t\in\{0,1\},\qquad
+a_t=0\ \text{eat nothing},\quad
+a_t=1\ \text{eat the offered item at the fixed fraction }\nu=0.6 .
+\label{eq:action}
+\end{equation}
+The policy is therefore a Bernoulli field parameterised by a logit,
+\begin{equation}
+\pi_\phi(1\mid o)=p_\phi(o)=\sigma\!\left(z_\phi(o)\right)\in(0,1),
+\label{eq:policy}
+\end{equation}
+with $p_\phi(o)$ bounded away from $0$ and $1$ by the entropy bonus. Write
+$x_t\in\mathbb{R}^3$ for the three regulated readouts (glucose, peptides,
+fatty acids). With $w_i=1$ the readout coincides with the leaky-integrator
+state, and since that integrator is \emph{linear}, a meal eaten at time $t$
+adds an exactly known perturbation to the entire future path:
+\begin{equation}
+x^{(a_t=1)}_{t+k}=x^{(a_t=0)}_{t+k}+\nu\,\varphi^{f_t}(k),
+\qquad
+\varphi^{f}_i(k)=\sum_{j\le k}(1-d_i)^{k-j}\,p^{f}_i(j),
+\label{eq:superposition}
+\end{equation}
+where $p^{f}_i$ is the per-step absorption profile of food $f$ on nutrient
+$i$, $d_i$ the phase-dependent decay rate, and $\varphi^f_i$ the resulting
+impulse response. Equation~\eqref{eq:superposition} holds exactly, for all
+$k$, holding future actions fixed; it is the reason a single ingestion event
+can be reasoned about in closed form.
+
+The reward is the piecewise band function of the methodology
+(there Equation~11): $r(x)=\sum_i\rho_i(x_i)$ with $\rho_i=w_i\beta_i$ inside
+$[l_i,h_i]$, $-2w_i(x_i-h_i)^2$ above, and
+$-2w_i\sigma_i(l_i-x_i)^2$ below ($\sigma_i>1$ during sleep). The TD residual,
+the one-sided clip and the GAE recursion are as in the methodology:
+\begin{equation}
+\delta_t=r_t+\gamma V(o_{t+1})(1-\mathrm{d}_t)-V(o_t),
+\qquad
+\delta'_t=
+\begin{cases}
+\min(\delta_t,c), & c>0,\\
+\max(\delta_t,c), & c<0,\\
+\delta_t, & c=0\ \text{or None},
+\end{cases}
+\qquad
+\Ahat_t=\sum_{l\ge0}(\gamma\lambda)^l\delta'_{t+l}.
+\label{eq:clip}
+\end{equation}
+Throughout, $\gamma=0.99$, $\lambda=0.95$, so $\gamma\lambda=0.9405$ and the
+GAE horizon is
+\begin{equation}
+H=\frac{1}{1-\gamma\lambda}=16.8\ \text{steps}=168\ \text{simulated minutes}.
+\label{eq:horizon}
+\end{equation}
+
+Two functionals of the residual stream carry the whole argument. Define the
+discounted \emph{upward} and \emph{downward} surprise
+\begin{equation}
+U_t=\sum_{l\ge0}(\gamma\lambda)^l\up{\delta_{t+l}},
+\qquad
+D_t=\sum_{l\ge0}(\gamma\lambda)^l\dn{\delta_{t+l}},
+\label{eq:UD}
+\end{equation}
+with $\up{u}=\max(u,0)$ and $\dn{u}=\max(-u,0)$, so $U_t,D_t\ge0$ and the
+unclipped advantage is $\Ahat_t=U_t-D_t$. We further write
+$T_t=U_t+D_t$ for the \emph{total surprise}, the discounted $\ell_1$ total
+variation of the value process.
+
+\begin{remark}[Two channels, only one of which is normalised]
+\label{rem:channels}
+In \texttt{agents/ppo.py}, \texttt{\_compute\_gae} builds the value target as
+\begin{center}
+\texttt{returns = advs + values[:-1]}
+\end{center}
+on the \emph{un-normalised} clipped advantage, after which the caller
+mean-centres and rescales only the actor's copy:
+\begin{center}
+\texttt{advs = (advs - advs.mean()) / (advs.std() + 1e-8)}
+\end{center}
+The critic
+therefore consumes the raw biased advantage and the actor a centred version.
+These two channels behave differently and are treated separately in
+Sections~\ref{sec:critic} and~\ref{sec:actor}. Conflating them is the main
+way to get this analysis wrong.
+\end{remark}
+
+\section{Assumptions, and their measured status}
+\label{sec:assumptions}
+
+\begin{assumption}[Unidirectional actuation]
+\label{as:actuation}
+$\varphi^f_i\ge0$ in aggregate: for every (food, nutrient) pair
+$\sum_k p^f_i(k)\ge0$, with strict positivity in at least one nutrient per
+food. The agent possesses no action that removes nutrient; downward motion of
+$x_t$ is exclusively the passive decay $(1-d_i)$.
+\end{assumption}
+
+\noindent
+\emph{Verified.} Over the 19-item pool, $\sum_k p^f_{\text{glucose}}(k)>0$ for
+all 19 foods (range $+0.136$ to $+0.335$ on the normalised scale); for
+peptides and fatty acids the sum is $\ge0$ for all foods and exactly $0$ for
+the four items with no measurable content of that macronutrient. No
+violations. Note that assumption~\ref{as:actuation} concerns the
+\emph{aggregate}: the glucose profile itself is biphasic, with $66.5\%$ of its
+per-step increments negative, which is what makes a single meal generate both
+upward and downward value movement.
+
+\begin{assumption}[Effective rectification]
+\label{as:rect}
+$|c|\ll\operatorname{med}|\delta|$ over the operating regime.
+\end{assumption}
+
+\noindent
+\emph{Verified} on the recorded residual logs ($3.24\times10^{5}$ residuals per
+condition, \texttt{enable\_td\_logging}): at $c=-10^{-4}$,
+$\Prob(|\delta|<|c|)=7\times10^{-4}$ against $\operatorname{med}|\delta|=3.07$;
+at $c=+10^{-4}$, $\Prob(|\delta|<|c|)=0$ against
+$\operatorname{med}|\delta|=0.46$. The fraction of residuals actually modified
+by the clip is $97.7\%$ and $98.0\%$ respectively.
+
+\subsection{Actuator coarseness}
+\label{sec:coarseness}
+
+A third structural fact, measured rather than assumed, explains why a meal is
+intrinsically a high-total-variation event. Define the \emph{coarseness ratio}
+\begin{equation}
+\kappa_i^f=\frac{\nu\,\max_k\varphi^f_i(k)}{h_i-l_i},
+\label{eq:kappa}
+\end{equation}
+the peak excursion caused by one $\nu=0.6$ meal, in units of the target band
+width. Because the discrete action space offers no portion control,
+$\kappa$ cannot be titrated: it is a fixed property of each (food, nutrient)
+pair.
+
+\begin{table}[t]
+\centering
+\caption{Band geometry and actuator coarseness on the normalised readout
+scale. $\kappa_i$ is Equation~\eqref{eq:kappa}, median over the 19 foods, with
+the range across foods in brackets. Peak lag is the median $\arg\max_k
+\varphi^f_i(k)$. Computed at ten simulated minutes per step
+(Remark~\ref{rem:mps}).}
+\label{tab:coarse}
+\begin{tabular}{lrrrrrr}
+\toprule
+nutrient & $l_i$ & target & $h_i$ & $h_i-l_i$ & $\kappa_i$ [range] & peak lag \\
+\midrule
+glucose      & $-0.0010$ & $0.2751$ & $0.5512$ & $0.5522$ & $0.48$ $[0.22,1.03]$ & 2 steps (20\,min)\\
+peptides     & $0.0838$  & $0.2235$ & $0.3631$ & $0.2793$ & $0.89$ $[0.15,1.87]$ & 4 steps (40\,min)\\
+fatty acids  & $0.2500$  & $0.3571$ & $0.4643$ & $0.2143$ & $\mathbf{1.25}$ $[0.00,2.58]$ & 1 step (10\,min)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:coarse} gives the values. The median $\kappa$ for fatty acids
+exceeds unity: \emph{the typical single meal, taken at the bottom of the fatty
+acid band, overshoots the top of it}. Since the action is quantised at
+$\nu=0.6$ with no smaller option, there is in general no meal that lands the
+state inside the band and keeps it there. Every ingestion event therefore
+produces a rise followed by an overshoot and a decay --- upward value movement
+followed by downward value movement --- with the peak arriving after 1--4
+steps, far inside the horizon $H=16.8$ of Equation~\eqref{eq:horizon}. This is
+the structural reason both $U$ and $D$ respond to eating, and it is what
+Section~\ref{sec:numerical} measures directly.
+
+\begin{remark}[A discrepancy between the code and the methodology]
+\label{rem:mps}
+The methodology states ten simulated minutes per environment step, which is
+the value consistent with its other claims: $144$ steps per cycle is then
+exactly $24$\,h ($96$ awake $=16$\,h, $48$ asleep $=8$\,h) and a $432$-step
+episode is $72$\,h. The constant currently in \texttt{envs/env.py} is
+\texttt{MINUTES\_PER\_STEP = 5}, which would make a cycle $12$\,h and an
+episode $36$\,h. Table~\ref{tab:coarse} is computed at ten minutes per step;
+at five the picture is qualitatively identical and marginally weaker
+($\kappa=0.48/0.83/1.12$, peak lags 4/8/2 steps). All conclusions below are
+robust to the choice (Section~\ref{sec:numerical}), but the constant should be
+reconciled before publication.
+\end{remark}
+
+\section{The clip is a rectifier, not a damper}
+\label{sec:rect}
+
+\begin{lemma}[Rectification]
+\label{lem:rect}
+Under Assumption~\ref{as:rect}, uniformly in $t$,
+\begin{equation}
+\left|\Ahat_t-U_t\right|\le\frac{|c|}{1-\gamma\lambda}
+\quad (c<0),
+\qquad
+\left|\Ahat_t+D_t\right|\le\frac{|c|}{1-\gamma\lambda}
+\quad (c>0).
+\label{eq:rectbound}
+\end{equation}
+In particular the clipped advantage is sign-definite up to
+$O\!\left(|c|/(1-\gamma\lambda)\right)$, which at the reported magnitudes is
+$\approx10^{-3}$:
+\begin{equation}
+\Ahat_t\approx U_t\ \ge0\ \ (c<0),
+\qquad
+\Ahat_t\approx-D_t\ \le0\ \ (c>0).
+\label{eq:signdef}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Take $c<0$. If $\delta\ge0$ then $\max(\delta,c)=\delta=\up{\delta}$ and the
+pointwise error vanishes. If $\delta<0$ then $\max(\delta,c)\in[c,0)$ while
+$\up{\delta}=0$, so the pointwise error is at most $|c|$. Hence
+$|\delta'_t-\up{\delta_t}|\le|c|$ for all $t$, and summing the geometric
+weights in Equation~\eqref{eq:clip} gives
+$|\Ahat_t-U_t|\le|c|\sum_{l\ge0}(\gamma\lambda)^l=|c|/(1-\gamma\lambda)$. The
+case $c>0$ is the mirror image, comparing $\min(\delta,c)$ with $-\dn{\delta}$.
+\end{proof}
+
+\noindent
+Lemma~\ref{lem:rect} is confirmed directly by the recorded logs. The clipped
+residual stream spans $[-10^{-4},\,+30.28]$ at $c=-10^{-4}$ and
+$[-5.33,\,+10^{-4}]$ at $c=+10^{-4}$: in each case the retained side is
+unbounded and the suppressed side is pinned at $c$. The estimator is not a
+mildly robustified advantage, but a one-sided functional.
+
+\begin{remark}[What has been substituted for what]
+\label{rem:objective}
+For $\lambda\to1$, $\gamma\to1$ the GAE sum telescopes,
+$\Ahat_t=G_t-V(o_t)=U_t-D_t$: the net change of the value process, i.e.\
+upward movement minus downward movement. Lemma~\ref{lem:rect} says the clip
+deletes one of the two terms. A negative clip optimises upward movement alone
+--- reward seeking with no punishment avoidance --- and a positive clip
+optimises minus downward movement alone --- punishment avoidance with no
+reward seeking. Everything that follows is a quantitative version of this
+sentence.
+\end{remark}
+
+\begin{lemma}[Decomposition]
+\label{lem:decomp}
+$U_t=\tfrac12(T_t+\Ahat^{\,\mathrm{raw}}_t)$ and
+$D_t=\tfrac12(T_t-\Ahat^{\,\mathrm{raw}}_t)$, where
+$\Ahat^{\,\mathrm{raw}}_t=U_t-D_t$ is the unclipped advantage. Consequently,
+for any two actions with gaps $\Delta U,\Delta D,\Delta T,\Delta A$,
+\begin{equation}
+\big[\,\Delta U>0\ \wedge\ \Delta D>0\,\big]
+\iff
+\Delta T>|\Delta A| .
+\label{eq:equiv}
+\end{equation}
+\end{lemma}
+
+\noindent
+Equation~\eqref{eq:equiv} is the useful form: it says the clipped estimators
+point in a fixed direction, irrespective of the true advantage, exactly when
+the meal is \emph{more surprising than it is on-net beneficial or harmful}.
+
+\section{Actor channel: the gradient along the eat/no-eat margin}
+\label{sec:actor}
+
+Because the action set is binary, no scalar reduction is needed --- the
+relevant gradient is available in closed form.
+
+\begin{lemma}[Bernoulli logit gradient]
+\label{lem:bern}
+For the policy \eqref{eq:policy}, $\nabla_{z}\log\pi(a\mid o)=a-p(o)$, hence
+for any advantage estimator $\Ahat$,
+\begin{equation}
+\frac{\partial}{\partial z(o)}\,\E\!\left[\log\pi(a\mid o)\,\Ahat(o,a)\right]
+=p(o)\big(1-p(o)\big)\Big[\Ahat(o,1)-\Ahat(o,0)\Big].
+\label{eq:logitgrad}
+\end{equation}
+Combining with Lemma~\ref{lem:rect}, and writing
+$\Delta U(o)=U(o,1)-U(o,0)$, $\Delta D(o)=D(o,1)-D(o,0)$,
+\begin{equation}
+\frac{\partial J}{\partial z(o)}
+\;\propto\;
+\begin{cases}
++\Delta U(o), & c<0,\\[2pt]
+-\Delta D(o), & c>0,
+\end{cases}
+\qquad\text{with }p(1-p)>0 .
+\label{eq:actorsign}
+\end{equation}
+\end{lemma}
+
+\noindent
+Equation~\eqref{eq:actorsign} is an identity, not an approximation: the sign
+of the gradient on the probability of eating is the sign of $\Delta U$ (for
+$c<0$) or of $-\Delta D$ (for $c>0$). This is the step that the multi-slot
+($K>1$) case can only approximate, and it is available here precisely because
+the reported configuration has $K=1$.
+
+\begin{lemma}[Mean-centring cannot repair a sign-definite advantage]
+\label{lem:center}
+Let $\tilde A=(\Ahat-\bar A)/(\hat s+\epsilon)$ with $\bar A,\hat s$ scalars
+computed from the batch. Since $\E_{a\sim\pi}\!\left[\nabla\log\pi(a\mid o)\right]=0$,
+subtracting any quantity independent of $(o,a)$ leaves the expected gradient
+unchanged, and dividing by $\hat s>0$ rescales it by a positive constant.
+Hence normalisation alters neither the sign in
+Equation~\eqref{eq:actorsign} nor the direction of the induced flow.
+\end{lemma}
+
+\noindent
+Lemma~\ref{lem:center} is worth stating explicitly because the natural
+objection to Lemma~\ref{lem:rect} --- ``a uniformly non-negative advantage is
+re-centred anyway'' --- is false. Centring removes the offset; the bias lives
+in the \emph{shape}, and Equation~\eqref{eq:actorsign} shows the shape is what
+the gradient reads.
+
+\section{Critic channel: sign-definite value drift}
+\label{sec:critic}
+
+\begin{theorem}[No interior fixed point of the value target]
+\label{thm:critic}
+The regression target in \texttt{\_compute\_gae} is $\Rhat_t=\Ahat_t+V(o_t)$,
+formed on the un-normalised clipped advantage (Remark~\ref{rem:channels}). By
+Lemma~\ref{lem:rect},
+\begin{equation}
+\Rhat_t-V(o_t)=
+\begin{cases}
+\ \ U_t\ \ge0 & (c<0),\\
+-D_t\ \le0 & (c>0),
+\end{cases}
+\qquad\text{for \emph{every} visited state.}
+\label{eq:residsign}
+\end{equation}
+Since $\nabla_\theta L^V=-2\,\E\!\left[(\Rhat_t-V_\theta(o_t))\nabla_\theta V_\theta(o_t)\right]$
+and the residual is sign-definite across the whole batch, every gradient step
+moves $V$ in one direction at every visited state. Define
+$\mathcal{T}_cV(o)=V(o)+\E[U_t\mid o_t=o]$ for $c<0$. Then
+$\mathcal{T}_cV\ge V$ pointwise, with equality only on
+$\{o:\Prob(\exists\,l<H:\delta_{t+l}>0\mid o)=0\}$, a null set under a policy
+with full support. Hence $\mathcal{T}_c$ admits no interior fixed point and
+iteration diverges: $V\to+\infty$ for $c<0$ and $V\to-\infty$ for $c>0$.
+\end{theorem}
+
+\begin{corollary}[Predictable sign of critic miscalibration]
+\label{cor:miscal}
+Under correct PPO, $\E[\delta_t]=0$ by definition of $V^\pi$. Under a
+one-sided clip, $c<0$ inflates $V$, so realised residuals become
+systematically negative, and $c>0$ deflates $V$, so they become systematically
+positive.
+\end{corollary}
+
+\noindent
+\emph{Measured.} $\E[\delta]=-6.93$ with $97.7\%$ of residuals negative at
+$c=-10^{-4}$; $\E[\delta]=+0.60$ with $98.0\%$ positive at $c=+10^{-4}$. A
+mean residual of $\mp7$ where the correct value is $0$ is an artefact of the
+clip alone, of exactly the predicted sign.
+
+\begin{corollary}[Measure degeneracy and instability]
+\label{cor:degen}
+The surviving residual tail carries $\approx2\%$ of steps, so the gradient
+estimator loads on a rare high-magnitude tail and its variance grows. Median
+$|\delta|$ rises from $0.099$ to $18.9$ across 500 retraining episodes at
+$c=-10^{-4}$. The prediction is bimodality across seeds rather than uniform
+overeating, which is what the per-seed inference table shows (seed 7:
+$+170$ return, 11 items; seed 27: $-6893$ return, 191 items), and which the
+across-seed standard deviations confirm: $89.2$ items at $c=-10^{-4}$ against
+$4.8$ at $c=+10^{-5}$ and $0.8$ with no clip.
+\end{corollary}
+
+\section{Numerical determination of $\Delta U$ and $\Delta D$}
+\label{sec:numerical}
+
+By Lemma~\ref{lem:bern} the behavioural question reduces entirely to the signs
+of $\E[\Delta U]$ and $\E[\Delta D]$ as functions of the intake level. We
+measure them by \emph{paired forking under common random numbers}. Fix a
+state-independent Bernoulli policy with eating probability $\theta$ while
+awake. For each of 1500 awake fork states $o$: snapshot the full environment
+state (in-progress meals, phase, menu); run one branch with $a=1$ and one with
+$a=0$; give both branches the \emph{same} pre-drawn menu sequence and the
+\emph{same} pre-drawn action-randomisation stream, so the branches differ only
+in the forked action. On each branch accumulate $U$ and $D$ over the GAE
+window from Equation~\eqref{eq:UD}, and additionally a value-function-free
+Monte-Carlo advantage gap
+\begin{equation}
+\Delta A_{\mathrm{mc}}=\sum_k\gamma^k\left(r^{(1)}_k-r^{(0)}_k\right),
+\label{eq:damc}
+\end{equation}
+which under common random numbers estimates $Q(o,1)-Q(o,0)$ with no
+dependence on any value estimate. $V^\pi$ itself is fitted by Monte-Carlo
+regression (random Fourier features and ridge) on
+$\left[x_t,\,\text{awake},\,\text{phase},\,\text{phase harmonics},\,\text{remaining
+episode fraction},\,\text{menu one-hot}\right]$; held-out $R^2$ is reported
+per condition.
+
+We use a Bernoulli policy class, rather than a trained checkpoint, because
+this is the correct object for the question: $\Delta U$ and $\Delta D$ are
+properties of the \emph{environment} evaluated at a policy, and the claim to
+be tested is that eating raises the total variation of the value process. The
+class also brackets the empirical operating point: $\Delta A_{\mathrm{mc}}$
+changes sign at $\theta^\ast\approx0.032$, or $9$--$10$ meals per episode,
+against $12.5$ items for the trained no-clip agent.
+
+\begin{table}[t]
+\centering
+\caption{Paired-fork estimates. 1500 forks per row; all standard errors
+$\le0.18$. ``regulated'' is the fraction of fork states at or above the band
+(signed band error $>-0.05$). $\Delta A_{\mathrm{mc}}$ is
+Equation~\eqref{eq:damc} and is value-function-free. The row nearest
+$\theta^\ast$ is marked. Computed at five simulated minutes per step; see
+Remark~\ref{rem:mps} and the robustness note below.}
+\label{tab:fork}
+\begin{tabular}{rrrrrrrrr}
+\toprule
+& meals & regu- & \multicolumn{2}{c}{$\Delta U$} & \multicolumn{2}{c}{$\Delta D$} & & \\
+\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+$\theta$ & /ep & lated & mean & frac${>}0$ & mean & frac${>}0$ & $\Delta A_{\mathrm{mc}}$ & $R^2$\\
+\midrule
+$0.008$ & 2  & $0.13$ & $+13.95$ & $0.989$ & $+5.53$ & $0.875$ & $+8.58$ & $0.50$\\
+$0.020$ & 6  & $0.33$ & $+5.38$  & $0.955$ & $+2.16$ & $0.693$ & $+3.15$ & $0.65$\\
+$0.030^{\ast}$ & 9  & $0.49$ & $+2.74$  & $0.884$ & $+1.96$ & $0.655$ & $+0.55$ & $0.70$\\
+$0.043$ & 12 & $0.66$ & $+1.20$  & $0.737$ & $+2.61$ & $0.757$ & $-1.64$ & $0.66$\\
+$0.100$ & 29 & $0.90$ & $-0.71$  & $0.336$ & $+4.58$ & $0.957$ & $-5.46$ & $0.36$\\
+$0.200$ & 58 & $0.96$ & $-1.30$  & $0.365$ & $+6.98$ & $0.909$ & $-8.36$ & $0.48$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:fork} reports the result, and it is asymmetric in a way that
+matters.
+
+\paragraph{Robustness.} The $\Delta U$ sign change was re-estimated with
+$3\times$ the regression data and $2\times$ the feature count, giving
+$-0.71\to-0.71$ at $\theta=0.100$: it is not a fitting artefact. Repeating the
+experiment at ten simulated minutes per step (Remark~\ref{rem:mps}) gives
+$\Delta U=+3.43$ ($0.893$), $\Delta D=+2.31$ ($0.693$) at $\theta=0.030$ and
+$\Delta U=-0.14$ ($0.471$), $\Delta D=+5.08$ ($0.931$) at $\theta=0.100$ ---
+the same qualitative pattern, with the $\Delta U$ zero-crossing displaced from
+$\theta\approx0.06$ to $\theta\approx0.10$. The regression fit is weakest in
+the high-$\theta$ rows ($R^2=0.36$--$0.48$), which is where the value process
+is largest in magnitude; those rows should be read as establishing a sign, not
+a magnitude.
+
+\subsection{Consequence for $c>0$: undereating, from the actor channel alone}
+
+\begin{proposition}[Monotone descent of intake]
+\label{prop:pos}
+$\E[\Delta D]>0$ at every $\theta$ examined, from $\theta=0.008$ to
+$\theta=0.200$, with standard errors $\le0.18$ and
+$\Prob(\Delta D>0)\ge0.655$ throughout. By Equation~\eqref{eq:actorsign} the
+gradient flow on the eating logit therefore satisfies
+\begin{equation}
+\dot\theta\;\propto\;-\,\E[\Delta D]\;<\;0
+\qquad\text{for all }\theta\in[0.008,0.200],
+\label{eq:posflow}
+\end{equation}
+so the flow is monotone decreasing with no interior fixed point over the whole
+examined range. Intake collapses.
+\end{proposition}
+
+\noindent
+The $c>0$ direction is thus fully explained by the actor channel, and the
+explanation is unconditional. Two refinements match the data quantitatively.
+First, $\Delta D$ is smallest near $\theta^\ast$ and grows in both directions
+away from it, so the suppression accelerates once the policy has been pushed
+off the regulating point. Second, and more usefully, $\Delta D$ is strongly
+regime-dependent: at $\theta=0.043$ it is $+4.02$ ($\Prob=0.912$) in regulated
+states but $-0.14$ ($\Prob=0.457$) in depleted ones, a collapse of roughly
+$6\times$. The descent therefore \emph{stalls} once the policy has driven the
+state distribution into depletion, predicting a non-zero intake floor rather
+than $\theta\to0$. The observed floor is $4$--$9$ items per episode
+($\theta\approx0.015$--$0.031$), consistent with this.
+
+\begin{remark}
+This corrects a natural but wrong first guess, namely that $c>0$ should drive
+eating to zero. It does not, and the reason is visible in the measurement: the
+punishment-avoidance signal has no grip on a policy that is already starving,
+because a depleted trajectory is smooth and predictable and therefore
+surprise-free.
+\end{remark}
+
+\subsection{Consequence for $c<0$: the actor channel only destabilises}
+
+\begin{proposition}[Local instability, but no actor-driven runaway]
+\label{prop:neg}
+$\E[\Delta U]>0$ for $\theta\lesssim0.06$ (five minutes per step) or
+$\theta\lesssim0.10$ (ten minutes per step) and \emph{negative} above it.
+Hence by Equation~\eqref{eq:actorsign} the regulating policy $\theta^\ast$ is
+\emph{unstable} under $c<0$ --- at $\theta^\ast$ we measure
+$\Delta U=+2.74$ with $\Prob(\Delta U>0)=0.884$, and among the fork states
+where eating is genuinely harmful ($\Delta A_{\mathrm{mc}}<0$) the negative
+clip still pushes towards eating in $84.0\%$ of cases --- but the flow
+possesses a stable interior fixed point at
+\begin{equation}
+\theta_{\mathrm{fix}}\approx0.06\text{--}0.10
+\qquad(\approx18\text{--}29\ \text{meals per episode}).
+\label{eq:thetafix}
+\end{equation}
+\end{proposition}
+
+\noindent
+Equation~\eqref{eq:thetafix} is $1.5$--$2.4\times$ the no-clip intake, which is
+overeating, but the observed $c<0$ behaviour is $114$--$139$ items per episode
+($\theta\approx0.40$--$0.48$), some $5$--$7\times$ beyond
+$\theta_{\mathrm{fix}}$. The actor channel therefore accounts for the
+\emph{direction} of the $c<0$ effect and for the \emph{loss of stability} of
+the regulating policy, but not for the magnitude of the runaway. The residual
+must be supplied by the critic channel: by Theorem~\ref{thm:critic} the value
+function is being driven upward without bound, and
+Corollary~\ref{cor:miscal}'s measured $\E[\delta]=-6.93$ confirms it. An
+inflated $V$ keeps the realised residual stream overwhelmingly negative, so
+the $2\%$ surviving positive tail remains attached to ingestion events and
+continues to reinforce them long past the point at which a calibrated critic
+would have arrested the flow.
+
+\begin{corollary}[The two directions fail by different mechanisms]
+\label{cor:asym}
+$c>0$ is a single-channel, monotone, actor-driven failure with a floor;
+$c<0$ is a two-channel failure in which the actor destabilises the regulating
+policy and the diverging critic sustains the departure. This predicts the
+severity and stability asymmetry observed: $c<0$ gives return $-2631$ with an
+across-seed dispersion of $89.2$ items, while $c>0$ gives return $+106$ with a
+dispersion of $4.8$ items.
+\end{corollary}
+
+\section{Independence from the reward asymmetry}
+\label{sec:notreward}
+
+The derivation used Assumptions~\ref{as:actuation} and~\ref{as:rect}, the
+coarseness measurement of Section~\ref{sec:coarseness}, and
+Lemmas~\ref{lem:rect}--\ref{lem:center}. It nowhere used the fact that the
+band reward has a bounded upside $\beta_i$ and an unbounded quadratic
+downside, nor the sleep penalty $\sigma_i>1$. This is worth emphasising
+because $\sigma_i\in\{1.5,2.0\}$ makes depletion \emph{strictly worse} than
+overshoot, which if anything biases the agent towards eating more --- the
+opposite of the measured $c>0$ result. The reward asymmetry cannot therefore
+be the mechanism. The mechanism is Assumption~\ref{as:actuation}: the actuator
+is one-sided. Eating is the only way for the state to move up and waiting is
+the only way for it to move down, so ``which side of the surprise is retained''
+maps one-to-one onto ``which action is reinforced''.
+
+\section{Consistency with the magnitude sweep}
+\label{sec:sweep}
+
+Lemma~\ref{lem:rect} makes a sharp prediction that the existing sweep tests
+without further computation: the effect should be a \emph{step function of
+$\operatorname{sign}(c)$ that saturates in $|c|$}, since once
+$|c|\ll\operatorname{med}|\delta|$ the operator is already a pure rectifier and
+shrinking $c$ further changes nothing; and it should \emph{vanish} once
+$|c|\gtrsim\operatorname{med}|\delta|$, where the clip stops binding.
+
+\begin{table}[t]
+\centering
+\caption{Retraining sweep, 10 seeds per condition, mean over the final 50 of
+500 retraining episodes. Selected rows from the 37 available conditions.}
+\label{tab:sweep}
+\begin{tabular}{rrr@{\hskip 2.2em}rrr}
+\toprule
+$c$ & items/ep & return & $c$ & items/ep & return\\
+\midrule
+$-5\times10^{-3}$ & $10.0$  & $+165$  & $+1\times10^{-6}$ & $7.2$  & $+100$\\
+$-1\times10^{-3}$ & $11.4$  & $+172$  & $+5\times10^{-6}$ & $4.3$  & $+77$ \\
+$-5\times10^{-4}$ & $33.9$  & $-543$  & $+1\times10^{-5}$ & $7.8$  & $+106$\\
+$-1\times10^{-4}$ & $114.3$ & $-2631$ & $+1\times10^{-4}$ & $9.3$  & $+116$\\
+$-1\times10^{-5}$ & $137.3$ & $-3346$ & $+1\times10^{-3}$ & $8.6$  & $+116$\\
+$-1\times10^{-6}$ & $137.0$ & $-3108$ & $+5\times10^{-2}$ & $12.7$ & $+154$\\
+\midrule
+\multicolumn{6}{c}{$c=0$ (no clip): $12.5$ items/ep, return $+159$}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:sweep} bears this out on both counts. On the negative side
+there is a flat plateau of $105$--$139$ items across
+$|c|\in[10^{-6},10^{-4}]$ --- four orders of magnitude with no graded
+dependence, as the rectification limit requires --- a sharp threshold between
+$-5\times10^{-4}$ and $-10^{-3}$, and full recovery to no-clip behaviour for
+$|c|\ge10^{-3}$, which is the $\operatorname{med}|\delta|$ scale. The positive
+side recovers monotonically from $4.3$ to $12.7$ items over the same range.
+The no-clip condition sits between the two branches.
+
+\paragraph{An exception worth reporting.} At $c=+2\times10^{-4}$ and
+$+3\times10^{-4}$ the mean intake is $28.5$ and $31.8$ items with across-seed
+standard deviations of $60$ and $79$: a minority of seeds crossed into the
+overeating mode. A candidate explanation follows from
+Corollary~\ref{cor:miscal}: a positive clip deflates $V$, so residuals become
+overwhelmingly positive, and at intermediate $|c|$ nearly all of them exceed
+$+c$, leaving $\Ahat\approx-D\approx0$ and starving the gradient. This should
+be checked rather than assumed.
+
+\section{Predictions}
+\label{sec:predictions}
+
+\paragraph{P1 (decisive; two lines of code).} Clip only the actor's advantage
+and leave the critic's target unclipped --- that is, form \texttt{returns} in
+\texttt{\_compute\_gae} from the raw $\delta$ while still clipping
+\texttt{advs}. By Propositions~\ref{prop:pos} and~\ref{prop:neg} this should
+collapse the $c<0$ intake from $\approx139$ items to
+$\theta_{\mathrm{fix}}$'s $18$--$29$, while leaving the $c>0$ undereating
+essentially unchanged. This isolates the two channels and converts
+Corollary~\ref{cor:asym} from an inference into a measurement.
+
+\paragraph{P2.} Log the mean value estimate during retraining: by
+Theorem~\ref{thm:critic} it must rise monotonically for $c<0$ and fall for
+$c>0$.
+
+\paragraph{P3.} Introduce a bidirectional actuator, i.e.\ an action with
+negative nutrient input, violating Assumption~\ref{as:actuation}. The $c<0$
+bias should partly redirect onto that action and the intake effect should
+weaken. This is the direct test of the mechanism identified in
+Section~\ref{sec:notreward}.
+
+\paragraph{P4.} Make ingestion predictable (fixed meal schedule, no menu
+resampling). Both $U$ and $D$ shrink, and both clip effects should shrink
+towards zero.
+
+\paragraph{P5.} A \emph{symmetric} clamp $|\delta|\le c$ should be comparatively
+benign at the same magnitude, since it preserves $\operatorname{sign}(\Ahat)$
+and hence the sign in Equation~\eqref{eq:actorsign}.
+
+\paragraph{P6.} Add portion control, reducing $\kappa$ in
+Equation~\eqref{eq:kappa} below unity for all nutrients. The overshoot
+component of $D$ should fall and the $c>0$ effect weaken.
+
+\section{Limitations}
+\label{sec:limitations}
+
+\begin{enumerate}
+\item Table~\ref{tab:fork} uses a state-independent Bernoulli policy class,
+not the trained network. This is the appropriate object for testing a claim
+about the environment, and $\theta^\ast$ brackets the trained agent's intake,
+but $\Delta U$ and $\Delta D$ at the network's actual state distribution are
+not measured.
+\item $V^\pi$ is fitted, with held-out $R^2$ of $0.65$--$0.70$ near
+$\theta^\ast$ but only $0.36$--$0.48$ at high $\theta$. The high-$\theta$ rows
+establish signs, not magnitudes. The $\Delta A_{\mathrm{mc}}$ column is free
+of this concern by construction.
+\item The fork experiment evaluates the gradient at a \emph{calibrated}
+critic. Under the clip the critic is not calibrated (Theorem~\ref{thm:critic}),
+so Table~\ref{tab:fork} describes the instability at the outset of the
+departure, not the fully developed dynamics. This is precisely why
+Proposition~\ref{prop:neg} cannot close the magnitude gap on its own, and why
+P1 is the decisive experiment.
+\item Theorem~\ref{thm:critic}'s divergence is asymptotic. In practice it is
+bounded by the 500-episode budget and by \texttt{max\_grad\_norm}$=0.5$; the
+claim is about the direction and the absence of a fixed point, not about an
+attained infinity.
+\item Remark~\ref{rem:mps}: the simulated minutes per step differ between the
+methodology and the current code. Conclusions are robust to the choice, but
+$\theta_{\mathrm{fix}}$ in Equation~\eqref{eq:thetafix} is not.
+\end{enumerate}
+
+\end{document}
