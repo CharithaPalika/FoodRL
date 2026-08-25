@@ -81,6 +81,14 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+[`requirements.txt`](requirements.txt) covers the core stack (unpinned versions):
+
+- **Core scientific:** `numpy`, `pandas`, `scipy`
+- **Deep learning / RL:** `torch`, `gymnasium`
+- **Analysis utilities:** `scikit-learn`, `tqdm`
+- **Plotting:** `matplotlib`
+- **Notebooks:** `jupyter`, `ipykernel`
+
 Optional experiment tracking:
 
 ```bash
@@ -131,28 +139,4 @@ The model code supports several bottleneck layouts:
 
 `PPOAgent` exposes helpers such as `list_bottlenecks()`, `set_amplitude()`, and `set_bias()` so notebooks can perturb specific latent dimensions without modifying saved model weights. This is what powers the latent ablation and neuron-probing experiments.
 
-## What To Skip When Reading 🧹
-
-The `.gitignore` says these paths are generated or scratch space:
-
-```text
-temp/*
-__pycache__/
-plots/*
-wandb/*
-results/retrain_250ep/*
-results/retrain_750ep/*
-results/neg_0.0002/*
-results/neg_0.00015/*
-results/training_checkpoints/*
-Latex files/*
-```
-
-Some generated artifacts may already be tracked in git because they were committed before or despite the ignore rules. For understanding the codebase, start with `envs/`, `agents/`, `models/`, `analysis/`, `utils/`, `food_dataset/`, and the top-level notebooks. Treat large checkpoint, plot, LaTeX, `wandb`, and `temp` folders as outputs unless you are reproducing a specific figure or experiment.
-
-## Notes For Future Cleanup 🛠️
-
-- Add a `requirements.txt` or `environment.yml` so new runs are reproducible.
-- Consider ignoring `.DS_Store` and nested Python cache folders like `agents/__pycache__/`.
-- Keep generated checkpoints and final plots separate from source code where possible; the repo is easier to navigate when heavy artifacts are clearly marked as outputs..
 
