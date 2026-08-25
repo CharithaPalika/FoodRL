@@ -1,0 +1,19 @@
+# Core scientific stack
+numpy
+pandas
+scipy
+
+# Deep learning / RL
+torch
+gymnasium
+
+# Analysis and ML utilities
+scikit-learn
+tqdm
+
+# Plotting
+matplotlib
+
+# Notebooks
+jupyter
+ipykernel

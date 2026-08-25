@@ -5,4 +5,7 @@ __pycache__/
 /wandb/*
 /results/retrain_250ep/*
 /results/retrain_750ep/*
+/results/neg_0.0002/*
+/results/neg_0.00015/*
 /results/training_checkpoints/*
+/Latex files/*
