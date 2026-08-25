@@ -154,5 +154,5 @@ Some generated artifacts may already be tracked in git because they were committ
 
 - Add a `requirements.txt` or `environment.yml` so new runs are reproducible.
 - Consider ignoring `.DS_Store` and nested Python cache folders like `agents/__pycache__/`.
-- Keep generated checkpoints and final plots separate from source code where possible; the repo is easier to navigate when heavy artifacts are clearly marked as outputs.
+- Keep generated checkpoints and final plots separate from source code where possible; the repo is easier to navigate when heavy artifacts are clearly marked as outputs..
 
